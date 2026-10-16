@@ -56,7 +56,7 @@
   "setup": [
    {
     "label": "Run with npx",
-    "code": "npx -y @zereight/mcp-gitlab@latest"
+    "code": "{\n  \"mcpServers\": {\n    \"gitlab\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@zereight/mcp-gitlab@latest\"],\n      \"env\": {\n        \"GITLAB_PERSONAL_ACCESS_TOKEN\": \"<your token>\",\n        \"GITLAB_API_URL\": \"https://gitlab.com/api/v4\"\n      }\n    }\n  }\n}"
    }
   ],
   "prompts": [
@@ -68,9 +68,9 @@
   "sourceUrl": "https://github.com/zereight/gitlab-mcp",
   "auth": {
    "method": "Personal Access Token (or OAuth)",
-   "scopes": "Not documented"
+   "scopes": "OAuth: api or read_api (default api,read_api,read_user)"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-10-16"
  },
  {
   "slug": "git",
@@ -106,7 +106,7 @@
   "sourceUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/git",
   "auth": {
    "method": "None (local repository access)",
-   "scopes": "\u2014"
+   "scopes": "—"
   },
   "lastVerified": "2026-10-15"
  },
@@ -146,7 +146,7 @@
   "sourceUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem",
   "auth": {
    "method": "None (restricted to allowed directories)",
-   "scopes": "\u2014"
+   "scopes": "—"
   },
   "lastVerified": "2026-10-15"
  },
@@ -175,7 +175,7 @@
   "sourceUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/fetch",
   "auth": {
    "method": "None",
-   "scopes": "\u2014"
+   "scopes": "—"
   },
   "lastVerified": "2026-10-15"
  },
@@ -212,7 +212,7 @@
   "sourceUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/memory",
   "auth": {
    "method": "None (local)",
-   "scopes": "\u2014"
+   "scopes": "—"
   },
   "lastVerified": "2026-10-15"
  },
@@ -241,7 +241,7 @@
   "sourceUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking",
   "auth": {
    "method": "None",
-   "scopes": "\u2014"
+   "scopes": "—"
   },
   "lastVerified": "2026-10-15"
  },
@@ -271,7 +271,7 @@
   "sourceUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/time",
   "auth": {
    "method": "None",
-   "scopes": "\u2014"
+   "scopes": "—"
   },
   "lastVerified": "2026-10-15"
  },
@@ -299,7 +299,7 @@
   "sourceUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/everything",
   "auth": {
    "method": "None",
-   "scopes": "\u2014"
+   "scopes": "—"
   },
   "lastVerified": "2026-10-15"
  },
@@ -795,7 +795,7 @@
   "sourceUrl": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/sqlite",
   "auth": {
    "method": "None (local database file)",
-   "scopes": "\u2014"
+   "scopes": "—"
   },
   "lastVerified": "2026-10-15"
  },
@@ -1054,7 +1054,7 @@
   "sourceUrl": "https://github.com/microsoft/playwright-mcp",
   "auth": {
    "method": "None (local browser)",
-   "scopes": "\u2014"
+   "scopes": "—"
   },
   "lastVerified": "2026-10-15"
  },
@@ -1086,7 +1086,7 @@
   "sourceUrl": "https://github.com/ChromeDevTools/chrome-devtools-mcp",
   "auth": {
    "method": "None (local browser)",
-   "scopes": "\u2014"
+   "scopes": "—"
   },
   "lastVerified": "2026-10-15"
  },
@@ -1120,7 +1120,7 @@
   "sourceUrl": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/puppeteer",
   "auth": {
    "method": "None (local browser)",
-   "scopes": "\u2014"
+   "scopes": "—"
   },
   "lastVerified": "2026-10-15"
  },
@@ -1350,7 +1350,7 @@
    "method": "API key recommended (Bearer header)",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-10-16"
  },
  {
   "slug": "cloudflare",
@@ -1540,7 +1540,11 @@
   "setup": [
    {
     "label": "Example: AWS API server",
-    "code": "uvx awslabs.aws-api-mcp-server"
+    "code": "{\n  \"mcpServers\": {\n    \"awslabs.aws-api-mcp-server\": {\n      \"command\": \"uvx\",\n      \"args\": [\"awslabs.aws-api-mcp-server@latest\"],\n      \"env\": { \"AWS_REGION\": \"us-east-1\" }\n    }\n  }\n}"
+   },
+   {
+    "label": "Claude Code",
+    "code": "claude mcp add aws-api uvx awslabs.aws-api-mcp-server@latest"
    }
   ],
   "prompts": [
@@ -1553,7 +1557,7 @@
    "method": "Your AWS credentials",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-10-16"
  },
  {
   "slug": "azure",
@@ -1571,8 +1575,12 @@
   ],
   "setup": [
    {
-    "label": "Install",
-    "code": "# Install via the VS Code / Visual Studio buttons or follow the README:\n# https://github.com/microsoft/mcp"
+    "label": "Run with npx",
+    "code": "{\n  \"mcpServers\": {\n    \"azure-mcp-server\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@azure/mcp@latest\", \"server\", \"start\"]\n    }\n  }\n}"
+   },
+   {
+    "label": "Claude Code (Azure plugin)",
+    "code": "/plugin install azure@claude-plugins-official"
    }
   ],
   "prompts": [
@@ -1582,10 +1590,10 @@
   "officialUrl": "https://github.com/microsoft/mcp",
   "sourceUrl": "https://github.com/microsoft/mcp",
   "auth": {
-   "method": "Your Azure credentials",
+   "method": "Your Azure credentials (e.g. Azure CLI via az login)",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-10-16"
  },
  {
   "slug": "docker-mcp-gateway",
@@ -1660,7 +1668,15 @@
   ],
   "setup": [
    {
-    "label": "Claude Code (remote)",
+    "label": "Remote server (OAuth)",
+    "code": "{\n  \"mcpServers\": {\n    \"resend\": {\n      \"url\": \"https://mcp.resend.com/mcp\"\n    }\n  }\n}"
+   },
+   {
+    "label": "Claude Code (remote, OAuth)",
+    "code": "claude mcp add --transport http resend https://mcp.resend.com/mcp\n# then run /mcp and select resend to log in"
+   },
+   {
+    "label": "Claude Code (remote, API key)",
     "code": "claude mcp add --transport http resend https://mcp.resend.com/mcp --header \"Authorization: Bearer re_xxxxxxxxx\""
    },
    {
@@ -1675,10 +1691,10 @@
   "officialUrl": "https://github.com/resend/mcp-send-email",
   "sourceUrl": "https://github.com/resend/mcp-send-email",
   "auth": {
-   "method": "Resend API key",
+   "method": "OAuth (remote) or Resend API key (Bearer header / RESEND_API_KEY)",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-10-16"
  },
  {
   "slug": "elevenlabs",
