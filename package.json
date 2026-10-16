@@ -7,7 +7,8 @@
     "build": "node scripts/gen-logos.mjs && next build",
     "start": "next start",
     "check-drift": "node scripts/check-drift.mjs",
-    "indexnow": "node scripts/indexnow.mjs"
+    "indexnow": "node scripts/indexnow.mjs",
+    "list-tools": "node scripts/list-tools.mjs"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +21,7 @@
     "react-dom": "^19.3.1"
   },
   "devDependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.1",
     "@types/node": "^26.6.5",
     "@types/react": "^19.3.0",
     "simple-icons": "^16.35.0",

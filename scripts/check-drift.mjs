@@ -22,12 +22,19 @@ function sources(c) {
   return { repo: null, readmes: [c.officialUrl] };
 }
 const RELEVANT = /(npx |uvx |docker (run|mcp)|"command"|"args"|"url"|"type":|https?:\/\/[^\s"')]*mcp[^\s"')]*|claude mcp add|--transport|[A-Z][A-Z0-9]+_(API_KEY|TOKEN|URL|HOST|KEY|SECRET|CONNECTION_STRING)|pip install|npm i(nstall)? )/;
+// Auth-related lines are hashed separately so an auth change gets its own flag.
+const AUTH = /(oauth|api[ _-]?key|access[ _-]?token|bearer|\btokens?\b|\bscopes?\b|permissions?|authenticat|authoriz|\bPAT\b|personal access|client[ _-]?(id|secret)|credentials?|service account|sign[ -]?in)/i;
+function clean(text) {
+  const t = text.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, "").replace(/<[^>]+>/g, "\n").replace(/&quot;/g, '"').replace(/&amp;/g, "&");
+  return t.split("\n").map(l => l.trim().replace(/\s+/g, " ")).filter(l => l && l.length < 400).filter(l => !/img\.shields\.io|badge/i.test(l));
+}
+function extractAuth(text) { return Array.from(new Set(clean(text).filter(l => AUTH.test(l)))).sort(); }
 function extract(text) {
   const t = text.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, "").replace(/<[^>]+>/g, "\n").replace(/&quot;/g, '"').replace(/&amp;/g, "&");
   const lines = t.split("\n").map(l => l.trim().replace(/\s+/g, " ")).filter(l => l && l.length < 400 && RELEVANT.test(l)).filter(l => !/img\.shields\.io|badge/i.test(l));
   return Array.from(new Set(lines)).sort();
 }
-const now = new Date().toISOString(); let changed = [], failed = [], baselined = 0, same = 0;
+const now = new Date().toISOString(); let authChangedNow = [], authBaselined = 0; let changed = [], failed = [], baselined = 0, same = 0;
 for (const c of connectors) {
   const s = sources(c); let text = null, used = null;
   for (const u of s.readmes) { try { text = await get(u); used = u; break; } catch {} }
@@ -42,6 +49,11 @@ for (const c of connectors) {
     const drift = hash !== e.baselineHash || (release && e.baselineRelease && release !== e.baselineRelease);
     if (drift && !e.needsReverification) { e.needsReverification = true; e.changedAt = now; }
     if (drift) changed.push(c.slug); else same++; }
+  const al = extractAuth(text); const authHash = createHash("sha256").update(al.join("\n")).digest("hex").slice(0, 16);
+  Object.assign(e, { authHash, authLines: al.length, authBaselineHash: prev?.authBaselineHash || null, authChanged: prev?.authChanged || false, authChangedAt: prev?.authChangedAt || null });
+  if (!e.authBaselineHash) { e.authBaselineHash = authHash; authBaselined++; }
+  else if (authHash !== e.authBaselineHash) { authChangedNow.push(c.slug); if (!e.authChanged) { e.authChanged = true; e.authChangedAt = now; } }
+  if (accept.includes(c.slug)) { e.authBaselineHash = authHash; e.authChanged = false; e.authChangedAt = null; }
   if (accept.includes(c.slug)) { e.baselineHash = hash; e.baselineRelease = release; e.baselineAt = now; e.needsReverification = false; e.changedAt = null; }
   db.entries[c.slug] = e;
 }
@@ -52,3 +64,6 @@ console.log(`  baselined: ${baselined}  unchanged: ${same}  changed: ${changed.l
 if (changed.length) console.log("  changed:", changed.join(", "));
 if (failed.length) console.log("  failed:", failed.join(", "));
 console.log(`  flagged 'Needs re-verification': ${flagged.length}${flagged.length ? " -> " + flagged.join(", ") : ""}`);
+const authFlagged = Object.entries(db.entries).filter(([, v]) => v.authChanged).map(([k]) => k);
+console.log(`  auth baselined: ${authBaselined}  auth changed this run: ${authChangedNow.length}`);
+console.log(`  flagged 'Auth changed': ${authFlagged.length}${authFlagged.length ? " -> " + authFlagged.join(", ") : ""}`);

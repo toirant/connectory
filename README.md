@@ -26,7 +26,15 @@ npm run build
 ```bash
 node scripts/check-drift.mjs
 ```
-This fetches each connector's README or docs, hashes the setup-relevant lines, compares them with `data/drift.json`, and flags changes. Flagged connectors get a "Needs re-verification" badge and appear on `/status`.
+This fetches each connector's README or docs, hashes the setup-relevant lines, compares them with `data/drift.json`, and flags changes. Flagged connectors get a "Needs re-verification" badge and appear on `/status`. Auth-related lines (OAuth, API keys, tokens, scopes, permissions) are hashed separately and raise a distinct "Auth changed" flag.
+
+## Live tool listing
+
+```
+npm run list-tools
+```
+
+For an allowlist of credential-free servers (stdio packages needing no secrets, public no-auth remote endpoints), connects with `@modelcontextprotocol/sdk`, calls only `tools/list` with timeouts in a temp dir with a minimal env, kills the child, and writes `data/tools.json`.
 
 ## Deploy
 The site is deployed to Vercel (project `connectory`). This repo is **not** connected to Vercel; deployments are made separately. Environment variables (set in Vercel and never committed):

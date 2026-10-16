@@ -1,0 +1,538 @@
+{
+ "entries": {
+  "git": {
+   "checked": "2026-10-16",
+   "via": "uvx mcp-server-git",
+   "tools": [
+    {
+     "name": "git_status",
+     "description": "Shows the working tree status"
+    },
+    {
+     "name": "git_diff_unstaged",
+     "description": "Shows changes in the working directory that are not yet staged"
+    },
+    {
+     "name": "git_diff_staged",
+     "description": "Shows changes that are staged for commit"
+    },
+    {
+     "name": "git_diff",
+     "description": "Shows differences between branches or commits"
+    },
+    {
+     "name": "git_commit",
+     "description": "Records changes to the repository"
+    },
+    {
+     "name": "git_add",
+     "description": "Adds file contents to the staging area"
+    },
+    {
+     "name": "git_reset",
+     "description": "Unstages all staged changes"
+    },
+    {
+     "name": "git_log",
+     "description": "Shows the commit logs"
+    },
+    {
+     "name": "git_create_branch",
+     "description": "Creates a new branch from an optional base branch"
+    },
+    {
+     "name": "git_checkout",
+     "description": "Switches branches"
+    },
+    {
+     "name": "git_show",
+     "description": "Shows the contents of a commit, or of a file or directory given as <revision>:<path>"
+    },
+    {
+     "name": "git_branch",
+     "description": "List Git branches"
+    }
+   ]
+  },
+  "filesystem": {
+   "checked": "2026-10-16",
+   "via": "npx @modelcontextprotocol/server-filesystem",
+   "tools": [
+    {
+     "name": "read_file",
+     "description": "Read the complete contents of a file as text. DEPRECATED: Use read_text_file instead."
+    },
+    {
+     "name": "read_text_file",
+     "description": "Read the complete contents of a file from the file system as text. Handles various text encodings and provides detailed error messages if the file cannot be read. Use this tool when you need to examine the contents of a single file. Use the 'head' parameter to read only the first N lines of a file, "
+    },
+    {
+     "name": "read_media_file",
+     "description": "Read a file and return it as a base64-encoded content block with its MIME type. Image and audio files are returned as image/audio content; any other file type is returned as an embedded resource. Only works within allowed directories."
+    },
+    {
+     "name": "read_multiple_files",
+     "description": "Read the contents of multiple files simultaneously. This is more efficient than reading files one by one when you need to analyze or compare multiple files. Each file's content is returned with its path as a reference. Failed reads for individual files won't stop the entire operation. Only works wit"
+    },
+    {
+     "name": "write_file",
+     "description": "Create a new file or completely overwrite an existing file with new content. Use with caution as it will overwrite existing files without warning. Handles text content with proper encoding. Only works within allowed directories."
+    },
+    {
+     "name": "edit_file",
+     "description": "Make line-based edits to a text file. Each edit replaces exact line sequences with new content. Returns a git-style diff showing the changes made. Only works within allowed directories."
+    },
+    {
+     "name": "create_directory",
+     "description": "Create a new directory or ensure a directory exists. Can create multiple nested directories in one operation. If the directory already exists, this operation will succeed silently. Perfect for setting up directory structures for projects or ensuring required paths exist. Only works within allowed di"
+    },
+    {
+     "name": "list_directory",
+     "description": "Get a detailed listing of all files and directories in a specified path. Results clearly distinguish between files and directories with [FILE] and [DIR] prefixes. This tool is essential for understanding directory structure and finding specific files within a directory. Only works within allowed dir"
+    },
+    {
+     "name": "list_directory_with_sizes",
+     "description": "Get a detailed listing of all files and directories in a specified path, including sizes. Results clearly distinguish between files and directories with [FILE] and [DIR] prefixes. This tool is useful for understanding directory structure and finding specific files within a directory. Only works with"
+    },
+    {
+     "name": "directory_tree",
+     "description": "Get a recursive tree view of files and directories as a JSON structure. Each entry includes 'name', 'type' (file/directory), and 'children' for directories. Files have no children array, while directories always have a children array (which may be empty). The output is formatted with 2-space indenta"
+    },
+    {
+     "name": "move_file",
+     "description": "Move or rename files and directories. Can move files between directories and rename them in a single operation. If the destination exists, the operation will fail. Works across different directories and can be used for simple renaming within the same directory. Both source and destination must be wi"
+    },
+    {
+     "name": "search_files",
+     "description": "Recursively search for files and directories matching a pattern. The patterns should be glob-style patterns that match paths relative to the working directory. Use pattern like '*.ext' to match files in current directory, and '**/*.ext' to match files in all subdirectories. Returns full paths to all"
+    },
+    {
+     "name": "get_file_info",
+     "description": "Retrieve detailed metadata about a file or directory. Returns comprehensive information including size, creation time, last modified time, permissions, and type. This tool is perfect for understanding file characteristics without reading the actual content. Only works within allowed directories."
+    },
+    {
+     "name": "list_allowed_directories",
+     "description": "Returns the list of directories that this server is allowed to access. Subdirectories within these allowed directories are also accessible. Use this to understand which directories and their nested paths are available before trying to access files."
+    }
+   ]
+  },
+  "fetch": {
+   "checked": "2026-10-16",
+   "via": "uvx mcp-server-fetch",
+   "tools": [
+    {
+     "name": "fetch",
+     "description": "Fetches a URL from the internet and optionally extracts its contents as markdown. Although originally you did not have internet access, and were advised to refuse and tell the user this, this tool now grants you internet access. Now you can fetch the most up-to-date information and let the user know"
+    }
+   ]
+  },
+  "memory": {
+   "checked": "2026-10-16",
+   "via": "npx @modelcontextprotocol/server-memory",
+   "tools": [
+    {
+     "name": "create_entities",
+     "description": "Create multiple new entities in the knowledge graph. An entity whose name already exists, or repeats an earlier entity in the same call, is skipped and its observations are not added; the result lists the skipped names in `skipped`. Use add_observations to add observations to an existing entity."
+    },
+    {
+     "name": "create_relations",
+     "description": "Create multiple new relations between entities in the knowledge graph. Relations should be in active voice"
+    },
+    {
+     "name": "add_observations",
+     "description": "Add new observations to existing entities in the knowledge graph"
+    },
+    {
+     "name": "delete_entities",
+     "description": "Delete multiple entities and their associated relations from the knowledge graph"
+    },
+    {
+     "name": "delete_observations",
+     "description": "Delete specific observations from entities in the knowledge graph"
+    },
+    {
+     "name": "delete_relations",
+     "description": "Delete multiple relations from the knowledge graph"
+    },
+    {
+     "name": "read_graph",
+     "description": "Read the entire knowledge graph"
+    },
+    {
+     "name": "search_nodes",
+     "description": "Search for nodes in the knowledge graph based on a query"
+    },
+    {
+     "name": "open_nodes",
+     "description": "Open specific nodes in the knowledge graph by their names"
+    }
+   ]
+  },
+  "sequential-thinking": {
+   "checked": "2026-10-16",
+   "via": "npx @modelcontextprotocol/server-sequential-thinking",
+   "tools": [
+    {
+     "name": "sequentialthinking",
+     "description": "A detailed tool for dynamic and reflective problem-solving through thoughts. This tool helps analyze problems through a flexible thinking process that can adapt and evolve. Each thought can build on, question, or revise previous insights as understanding deepens. When to use this tool: - Breaking do"
+    }
+   ]
+  },
+  "time": {
+   "checked": "2026-10-16",
+   "via": "uvx mcp-server-time",
+   "tools": [
+    {
+     "name": "get_current_time",
+     "description": "Get current time in a specific timezone"
+    },
+    {
+     "name": "convert_time",
+     "description": "Convert time between timezones"
+    }
+   ]
+  },
+  "everything": {
+   "checked": "2026-10-16",
+   "via": "npx @modelcontextprotocol/server-everything",
+   "tools": [
+    {
+     "name": "echo",
+     "description": "Echoes back the input string"
+    },
+    {
+     "name": "get-annotated-message",
+     "description": "Demonstrates how annotations can be used to provide metadata about content."
+    },
+    {
+     "name": "get-env",
+     "description": "Returns all environment variables, helpful for debugging MCP server configuration"
+    },
+    {
+     "name": "get-resource-links",
+     "description": "Returns up to ten resource links that reference different types of resources"
+    },
+    {
+     "name": "get-resource-reference",
+     "description": "Returns a resource reference that can be used by MCP clients"
+    },
+    {
+     "name": "get-structured-content",
+     "description": "Returns structured content along with an output schema for client data validation"
+    },
+    {
+     "name": "get-sum",
+     "description": "Returns the sum of two numbers"
+    },
+    {
+     "name": "get-tiny-image",
+     "description": "Returns a tiny MCP logo image."
+    },
+    {
+     "name": "gzip-file-as-resource",
+     "description": "Compresses a single file using gzip compression. Depending upon the selected output type, returns either the compressed data as a gzipped resource or a resource link, allowing it to be downloaded in a subsequent request during the current session."
+    },
+    {
+     "name": "toggle-simulated-logging",
+     "description": "Toggles simulated, random-leveled logging on or off."
+    },
+    {
+     "name": "toggle-subscriber-updates",
+     "description": "Toggles simulated resource subscription updates on or off."
+    },
+    {
+     "name": "trigger-long-running-operation",
+     "description": "Demonstrates a long running operation with progress updates."
+    },
+    {
+     "name": "simulate-research-query",
+     "description": "Simulates a deep research operation that gathers, analyzes, and synthesizes information. Demonstrates MCP task-based operations with progress through multiple stages. If 'ambiguous' is true and client supports elicitation, sends an elicitation request for clarification."
+    }
+   ]
+  },
+  "playwright": {
+   "checked": "2026-10-16",
+   "via": "npx @playwright/mcp@latest",
+   "tools": [
+    {
+     "name": "browser_close",
+     "description": "Close the page"
+    },
+    {
+     "name": "browser_resize",
+     "description": "Resize the browser window"
+    },
+    {
+     "name": "browser_console_messages",
+     "description": "Returns all console messages"
+    },
+    {
+     "name": "browser_handle_dialog",
+     "description": "Handle a dialog"
+    },
+    {
+     "name": "browser_emulate_media",
+     "description": "Emulate CSS media features for the page, for example switch between the light and dark color scheme. Omitted parameters are left unchanged; null clears an override."
+    },
+    {
+     "name": "browser_evaluate",
+     "description": "Evaluate JavaScript expression on page or element"
+    },
+    {
+     "name": "browser_file_upload",
+     "description": "Upload one or multiple files"
+    },
+    {
+     "name": "browser_drop",
+     "description": "Drop files or MIME-typed data onto an element, as if dragged from outside the page. At least one of \"paths\" or \"data\" must be provided."
+    },
+    {
+     "name": "browser_find",
+     "description": "Search the accessibility snapshot of the current page for text or a regular expression. Returns matching snapshot nodes with a few lines of surrounding context (like search snippets), each shown under its path from the root of the tree, which is cheaper than capturing the whole snapshot when you onl"
+    },
+    {
+     "name": "browser_fill_form",
+     "description": "Fill multiple form fields"
+    },
+    {
+     "name": "browser_press_key",
+     "description": "Press a key on the keyboard"
+    },
+    {
+     "name": "browser_type",
+     "description": "Type text into editable element"
+    },
+    {
+     "name": "browser_navigate",
+     "description": "Navigate to a URL"
+    },
+    {
+     "name": "browser_navigate_back",
+     "description": "Go back to the previous page in the history"
+    },
+    {
+     "name": "browser_network_requests",
+     "description": "Returns a numbered list of network requests since loading the page. Use browser_network_request with the number to get full details."
+    },
+    {
+     "name": "browser_network_request",
+     "description": "Returns full details (headers and body) of a single network request, or a single part if `part` is set. Use the number from browser_network_requests."
+    },
+    {
+     "name": "browser_run_code_unsafe",
+     "description": "Run a Playwright code snippet. Unsafe: executes arbitrary JavaScript in the Playwright server process and is RCE-equivalent."
+    },
+    {
+     "name": "browser_take_screenshot",
+     "description": "Take a screenshot of the current page. You can't perform actions based on the screenshot, use browser_snapshot for actions."
+    },
+    {
+     "name": "browser_snapshot",
+     "description": "Capture accessibility snapshot of the current page, this is better than screenshot"
+    },
+    {
+     "name": "browser_click",
+     "description": "Perform click on a web page"
+    },
+    {
+     "name": "browser_drag",
+     "description": "Perform drag and drop between two elements"
+    },
+    {
+     "name": "browser_hover",
+     "description": "Hover over element on page"
+    },
+    {
+     "name": "browser_select_option",
+     "description": "Select an option in a dropdown"
+    },
+    {
+     "name": "browser_tabs",
+     "description": "List, create, close, or select a browser tab."
+    },
+    {
+     "name": "browser_wait_for",
+     "description": "Wait for text to appear or disappear or a specified time to pass"
+    }
+   ]
+  },
+  "chrome-devtools": {
+   "checked": "2026-10-16",
+   "via": "npx chrome-devtools-mcp@latest",
+   "tools": [
+    {
+     "name": "click",
+     "description": "Clicks on the provided element"
+    },
+    {
+     "name": "close_page",
+     "description": "Closes the page by its index. The last open page cannot be closed."
+    },
+    {
+     "name": "drag",
+     "description": "Drag an element onto another element"
+    },
+    {
+     "name": "emulate",
+     "description": "Emulates various features on the target page. Each call replaces all emulation settings (except extraHttpHeaders), so pass all desired settings in a single call."
+    },
+    {
+     "name": "evaluate_script",
+     "description": "Evaluate JavaScript inside the target page. The source can be provided inline or loaded from a local file. Returns the response as JSON, so returned values have to be JSON-serializable."
+    },
+    {
+     "name": "fill",
+     "description": "Type text into an input, text area or select an option from a <select> element."
+    },
+    {
+     "name": "fill_form",
+     "description": "Fill out multiple form elements (inputs, selects, checkboxes, radios) at once. ALWAYS prefer this tool over multiple individual 'fill' or 'click' calls when interacting with forms. It is significantly faster, more reliable, and reduces turn count. Example: Fill username, password, and check \"Remembe"
+    },
+    {
+     "name": "get_console_message",
+     "description": "Gets a console message by its ID. You can get all messages by calling list_console_messages."
+    },
+    {
+     "name": "get_css_styles",
+     "description": "Retrieve matched CSS rules, inline styles (element.style), inherited styles, custom properties, and cascade wrappers (@layer, @media, @container, @scope) for an element identified by its UID. Rules are ordered from highest to lowest cascade precedence and include source line numbers (e.g. index:196)"
+    },
+    {
+     "name": "get_network_request",
+     "description": "Gets a network request by an optional reqid, if omitted returns the currently selected request in the DevTools Network panel. Useful for inspecting request headers (including 'Cookie') and response headers (including 'Set-Cookie' and directives)."
+    },
+    {
+     "name": "handle_dialog",
+     "description": "If a browser dialog was opened, use this command to handle it"
+    },
+    {
+     "name": "hover",
+     "description": "Hover over the provided element"
+    },
+    {
+     "name": "lighthouse_audit",
+     "description": "Get Lighthouse scores, failing audits, and the DOM nodes they flag for accessibility, SEO, best practices, and agentic browsing. Full reports are saved to disk. This excludes performance. For performance audits, run performance_start_trace"
+    },
+    {
+     "name": "list_console_messages",
+     "description": "List all console messages for the target page since the last navigation."
+    },
+    {
+     "name": "list_network_requests",
+     "description": "Lists the most recent requests for the target page since the last navigation."
+    },
+    {
+     "name": "list_pages",
+     "description": "Get a list of pages open in the browser."
+    },
+    {
+     "name": "navigate_page",
+     "description": "Go to a URL, or back, forward, or reload. Use project URL if not specified otherwise."
+    },
+    {
+     "name": "new_page",
+     "description": "Open a new tab and load a URL. Use project URL if not specified otherwise."
+    },
+    {
+     "name": "performance_analyze_insight",
+     "description": "Provides more detailed information on a specific Performance Insight of an insight set that was highlighted in the results of a trace recording."
+    },
+    {
+     "name": "performance_start_trace",
+     "description": "Start a performance trace on the target webpage. Use to find frontend performance issues, Core Web Vitals (LCP, INP, CLS), and improve page load speed."
+    },
+    {
+     "name": "performance_stop_trace",
+     "description": "Stop the active performance trace recording on the target webpage."
+    },
+    {
+     "name": "press_key",
+     "description": "Press a key or key combination. Use this when other input methods like fill() cannot be used (e.g., keyboard shortcuts, navigation keys, or special key combinations)."
+    },
+    {
+     "name": "resize_page",
+     "description": "Resizes the page's window so that the page has specified dimension"
+    },
+    {
+     "name": "screencast_start",
+     "description": "Starts recording a screencast (video) of the target page."
+    },
+    {
+     "name": "screencast_stop",
+     "description": "Stops the active screencast recording on the target page."
+    },
+    {
+     "name": "select_page",
+     "description": "Select a page as a context for future tool calls."
+    },
+    {
+     "name": "take_heapsnapshot",
+     "description": "Capture a heap snapshot of the target page. Use to analyze the memory distribution of JavaScript objects and debug memory leaks."
+    },
+    {
+     "name": "take_screenshot",
+     "description": "Take a screenshot of the page or element."
+    },
+    {
+     "name": "take_snapshot",
+     "description": "Take a text snapshot of the target page based on the a11y tree. The snapshot lists page elements along with a unique identifier (uid). Always use the latest snapshot. Prefer taking a snapshot over taking a screenshot. The snapshot indicates the element selected in the DevTools Elements panel (if any"
+    },
+    {
+     "name": "type_text",
+     "description": "Type text using keyboard into a previously focused input"
+    },
+    {
+     "name": "upload_file",
+     "description": "Upload a file through a provided element."
+    },
+    {
+     "name": "wait_for",
+     "description": "Wait for the specified text to appear on the selected page."
+    }
+   ]
+  },
+  "exa": {
+   "checked": "2026-10-16",
+   "via": "remote https://mcp.exa.ai/mcp",
+   "tools": [
+    {
+     "name": "web_search_exa",
+     "description": "Search the web for any topic and get clean, ready-to-use content. Best for: Finding current information, news, facts, people, companies, or answering questions about any topic. Returns: Clean text content from top search results. Query tips: describe the ideal page, not keywords. \"blog post comparin"
+    },
+    {
+     "name": "web_fetch_exa",
+     "description": "Read a webpage's full content as clean markdown. Use after web_search_exa when highlights are insufficient or to read any URL. Best for: Extracting full content from known URLs. Batch multiple URLs in one call. Returns: Clean text content and metadata from the page(s)."
+    }
+   ]
+  },
+  "context7": {
+   "checked": "2026-10-16",
+   "via": "remote https://mcp.context7.com/mcp",
+   "tools": [
+    {
+     "name": "resolve-library-id",
+     "description": "Resolves a package/product name to a Context7-compatible library ID and returns matching libraries. You MUST call this function before 'Query Documentation' tool to obtain a valid Context7-compatible library ID UNLESS the user explicitly provides a library ID in the format '/org/project' or '/org/pr"
+    },
+    {
+     "name": "query-docs",
+     "description": "Retrieves and queries up-to-date documentation and code examples from Context7 for any programming library or framework. You must call 'Resolve Context7 Library ID' tool first to obtain the exact Context7-compatible library ID required to use this tool, UNLESS the user explicitly provides a library "
+    }
+   ]
+  },
+  "cloudflare": {
+   "checked": "2026-10-16",
+   "via": "remote https://docs.mcp.cloudflare.com/mcp",
+   "note": "Cloudflare Docs server only",
+   "tools": [
+    {
+     "name": "search_cloudflare_documentation",
+     "description": "Search the Cloudflare documentation. This tool should be used to answer any question about Cloudflare products or features, including: - Workers, Pages, R2, Images, Stream, D1, Durable Objects, KV, Workflows, Hyperdrive, Queues - AI Search, Workers AI, Vectorize, AI Gateway, Browser Run - Zero Trust"
+    },
+    {
+     "name": "migrate_pages_to_workers_guide",
+     "description": "ALWAYS read this guide before migrating Pages projects to Workers."
+    }
+   ]
+  }
+ },
+ "lastRun": "2026-10-16T22:58:48.023Z"
+}

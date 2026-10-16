@@ -1,6 +1,7 @@
 import raw from "../data/connectors.json";
 import logoMap from "../data/logos.json";
 import drift from "../data/drift.json";
+import toolsDb from "../data/tools.json";
 export type Setup = { label: string; code: string };
 export type Entry = { command?: string; args?: string[]; env?: Record<string, string>; url?: string; type?: string };
 export type Connector = { slug: string; name: string; vendor: string; category: string; official: boolean; summary: string; description: string; tools: string[]; setup: Setup[]; prompts: string[]; officialUrl: string; sourceUrl: string; lastVerified: string; auth: { method: string; scopes: string } };
@@ -36,8 +37,12 @@ export function slim(c: Connector) {
   return { slug: c.slug, name: c.name, vendor: c.vendor, category: c.category, official: c.official, summary: c.summary, tools: c.tools, logo: logoOf(c.slug), verified: c.lastVerified, stale: !!driftOf(c.slug).needsReverification };
 }
 
-type Drift = { source?: string; needsReverification?: boolean; changedAt?: string | null; lastCheck?: string; release?: string | null; lastError?: string };
+type Drift = { source?: string; needsReverification?: boolean; changedAt?: string | null; lastCheck?: string; release?: string | null; lastError?: string; authChanged?: boolean; authChangedAt?: string | null };
 export const driftRun: string | undefined = (drift as any).lastRun;
 export function driftOf(slug: string): Drift { return ((drift as any).entries?.[slug] || {}) as Drift; }
 export const flagged = () => connectors.filter(c => driftOf(c.slug).needsReverification);
 export function fmtDate(iso: string) { return new Date(iso + (iso.length === 10 ? "T12:00:00Z" : "")).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "America/New_York" }); }
+export const authFlagged = () => connectors.filter(c => driftOf(c.slug).authChanged);
+export type LiveTools = { checked: string; via: string; note?: string; tools: { name: string; description: string }[] };
+export function liveToolsOf(slug: string): LiveTools | null { return ((toolsDb as any).entries?.[slug] || null) as LiveTools | null; }
+export const liveCount = () => Object.keys((toolsDb as any).entries || {}).length;
