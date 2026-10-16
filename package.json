@@ -1,0 +1,29 @@
+{
+  "name": "connectory",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "next dev",
+    "build": "node scripts/gen-logos.mjs && next build",
+    "start": "next start",
+    "check-drift": "node scripts/check-drift.mjs",
+    "indexnow": "node scripts/indexnow.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1",
+    "@vercel/blob": "^2.8.2",
+    "next": "^15.5.28",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "simple-icons": "^16.35.0",
+    "typescript": "^5.9.3"
+  },
+  "private": true
+}

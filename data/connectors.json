@@ -1,0 +1,1902 @@
+[
+ {
+  "slug": "github",
+  "name": "GitHub",
+  "vendor": "GitHub",
+  "category": "dev-tools",
+  "official": true,
+  "summary": "GitHub's official MCP server: work with repos, issues, pull requests, Actions and code security from your agent.",
+  "description": "The GitHub MCP Server connects AI tools directly to GitHub's platform, letting agents read repositories and code files, manage issues and pull requests, analyze code, and automate workflows. It is available as a remote server hosted by GitHub or as a local server run via Docker.",
+  "tools": [
+   "get_file_contents",
+   "get_repository_tree",
+   "list_gists / create_gist",
+   "github_support_docs_search",
+   "Toolsets: pull_requests, code_security, secret_protection, security_advisories, copilot_spaces"
+  ],
+  "setup": [
+   {
+    "label": "Remote server (OAuth or PAT)",
+    "code": "{\n  \"servers\": {\n    \"github\": {\n      \"type\": \"http\",\n      \"url\": \"https://api.githubcopilot.com/mcp/\"\n    }\n  }\n}"
+   },
+   {
+    "label": "Local via Docker in Claude Code",
+    "code": "claude mcp add github -e GITHUB_PERSONAL_ACCESS_TOKEN=$GITHUB_PAT -- docker run -i --rm -e GITHUB_PERSONAL_ACCESS_TOKEN ghcr.io/github/github-mcp-server"
+   }
+  ],
+  "prompts": [
+   "Summarize the open pull requests in my repo that are waiting on review.",
+   "Find where the auth middleware is defined in this repository and explain it.",
+   "Create an issue describing the bug we just reproduced."
+  ],
+  "officialUrl": "https://github.com/github/github-mcp-server",
+  "sourceUrl": "https://github.com/github/github-mcp-server",
+  "auth": {
+   "method": "OAuth (remote) or Personal Access Token",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "gitlab",
+  "name": "GitLab (community)",
+  "vendor": "zereight (community)",
+  "category": "dev-tools",
+  "official": false,
+  "summary": "Community GitLab MCP server covering merge requests, pipelines, projects and the GitLab API.",
+  "description": "A widely used community-maintained MCP server for GitLab. It exposes tools for merge requests, diffs, pipelines and jobs, groups, environments and generic GitLab API requests. The original reference GitLab server from the MCP project is archived.",
+  "tools": [
+   "get_merge_request",
+   "list_merge_request_changed_files",
+   "get_merge_request_file_diff",
+   "cancel_pipeline",
+   "validate_ci_lint",
+   "execute_graphql"
+  ],
+  "setup": [
+   {
+    "label": "Run with npx",
+    "code": "npx -y @zereight/mcp-gitlab@latest"
+   }
+  ],
+  "prompts": [
+   "Review the diff of merge request !42 and list risky changes.",
+   "Why did the latest pipeline on main fail?",
+   "Validate this .gitlab-ci.yml before I push it."
+  ],
+  "officialUrl": "https://github.com/zereight/gitlab-mcp",
+  "sourceUrl": "https://github.com/zereight/gitlab-mcp",
+  "auth": {
+   "method": "Personal Access Token (or OAuth)",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "git",
+  "name": "Git",
+  "vendor": "Model Context Protocol",
+  "category": "dev-tools",
+  "official": true,
+  "summary": "Reference server for reading, searching and manipulating local Git repositories.",
+  "description": "One of the reference servers maintained in the official modelcontextprotocol/servers repo. It gives an LLM tools to inspect status, diffs and logs and to stage, commit, reset and branch in a local Git repository.",
+  "tools": [
+   "git_status",
+   "git_diff_unstaged",
+   "git_diff_staged",
+   "git_diff",
+   "git_commit",
+   "git_add",
+   "git_reset",
+   "git_log",
+   "git_create_branch"
+  ],
+  "setup": [
+   {
+    "label": "Run with uvx",
+    "code": "{\n  \"mcpServers\": {\n    \"git\": {\n      \"command\": \"uvx\",\n      \"args\": [\"mcp-server-git\", \"--repository\", \"path/to/git/repo\"]\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Show me what changed since the last commit and write a commit message.",
+   "List the last 10 commits touching the billing module.",
+   "Create a branch called fix/login-redirect."
+  ],
+  "officialUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/git",
+  "sourceUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/git",
+  "auth": {
+   "method": "None (local repository access)",
+   "scopes": "\u2014"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "filesystem",
+  "name": "Filesystem",
+  "vendor": "Model Context Protocol",
+  "category": "dev-tools",
+  "official": true,
+  "summary": "Reference server for secure file operations restricted to directories you allow.",
+  "description": "Official reference server that lets an agent read, write, edit, move and search files, but only inside the directories passed on the command line (or provided via MCP Roots).",
+  "tools": [
+   "read_text_file",
+   "read_multiple_files",
+   "write_file",
+   "edit_file",
+   "create_directory",
+   "list_directory",
+   "move_file",
+   "search_files",
+   "directory_tree",
+   "get_file_info",
+   "list_allowed_directories"
+  ],
+  "setup": [
+   {
+    "label": "Run with npx",
+    "code": "{\n  \"mcpServers\": {\n    \"filesystem\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-filesystem\", \"/Users/username/Desktop\", \"/path/to/other/allowed/dir\"]\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Find every markdown file in my notes folder that mentions 'Q3 plan'.",
+   "Rename all screenshots on my Desktop to include their date.",
+   "Show the directory tree of this project."
+  ],
+  "officialUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem",
+  "sourceUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem",
+  "auth": {
+   "method": "None (restricted to allowed directories)",
+   "scopes": "\u2014"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "fetch",
+  "name": "Fetch",
+  "vendor": "Model Context Protocol",
+  "category": "data",
+  "official": true,
+  "summary": "Reference server that fetches web pages and converts them to markdown for LLMs.",
+  "description": "Official reference server that retrieves a URL and converts HTML to markdown, with support for reading long pages in chunks via start_index and max_length.",
+  "tools": [
+   "fetch (url, max_length, start_index, raw)"
+  ],
+  "setup": [
+   {
+    "label": "Run with uvx",
+    "code": "{\n  \"mcpServers\": {\n    \"fetch\": {\n      \"command\": \"uvx\",\n      \"args\": [\"mcp-server-fetch\"]\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Fetch this blog post and summarize it in five bullets.",
+   "Read the changelog page and list breaking changes."
+  ],
+  "officialUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/fetch",
+  "sourceUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/fetch",
+  "auth": {
+   "method": "None",
+   "scopes": "\u2014"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "memory",
+  "name": "Memory",
+  "vendor": "Model Context Protocol",
+  "category": "productivity",
+  "official": true,
+  "summary": "Knowledge-graph based persistent memory for your assistant.",
+  "description": "Official reference server that stores entities, relations and observations in a local knowledge graph so an assistant can remember facts across chats.",
+  "tools": [
+   "create_entities",
+   "create_relations",
+   "add_observations",
+   "delete_entities",
+   "delete_observations",
+   "delete_relations",
+   "read_graph",
+   "search_nodes",
+   "open_nodes"
+  ],
+  "setup": [
+   {
+    "label": "Run with npx",
+    "code": "{\n  \"mcpServers\": {\n    \"memory\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-memory\"]\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Remember that my preferred stack is Next.js + Postgres.",
+   "What do you remember about project Atlas?"
+  ],
+  "officialUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/memory",
+  "sourceUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/memory",
+  "auth": {
+   "method": "None (local)",
+   "scopes": "\u2014"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "sequential-thinking",
+  "name": "Sequential Thinking",
+  "vendor": "Model Context Protocol",
+  "category": "productivity",
+  "official": true,
+  "summary": "Structured, reflective step-by-step problem solving through thought sequences.",
+  "description": "Official reference server that provides a tool for breaking complex problems into revisable, branching sequences of thoughts.",
+  "tools": [
+   "sequential_thinking"
+  ],
+  "setup": [
+   {
+    "label": "Run with npx",
+    "code": "{\n  \"mcpServers\": {\n    \"sequential-thinking\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-sequential-thinking\"]\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Think step by step through the migration plan from MySQL to Postgres.",
+   "Break this product launch into stages and revise as needed."
+  ],
+  "officialUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking",
+  "sourceUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking",
+  "auth": {
+   "method": "None",
+   "scopes": "\u2014"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "time",
+  "name": "Time",
+  "vendor": "Model Context Protocol",
+  "category": "productivity",
+  "official": true,
+  "summary": "Current time and timezone conversion for your agent.",
+  "description": "Official reference server that returns the current time in any IANA timezone and converts times between timezones.",
+  "tools": [
+   "get_current_time",
+   "convert_time"
+  ],
+  "setup": [
+   {
+    "label": "Run with uvx",
+    "code": "{\n  \"mcpServers\": {\n    \"time\": {\n      \"command\": \"uvx\",\n      \"args\": [\"mcp-server-time\"]\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "What time is it in Tokyo right now?",
+   "If it's 3pm in New York, what time is it in Berlin?"
+  ],
+  "officialUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/time",
+  "sourceUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/time",
+  "auth": {
+   "method": "None",
+   "scopes": "\u2014"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "everything",
+  "name": "Everything (test server)",
+  "vendor": "Model Context Protocol",
+  "category": "dev-tools",
+  "official": true,
+  "summary": "Reference test server exercising every MCP feature: prompts, resources and tools.",
+  "description": "Official server meant for MCP client builders. It implements prompts, resources, tools and other protocol features so you can test a client end to end.",
+  "tools": [
+   "Sample tools, resources and prompts covering the MCP spec"
+  ],
+  "setup": [
+   {
+    "label": "Run with npx",
+    "code": "{\n  \"mcpServers\": {\n    \"everything\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-everything\"]\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "List every tool and resource this server exposes."
+  ],
+  "officialUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/everything",
+  "sourceUrl": "https://github.com/modelcontextprotocol/servers/tree/main/src/everything",
+  "auth": {
+   "method": "None",
+   "scopes": "\u2014"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "figma",
+  "name": "Figma",
+  "vendor": "Figma",
+  "category": "design",
+  "official": true,
+  "summary": "Figma's official MCP server brings design context (frames, variables, components) into coding agents.",
+  "description": "Figma's MCP server gives agents design context from Figma files so they can generate code that matches your designs. Figma hosts a remote server you connect to with your Figma account.",
+  "tools": [
+   "get_design_context",
+   "get_screenshot",
+   "get_metadata",
+   "get_variable_defs",
+   "Code Connect mapping tools"
+  ],
+  "setup": [
+   {
+    "label": "Remote server",
+    "code": "{\n  \"mcpServers\": {\n    \"figma\": {\n      \"url\": \"https://mcp.figma.com/mcp\"\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Implement the selected Figma frame as a React component using our design tokens.",
+   "List the color variables used in this Figma file."
+  ],
+  "officialUrl": "https://developers.figma.com/docs/figma-mcp-server/",
+  "sourceUrl": "https://developers.figma.com/docs/figma-mcp-server/remote-server-installation/",
+  "auth": {
+   "method": "Figma account sign-in (remote server)",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "framelink-figma",
+  "name": "Framelink Figma MCP",
+  "vendor": "GLips (community)",
+  "category": "design",
+  "official": false,
+  "summary": "Popular community server giving coding agents simplified Figma layout data via the Figma API.",
+  "description": "Framelink (figma-developer-mcp) fetches Figma file and node data through the Figma REST API and simplifies it so agents like Cursor can implement designs accurately. Requires a Figma personal access token.",
+  "tools": [
+   "Fetch Figma file/frame layout data",
+   "Download images from Figma files"
+  ],
+  "setup": [
+   {
+    "label": "Run with npx",
+    "code": "{\n  \"mcpServers\": {\n    \"Framelink MCP for Figma\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"figma-developer-mcp\", \"--figma-api-key=YOUR-KEY\", \"--stdio\"]\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Implement this Figma frame link in Tailwind.",
+   "Download the icons from this Figma frame into /public."
+  ],
+  "officialUrl": "https://github.com/GLips/Figma-Context-MCP",
+  "sourceUrl": "https://github.com/GLips/Figma-Context-MCP",
+  "auth": {
+   "method": "Figma personal access token",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "stripe",
+  "name": "Stripe",
+  "vendor": "Stripe",
+  "category": "payments",
+  "official": true,
+  "summary": "Stripe's hosted MCP server for working with the Stripe API and searching Stripe docs.",
+  "description": "Stripe hosts a remote MCP server at mcp.stripe.com that lets MCP clients interact with the Stripe API and knowledge base, authenticated via OAuth.",
+  "tools": [
+   "Create and manage Stripe objects (customers, products, prices, payment links, invoices, refunds and more)",
+   "Search Stripe documentation"
+  ],
+  "setup": [
+   {
+    "label": "Remote server (OAuth)",
+    "code": "{\n  \"mcpServers\": {\n    \"stripe\": {\n      \"url\": \"https://mcp.stripe.com\"\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Create a $29/month product and a payment link for it.",
+   "List last week's failed payments and their reasons."
+  ],
+  "officialUrl": "https://docs.stripe.com/mcp",
+  "sourceUrl": "https://github.com/stripe/agent-toolkit",
+  "auth": {
+   "method": "OAuth (remote server)",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "paypal",
+  "name": "PayPal",
+  "vendor": "PayPal",
+  "category": "payments",
+  "official": true,
+  "summary": "PayPal's agent toolkit MCP server for invoices, payments and more.",
+  "description": "PayPal's official MCP server (part of the PayPal Agent Toolkit) exposes PayPal APIs such as invoicing to AI agents. Local setup uses a PayPal access token.",
+  "tools": [
+   "create_invoice",
+   "list_invoices",
+   "get_invoice",
+   "send_invoice",
+   "send_invoice_reminder",
+   "cancel_sent_invoice",
+   "generate_invoice_qr_code"
+  ],
+  "setup": [
+   {
+    "label": "Environment",
+    "code": "PAYPAL_ACCESS_TOKEN=<your access token>\n# see the PayPal agent toolkit README for client configuration"
+   }
+  ],
+  "prompts": [
+   "Create and send an invoice for $500 to client@example.com.",
+   "Which invoices are still unpaid?"
+  ],
+  "officialUrl": "https://github.com/paypal/agent-toolkit",
+  "sourceUrl": "https://github.com/paypal/agent-toolkit",
+  "auth": {
+   "method": "PayPal access token",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "square",
+  "name": "Square",
+  "vendor": "Square",
+  "category": "payments",
+  "official": true,
+  "summary": "Square's MCP server gives agents access to the Square API (payments, catalog, customers, orders).",
+  "description": "Square's official MCP server exposes the Square API through a small set of meta-tools that let an agent discover services and make API requests. A hosted remote server is available.",
+  "tools": [
+   "get_service_info",
+   "get_type_info",
+   "make_api_request"
+  ],
+  "setup": [
+   {
+    "label": "Remote server",
+    "code": "{\n  \"mcpServers\": {\n    \"square\": {\n      \"url\": \"https://mcp.squareup.com/mcp\"\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "What were my top-selling catalog items this month?",
+   "Add a new customer named Jane Doe."
+  ],
+  "officialUrl": "https://github.com/square/square-mcp-server",
+  "sourceUrl": "https://github.com/square/square-mcp-server",
+  "auth": {
+   "method": "OAuth (remote server)",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "linear",
+  "name": "Linear",
+  "vendor": "Linear",
+  "category": "productivity",
+  "official": true,
+  "summary": "Linear's official remote MCP server to find, create and update issues, projects and comments.",
+  "description": "Linear hosts a centrally managed remote MCP server with OAuth authentication. It lets agents search and manage issues, projects and comments in your Linear workspace. A read-only endpoint is also available.",
+  "tools": [
+   "Find, create and update issues",
+   "Manage projects",
+   "Add comments"
+  ],
+  "setup": [
+   {
+    "label": "Remote server",
+    "code": "{\n  \"mcpServers\": {\n    \"linear\": {\n      \"url\": \"https://mcp.linear.app/mcp\"\n    }\n  }\n}"
+   },
+   {
+    "label": "Claude Code",
+    "code": "claude mcp add --transport http linear-server https://mcp.linear.app/mcp"
+   }
+  ],
+  "prompts": [
+   "Create a Linear issue for this bug and assign it to me.",
+   "What's in the current cycle for the Web team?"
+  ],
+  "officialUrl": "https://linear.app/docs/mcp",
+  "sourceUrl": "https://linear.app/docs/mcp",
+  "auth": {
+   "method": "OAuth (remote server)",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "notion",
+  "name": "Notion",
+  "vendor": "Notion",
+  "category": "productivity",
+  "official": true,
+  "summary": "Notion's MCP server lets agents search, read and edit pages and databases.",
+  "description": "Notion offers a hosted MCP server (OAuth) and an open-source local server (@notionhq/notion-mcp-server) that uses an integration token.",
+  "tools": [
+   "Search pages and databases",
+   "Read and create pages",
+   "Update page content",
+   "Query data sources"
+  ],
+  "setup": [
+   {
+    "label": "Remote server",
+    "code": "{\n  \"mcpServers\": {\n    \"notion\": {\n      \"url\": \"https://mcp.notion.com/mcp\"\n    }\n  }\n}"
+   },
+   {
+    "label": "Local server (integration token)",
+    "code": "{\n  \"mcpServers\": {\n    \"notionApi\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@notionhq/notion-mcp-server\"],\n      \"env\": { \"NOTION_TOKEN\": \"ntn_****\" }\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Summarize my meeting notes from this week in Notion.",
+   "Add a row to the Content Calendar database for Friday's post."
+  ],
+  "officialUrl": "https://developers.notion.com/docs/mcp",
+  "sourceUrl": "https://github.com/makenotion/notion-mcp-server",
+  "auth": {
+   "method": "OAuth (remote) or integration token",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "atlassian",
+  "name": "Atlassian (Jira & Confluence)",
+  "vendor": "Atlassian",
+  "category": "productivity",
+  "official": true,
+  "summary": "Atlassian's remote MCP server for Jira, Confluence, Bitbucket and Jira Service Management.",
+  "description": "The Atlassian Rovo MCP server is a cloud-hosted server that connects agents to Jira, Confluence and other Atlassian Cloud products with OAuth, respecting your existing permissions.",
+  "tools": [
+   "read_jira / write_jira / search_jira",
+   "read_confluence / write_confluence / search_confluence",
+   "read_bitbucket / write_bitbucket",
+   "read_jsm / write_jsm"
+  ],
+  "setup": [
+   {
+    "label": "Claude Code",
+    "code": "claude mcp add --transport http atlassian https://mcp.atlassian.com/v2/mcp"
+   }
+  ],
+  "prompts": [
+   "Summarize all Jira tickets in the current sprint that are blocked.",
+   "Create a Confluence page from these release notes."
+  ],
+  "officialUrl": "https://github.com/atlassian/atlassian-mcp-server",
+  "sourceUrl": "https://github.com/atlassian/atlassian-mcp-server",
+  "auth": {
+   "method": "OAuth 2.1 (remote server)",
+   "scopes": "Inherits your existing Atlassian permissions"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "slack",
+  "name": "Slack (Zencoder)",
+  "vendor": "Zencoder",
+  "category": "communication",
+  "official": false,
+  "summary": "Slack MCP server for channels, messages, threads and reactions; successor to the archived reference server.",
+  "description": "The original Slack reference server from the MCP project has been archived and is now maintained by Zencoder. It uses a Slack bot token to list channels, read history and post messages.",
+  "tools": [
+   "slack_list_channels",
+   "slack_post_message",
+   "slack_reply_to_thread",
+   "slack_add_reaction",
+   "slack_get_channel_history",
+   "slack_get_thread_replies",
+   "slack_get_users",
+   "slack_get_user_profile"
+  ],
+  "setup": [
+   {
+    "label": "Setup",
+    "code": "# Create a Slack app with a bot token, then follow the README:\n# https://github.com/zencoderai/slack-mcp-server"
+   }
+  ],
+  "prompts": [
+   "Summarize what happened in #engineering today.",
+   "Post the deploy summary to #releases."
+  ],
+  "officialUrl": "https://github.com/zencoderai/slack-mcp-server",
+  "sourceUrl": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/slack",
+  "auth": {
+   "method": "Slack bot token (xoxb-)",
+   "scopes": "channels:history, channels:read, chat:write, reactions:write, users:read, users.profile:read"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "vercel",
+  "name": "Vercel",
+  "vendor": "Vercel",
+  "category": "dev-tools",
+  "official": true,
+  "summary": "Vercel's official remote MCP server to manage projects and deployments and search Vercel docs.",
+  "description": "Vercel MCP is Vercel's official hosted MCP server with OAuth. Agents can search Vercel docs, inspect projects and deployments, and read deployment logs.",
+  "tools": [
+   "Search Vercel documentation",
+   "List projects and deployments",
+   "Get deployment build logs"
+  ],
+  "setup": [
+   {
+    "label": "Remote server",
+    "code": "{\n  \"mcpServers\": {\n    \"vercel\": {\n      \"url\": \"https://mcp.vercel.com\"\n    }\n  }\n}"
+   },
+   {
+    "label": "Claude Code",
+    "code": "claude mcp add --transport http vercel https://mcp.vercel.com"
+   }
+  ],
+  "prompts": [
+   "Why did my latest Vercel deployment fail?",
+   "List my projects and their production URLs."
+  ],
+  "officialUrl": "https://vercel.com/docs/mcp/vercel-mcp",
+  "sourceUrl": "https://vercel.com/docs/mcp/vercel-mcp",
+  "auth": {
+   "method": "OAuth (remote server)",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "sentry",
+  "name": "Sentry",
+  "vendor": "Sentry",
+  "category": "dev-tools",
+  "official": true,
+  "summary": "Sentry's official MCP server: search issues, errors, traces and logs from your agent.",
+  "description": "Sentry's MCP server lets agents query Sentry for issues, errors, traces and logs to debug production problems. Sentry hosts a remote version and also publishes @sentry/mcp-server for local stdio use.",
+  "tools": [
+   "search_issues",
+   "search_errors",
+   "search_traces",
+   "search_logs"
+  ],
+  "setup": [
+   {
+    "label": "Remote server",
+    "code": "{\n  \"mcpServers\": {\n    \"sentry\": {\n      \"url\": \"https://mcp.sentry.dev/mcp\"\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "What are the top unresolved errors in my frontend project this week?",
+   "Explain the stack trace for this Sentry issue and suggest a fix."
+  ],
+  "officialUrl": "https://mcp.sentry.dev",
+  "sourceUrl": "https://github.com/getsentry/sentry-mcp",
+  "auth": {
+   "method": "OAuth (remote server)",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "supabase",
+  "name": "Supabase",
+  "vendor": "Supabase",
+  "category": "data",
+  "official": true,
+  "summary": "Connect agents to Supabase projects: databases, migrations, edge functions and docs.",
+  "description": "Supabase's MCP server lets agents manage tables, run SQL, fetch config and query docs. The hosted server supports scoping to a single project and a read-only mode.",
+  "tools": [
+   "Database tools (list tables, execute SQL, apply migrations)",
+   "Docs search",
+   "Project and branch management",
+   "Edge functions"
+  ],
+  "setup": [
+   {
+    "label": "Remote server (scoped, read-only)",
+    "code": "{\n  \"mcpServers\": {\n    \"supabase\": {\n      \"url\": \"https://mcp.supabase.com/mcp?project_ref=<project-ref>&read_only=true\"\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Show me the schema for the profiles table.",
+   "Write and apply a migration adding a created_at column to posts."
+  ],
+  "officialUrl": "https://supabase.com/docs/guides/getting-started/mcp",
+  "sourceUrl": "https://github.com/supabase-community/supabase-mcp",
+  "auth": {
+   "method": "OAuth (remote server)",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "neon",
+  "name": "Neon",
+  "vendor": "Neon",
+  "category": "data",
+  "official": true,
+  "summary": "Manage Neon serverless Postgres projects, branches and SQL in natural language.",
+  "description": "Neon's MCP server lets agents create projects and branches, run SQL and transactions, inspect schemas, and analyze slow queries. A hosted remote server is available.",
+  "tools": [
+   "run_sql",
+   "run_sql_transaction",
+   "get_database_tables",
+   "describe_table_schema",
+   "describe_branch",
+   "explain_sql_statement",
+   "list_slow_queries",
+   "get_connection_string"
+  ],
+  "setup": [
+   {
+    "label": "Remote server",
+    "code": "{\n  \"mcpServers\": {\n    \"neon\": {\n      \"url\": \"https://mcp.neon.tech/mcp\"\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Create a branch of my production database for testing.",
+   "Which queries are slowest in my Neon project?"
+  ],
+  "officialUrl": "https://github.com/neondatabase/mcp-server-neon",
+  "sourceUrl": "https://github.com/neondatabase/mcp-server-neon",
+  "auth": {
+   "method": "OAuth (remote) or Neon API key",
+   "scopes": "read, write"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "postgres",
+  "name": "PostgreSQL (reference, archived)",
+  "vendor": "Model Context Protocol",
+  "category": "data",
+  "official": true,
+  "summary": "Read-only Postgres access with schema inspection. Archived reference server.",
+  "description": "The original reference PostgreSQL server provides read-only queries and table schema resources. It has been moved to the servers-archived repo and is no longer maintained, so consider DBHub or a vendor server for new projects.",
+  "tools": [
+   "query (read-only SQL)",
+   "Table schema resources"
+  ],
+  "setup": [
+   {
+    "label": "Run with npx",
+    "code": "{\n  \"mcpServers\": {\n    \"postgres\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-postgres\", \"postgresql://localhost/mydb\"]\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "How many users signed up last month?",
+   "Describe the schema of the orders table."
+  ],
+  "officialUrl": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/postgres",
+  "sourceUrl": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/postgres",
+  "auth": {
+   "method": "Database connection string",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "sqlite",
+  "name": "SQLite (reference, archived)",
+  "vendor": "Model Context Protocol",
+  "category": "data",
+  "official": true,
+  "summary": "Query and analyze SQLite databases. Archived reference server.",
+  "description": "Archived reference server for interacting with SQLite databases, including read and write queries, table creation and a business-insight memo.",
+  "tools": [
+   "read_query",
+   "write_query",
+   "create_table",
+   "list_tables",
+   "describe_table",
+   "append_insight"
+  ],
+  "setup": [
+   {
+    "label": "Source",
+    "code": "# See the archived README for uvx/docker setup:\n# https://github.com/modelcontextprotocol/servers-archived/tree/main/src/sqlite"
+   }
+  ],
+  "prompts": [
+   "Load this SQLite database and find the top 10 customers by revenue."
+  ],
+  "officialUrl": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/sqlite",
+  "sourceUrl": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/sqlite",
+  "auth": {
+   "method": "None (local database file)",
+   "scopes": "\u2014"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "dbhub",
+  "name": "DBHub",
+  "vendor": "Bytebase",
+  "category": "data",
+  "official": false,
+  "summary": "Universal database MCP server for Postgres, MySQL, SQL Server, SQLite and more.",
+  "description": "DBHub by Bytebase is an open-source MCP server that connects to multiple databases using a DSN, exposing SQL execution and schema search.",
+  "tools": [
+   "execute_sql",
+   "search_objects"
+  ],
+  "setup": [
+   {
+    "label": "Run with npx (HTTP)",
+    "code": "npx @bytebase/dbhub@latest --transport http --port 8080 --dsn \"postgres://user:password@localhost:5432/dbname?sslmode=disable\""
+   }
+  ],
+  "prompts": [
+   "List tables in the analytics schema.",
+   "What's the average order value by month?"
+  ],
+  "officialUrl": "https://github.com/bytebase/dbhub",
+  "sourceUrl": "https://github.com/bytebase/dbhub",
+  "auth": {
+   "method": "Database DSN",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "mongodb",
+  "name": "MongoDB",
+  "vendor": "MongoDB",
+  "category": "data",
+  "official": true,
+  "summary": "MongoDB's official MCP server for databases and Atlas clusters.",
+  "description": "The MongoDB MCP server connects agents to MongoDB databases and MongoDB Atlas, supporting queries, aggregations, schema inspection and Atlas management. It supports a read-only mode.",
+  "tools": [
+   "find / aggregate / count",
+   "list-databases / list-collections",
+   "collection-schema",
+   "Atlas cluster tools"
+  ],
+  "setup": [
+   {
+    "label": "Run with npx (read-only)",
+    "code": "{\n  \"mcpServers\": {\n    \"MongoDB\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"mongodb-mcp-server@latest\", \"--readOnly\"],\n      \"env\": { \"MDB_MCP_CONNECTION_STRING\": \"mongodb://localhost:27017/myDatabase\" }\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "What does a typical document in the orders collection look like?",
+   "Count users who signed up this week."
+  ],
+  "officialUrl": "https://github.com/mongodb-js/mongodb-mcp-server",
+  "sourceUrl": "https://github.com/mongodb-js/mongodb-mcp-server",
+  "auth": {
+   "method": "Connection string or Atlas service account",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "redis",
+  "name": "Redis",
+  "vendor": "Redis",
+  "category": "data",
+  "official": true,
+  "summary": "Redis's official MCP server for managing and searching data in Redis.",
+  "description": "The official Redis MCP server provides a natural-language interface for agents to store, retrieve and search data across Redis data structures, including vector search.",
+  "tools": [
+   "String, hash, list, set, sorted set and stream operations",
+   "JSON documents",
+   "Vector search / index management"
+  ],
+  "setup": [
+   {
+    "label": "Source",
+    "code": "# Install with uvx from the GitHub repo; see README for full options:\n# https://github.com/redis/mcp-redis"
+   }
+  ],
+  "prompts": [
+   "Cache this result in Redis for one hour.",
+   "How many keys match session:*?"
+  ],
+  "officialUrl": "https://github.com/redis/mcp-redis",
+  "sourceUrl": "https://github.com/redis/mcp-redis",
+  "auth": {
+   "method": "Redis URL / credentials",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "clickhouse",
+  "name": "ClickHouse",
+  "vendor": "ClickHouse",
+  "category": "data",
+  "official": true,
+  "summary": "Run SQL against ClickHouse clusters (and chDB) from your agent.",
+  "description": "The official ClickHouse MCP server exposes tools for listing databases and tables and running queries against ClickHouse, plus optional chDB embedded queries.",
+  "tools": [
+   "run_query",
+   "list_databases",
+   "list_tables",
+   "run_chdb_select_query"
+  ],
+  "setup": [
+   {
+    "label": "Run with uvx",
+    "code": "{\n  \"mcpServers\": {\n    \"mcp-clickhouse\": {\n      \"command\": \"uvx\",\n      \"args\": [\"mcp-clickhouse\"],\n      \"env\": { \"CLICKHOUSE_HOST\": \"<host>\", \"CLICKHOUSE_USER\": \"<user>\", \"CLICKHOUSE_PASSWORD\": \"<password>\" }\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Which pages had the most views yesterday?",
+   "List the tables in the events database."
+  ],
+  "officialUrl": "https://github.com/ClickHouse/mcp-clickhouse",
+  "sourceUrl": "https://github.com/ClickHouse/mcp-clickhouse",
+  "auth": {
+   "method": "ClickHouse user + password",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "elasticsearch",
+  "name": "Elasticsearch",
+  "vendor": "Elastic",
+  "category": "data",
+  "official": true,
+  "summary": "Query Elasticsearch indices and mappings from your agent.",
+  "description": "Elastic's MCP server connects agents to an Elasticsearch cluster to list indices, read mappings and run searches. Configure with ES_URL plus ES_API_KEY (or basic auth).",
+  "tools": [
+   "list_indices",
+   "get_mappings",
+   "search",
+   "esql",
+   "get_shards"
+  ],
+  "setup": [
+   {
+    "label": "Docker",
+    "code": "docker run -i --rm -e ES_URL -e ES_API_KEY docker.elastic.co/mcp/elasticsearch stdio"
+   }
+  ],
+  "prompts": [
+   "What indices exist in my cluster?",
+   "Find log entries with status 500 in the last hour."
+  ],
+  "officialUrl": "https://github.com/elastic/mcp-server-elasticsearch",
+  "sourceUrl": "https://github.com/elastic/mcp-server-elasticsearch",
+  "auth": {
+   "method": "Elasticsearch API key or basic auth",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "qdrant",
+  "name": "Qdrant",
+  "vendor": "Qdrant",
+  "category": "data",
+  "official": true,
+  "summary": "Semantic memory layer on top of the Qdrant vector database.",
+  "description": "Qdrant's official MCP server stores and retrieves information in a Qdrant collection, acting as semantic memory for agents.",
+  "tools": [
+   "qdrant-store",
+   "qdrant-find"
+  ],
+  "setup": [
+   {
+    "label": "Run with uvx",
+    "code": "QDRANT_URL=\"http://localhost:6333\" \\\nCOLLECTION_NAME=\"my-collection\" \\\nuvx mcp-server-qdrant"
+   }
+  ],
+  "prompts": [
+   "Remember this code snippet for later.",
+   "Find notes related to rate limiting."
+  ],
+  "officialUrl": "https://github.com/qdrant/mcp-server-qdrant",
+  "sourceUrl": "https://github.com/qdrant/mcp-server-qdrant",
+  "auth": {
+   "method": "Qdrant URL (+ API key if required)",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "pinecone",
+  "name": "Pinecone",
+  "vendor": "Pinecone",
+  "category": "data",
+  "official": true,
+  "summary": "Pinecone's developer MCP server: search docs and manage indexes and records.",
+  "description": "Pinecone's MCP server helps coding agents search Pinecone documentation and manage indexes, upsert and search records. Requires Node.js 20+ and a Pinecone API key.",
+  "tools": [
+   "search-docs",
+   "list-indexes / describe-index / create-index-for-model",
+   "upsert-records / search-records"
+  ],
+  "setup": [
+   {
+    "label": "Run with npx",
+    "code": "{\n  \"mcpServers\": {\n    \"pinecone\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@pinecone-database/mcp\"],\n      \"env\": { \"PINECONE_API_KEY\": \"<your pinecone api key>\" }\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Create an index for my product descriptions and upsert them.",
+   "How do I filter by metadata in Pinecone?"
+  ],
+  "officialUrl": "https://github.com/pinecone-io/pinecone-mcp",
+  "sourceUrl": "https://github.com/pinecone-io/pinecone-mcp",
+  "auth": {
+   "method": "Pinecone API key",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "playwright",
+  "name": "Playwright",
+  "vendor": "Microsoft",
+  "category": "dev-tools",
+  "official": true,
+  "summary": "Browser automation for agents using Playwright accessibility snapshots.",
+  "description": "Microsoft's Playwright MCP server lets LLMs drive a browser through structured accessibility snapshots rather than screenshots, for fast, deterministic web automation and testing.",
+  "tools": [
+   "browser_navigate",
+   "browser_snapshot",
+   "browser_click",
+   "browser_fill_form",
+   "browser_evaluate",
+   "browser_file_upload",
+   "browser_console_messages",
+   "browser_close"
+  ],
+  "setup": [
+   {
+    "label": "Run with npx",
+    "code": "{\n  \"mcpServers\": {\n    \"playwright\": {\n      \"command\": \"npx\",\n      \"args\": [\"@playwright/mcp@latest\"]\n    }\n  }\n}"
+   },
+   {
+    "label": "Claude Code",
+    "code": "claude mcp add playwright npx @playwright/mcp@latest"
+   }
+  ],
+  "prompts": [
+   "Open localhost:3000, sign up with a test account and report any errors.",
+   "Fill out the contact form on this page."
+  ],
+  "officialUrl": "https://github.com/microsoft/playwright-mcp",
+  "sourceUrl": "https://github.com/microsoft/playwright-mcp",
+  "auth": {
+   "method": "None (local browser)",
+   "scopes": "\u2014"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "chrome-devtools",
+  "name": "Chrome DevTools",
+  "vendor": "Google Chrome",
+  "category": "dev-tools",
+  "official": true,
+  "summary": "Let coding agents control and inspect a live Chrome browser with DevTools.",
+  "description": "Chrome DevTools MCP gives agents access to Chrome DevTools for automation, debugging, network inspection and performance analysis.",
+  "tools": [
+   "Navigation and input automation",
+   "Performance traces",
+   "Network request inspection",
+   "Console messages and screenshots"
+  ],
+  "setup": [
+   {
+    "label": "Run with npx",
+    "code": "{\n  \"mcpServers\": {\n    \"chrome-devtools\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"chrome-devtools-mcp@latest\"]\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Check the LCP of my homepage and suggest improvements.",
+   "Why is this page throwing a console error?"
+  ],
+  "officialUrl": "https://github.com/ChromeDevTools/chrome-devtools-mcp",
+  "sourceUrl": "https://github.com/ChromeDevTools/chrome-devtools-mcp",
+  "auth": {
+   "method": "None (local browser)",
+   "scopes": "\u2014"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "puppeteer",
+  "name": "Puppeteer (reference, archived)",
+  "vendor": "Model Context Protocol",
+  "category": "dev-tools",
+  "official": true,
+  "summary": "Browser automation and scraping with Puppeteer. Archived reference server.",
+  "description": "Archived reference server that lets LLMs navigate pages, take screenshots, click, fill forms and run JavaScript in a real browser via Puppeteer.",
+  "tools": [
+   "puppeteer_navigate",
+   "puppeteer_screenshot",
+   "puppeteer_click",
+   "puppeteer_hover",
+   "puppeteer_fill",
+   "puppeteer_select",
+   "puppeteer_evaluate"
+  ],
+  "setup": [
+   {
+    "label": "Run with npx",
+    "code": "{\n  \"mcpServers\": {\n    \"puppeteer\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-puppeteer\"]\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Take a screenshot of example.com."
+  ],
+  "officialUrl": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/puppeteer",
+  "sourceUrl": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/puppeteer",
+  "auth": {
+   "method": "None (local browser)",
+   "scopes": "\u2014"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "browserbase",
+  "name": "Browserbase",
+  "vendor": "Browserbase",
+  "category": "dev-tools",
+  "official": true,
+  "summary": "Cloud browser automation for agents, powered by Browserbase and Stagehand.",
+  "description": "Browserbase's MCP server lets agents control cloud browsers to navigate, extract data and act on web pages. Hosted and npm (@browserbasehq/mcp) options are available.",
+  "tools": [
+   "Navigate pages",
+   "Act (natural-language actions)",
+   "Extract structured data",
+   "Observe page elements",
+   "Screenshots"
+  ],
+  "setup": [
+   {
+    "label": "Remote server",
+    "code": "{\n  \"mcpServers\": {\n    \"browserbase\": {\n      \"url\": \"https://mcp.browserbase.com/mcp\"\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Go to Hacker News and extract the top 10 titles.",
+   "Log into the staging dashboard and check the signup count."
+  ],
+  "officialUrl": "https://github.com/browserbase/mcp-server-browserbase",
+  "sourceUrl": "https://github.com/browserbase/mcp-server-browserbase",
+  "auth": {
+   "method": "Browserbase API key",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "brave-search",
+  "name": "Brave Search",
+  "vendor": "Brave",
+  "category": "data",
+  "official": true,
+  "summary": "Web, news, image, video and local search through the Brave Search API.",
+  "description": "Brave's official MCP server, which replaces the archived reference Brave server. It exposes several Brave Search API endpoints and requires a BRAVE_API_KEY.",
+  "tools": [
+   "brave_web_search",
+   "brave_local_search",
+   "brave_news_search",
+   "brave_image_search",
+   "brave_video_search",
+   "brave_summarizer"
+  ],
+  "setup": [
+   {
+    "label": "Run with npx",
+    "code": "{\n  \"mcpServers\": {\n    \"brave-search\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@brave/brave-search-mcp-server\"],\n      \"env\": { \"BRAVE_API_KEY\": \"YOUR_API_KEY\" }\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Search for the latest news on the MCP spec.",
+   "Find coffee shops near Union Square."
+  ],
+  "officialUrl": "https://github.com/brave/brave-search-mcp-server",
+  "sourceUrl": "https://github.com/brave/brave-search-mcp-server",
+  "auth": {
+   "method": "Brave Search API key",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "firecrawl",
+  "name": "Firecrawl",
+  "vendor": "Firecrawl",
+  "category": "data",
+  "official": true,
+  "summary": "Scrape, crawl, map and search the web with clean LLM-ready output.",
+  "description": "Firecrawl's official MCP server gives agents web scraping, crawling, site mapping and search through the Firecrawl API.",
+  "tools": [
+   "firecrawl_scrape",
+   "firecrawl_map",
+   "firecrawl_crawl",
+   "firecrawl_search",
+   "firecrawl_credit_usage"
+  ],
+  "setup": [
+   {
+    "label": "Run with npx",
+    "code": "env FIRECRAWL_API_KEY=fc-YOUR_API_KEY npx -y firecrawl-mcp"
+   }
+  ],
+  "prompts": [
+   "Crawl the docs at docs.example.com and summarize the auth section.",
+   "Map all URLs on this site."
+  ],
+  "officialUrl": "https://github.com/firecrawl/firecrawl-mcp-server",
+  "sourceUrl": "https://github.com/firecrawl/firecrawl-mcp-server",
+  "auth": {
+   "method": "Firecrawl API key",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "exa",
+  "name": "Exa",
+  "vendor": "Exa",
+  "category": "data",
+  "official": true,
+  "summary": "AI-native web search and page fetching via Exa.",
+  "description": "Exa's MCP server connects agents to Exa's search engine for web search and content retrieval. A hosted remote endpoint is available.",
+  "tools": [
+   "web_search_exa",
+   "web_search_advanced_exa",
+   "web_fetch_exa"
+  ],
+  "setup": [
+   {
+    "label": "Remote server",
+    "code": "{\n  \"mcpServers\": {\n    \"exa\": {\n      \"url\": \"https://mcp.exa.ai/mcp\"\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Find recent research papers on agent tool use.",
+   "Search for companies building MCP gateways."
+  ],
+  "officialUrl": "https://github.com/exa-labs/exa-mcp-server",
+  "sourceUrl": "https://github.com/exa-labs/exa-mcp-server",
+  "auth": {
+   "method": "Exa API key or OAuth (remote)",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "tavily",
+  "name": "Tavily",
+  "vendor": "Tavily",
+  "category": "data",
+  "official": true,
+  "summary": "Real-time web search and extraction built for AI agents.",
+  "description": "Tavily's MCP server provides search, extract, map and crawl via the Tavily API, as a remote server or local npm package.",
+  "tools": [
+   "tavily-search",
+   "tavily-extract",
+   "Site map and crawl tools"
+  ],
+  "setup": [
+   {
+    "label": "Claude Code (remote)",
+    "code": "claude mcp add --transport http tavily https://mcp.tavily.com/mcp/?tavilyApiKey=<your-api-key>"
+   },
+   {
+    "label": "Local",
+    "code": "npx -y tavily-mcp@latest  # with TAVILY_API_KEY set"
+   }
+  ],
+  "prompts": [
+   "What happened in AI news today?",
+   "Extract the pricing table from this page."
+  ],
+  "officialUrl": "https://github.com/tavily-ai/tavily-mcp",
+  "sourceUrl": "https://github.com/tavily-ai/tavily-mcp",
+  "auth": {
+   "method": "Tavily API key",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "perplexity",
+  "name": "Perplexity",
+  "vendor": "Perplexity",
+  "category": "data",
+  "official": true,
+  "summary": "Perplexity's Sonar search, ask, research and reasoning inside your agent.",
+  "description": "Perplexity's official MCP server exposes its Search API and Sonar models for web-grounded answers and deep research. Available locally via npm or as a hosted HTTP endpoint.",
+  "tools": [
+   "perplexity_search",
+   "perplexity_ask",
+   "perplexity_research",
+   "perplexity_reason"
+  ],
+  "setup": [
+   {
+    "label": "Claude Code (local)",
+    "code": "claude mcp add perplexity --env PERPLEXITY_API_KEY=\"your_key_here\" -- npx -y @perplexity-ai/mcp-server"
+   }
+  ],
+  "prompts": [
+   "Research the competitive landscape for MCP directories.",
+   "What's the latest stable Next.js version?"
+  ],
+  "officialUrl": "https://github.com/ppl-ai/modelcontextprotocol",
+  "sourceUrl": "https://github.com/ppl-ai/modelcontextprotocol",
+  "auth": {
+   "method": "Perplexity API key",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "context7",
+  "name": "Context7",
+  "vendor": "Upstash",
+  "category": "dev-tools",
+  "official": true,
+  "summary": "Up-to-date, version-specific library docs and code examples for coding agents.",
+  "description": "Context7 pulls current documentation for libraries directly into the prompt, reducing hallucinated or outdated APIs.",
+  "tools": [
+   "resolve-library-id",
+   "query-docs"
+  ],
+  "setup": [
+   {
+    "label": "Remote server",
+    "code": "{\n  \"mcpServers\": {\n    \"context7\": {\n      \"url\": \"https://mcp.context7.com/mcp\"\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Use context7: how do I set up middleware in Next.js 15?",
+   "Show the current Supabase auth API for React."
+  ],
+  "officialUrl": "https://github.com/upstash/context7",
+  "sourceUrl": "https://github.com/upstash/context7",
+  "auth": {
+   "method": "API key recommended (Bearer header)",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "cloudflare",
+  "name": "Cloudflare",
+  "vendor": "Cloudflare",
+  "category": "dev-tools",
+  "official": true,
+  "summary": "Cloudflare's remote MCP servers for Workers, observability, DNS analytics, Radar, docs and more.",
+  "description": "Cloudflare runs a set of remote MCP servers, each focused on an area of the platform (docs, Workers bindings, observability, Radar, DNS analytics, logs, GraphQL and more).",
+  "tools": [
+   "Docs search",
+   "Workers bindings and builds",
+   "Observability and logs",
+   "Radar internet insights",
+   "DNS analytics"
+  ],
+  "setup": [
+   {
+    "label": "Remote server (example: docs)",
+    "code": "{\n  \"mcpServers\": {\n    \"cloudflare-docs\": {\n      \"url\": \"https://docs.mcp.cloudflare.com/mcp\"\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Why is my Worker returning 500s? Check observability.",
+   "What are current internet traffic trends from Radar?"
+  ],
+  "officialUrl": "https://github.com/cloudflare/mcp-server-cloudflare",
+  "sourceUrl": "https://github.com/cloudflare/mcp-server-cloudflare",
+  "auth": {
+   "method": "OAuth (remote servers)",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "heroku",
+  "name": "Heroku",
+  "vendor": "Heroku",
+  "category": "dev-tools",
+  "official": true,
+  "summary": "Manage Heroku apps, dynos, add-ons and deployments with your agent.",
+  "description": "Heroku's official MCP server lets agents list and create apps, scale and restart dynos, manage add-ons, toggle maintenance mode and deploy.",
+  "tools": [
+   "list_apps",
+   "get_app_info",
+   "create_app",
+   "deploy_to_heroku",
+   "ps_list",
+   "ps_scale",
+   "ps_restart",
+   "list_addons",
+   "create_addon",
+   "maintenance_on"
+  ],
+  "setup": [
+   {
+    "label": "Run with npx",
+    "code": "{\n  \"mcpServers\": {\n    \"heroku\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@heroku/mcp-server\"],\n      \"env\": { \"HEROKU_API_KEY\": \"<your-api-key>\" }\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Scale my web dynos to 3.",
+   "Which add-ons is my production app using?"
+  ],
+  "officialUrl": "https://devcenter.heroku.com/articles/heroku-mcp-server",
+  "sourceUrl": "https://github.com/heroku/heroku-mcp-server",
+  "auth": {
+   "method": "Heroku API key",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "terraform",
+  "name": "Terraform",
+  "vendor": "HashiCorp",
+  "category": "dev-tools",
+  "official": true,
+  "summary": "Terraform Registry lookups for providers and modules, plus HCP Terraform workflows.",
+  "description": "HashiCorp's Terraform MCP server gives agents accurate provider and module documentation from the Terraform Registry so they generate correct infrastructure code.",
+  "tools": [
+   "Search providers and provider docs",
+   "Search modules and module details",
+   "HCP Terraform / Terraform Enterprise workspace tools"
+  ],
+  "setup": [
+   {
+    "label": "Claude Code (Docker)",
+    "code": "claude mcp add terraform -s user -t stdio -- docker run -i --rm hashicorp/terraform-mcp-server"
+   }
+  ],
+  "prompts": [
+   "Write Terraform for an S3 bucket with versioning using the latest AWS provider.",
+   "Find a registry module for a VPC."
+  ],
+  "officialUrl": "https://github.com/hashicorp/terraform-mcp-server",
+  "sourceUrl": "https://github.com/hashicorp/terraform-mcp-server",
+  "auth": {
+   "method": "None for public Registry; TFE_TOKEN for HCP Terraform / Enterprise",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "kubernetes",
+  "name": "Kubernetes",
+  "vendor": "containers (Red Hat community)",
+  "category": "dev-tools",
+  "official": false,
+  "summary": "Kubernetes and OpenShift MCP server for pods, namespaces, events, nodes and resources.",
+  "description": "A native Go MCP server for Kubernetes and OpenShift that talks to the API server directly (no kubectl required).",
+  "tools": [
+   "pods_list",
+   "pods_get",
+   "pods_delete",
+   "namespaces_list",
+   "events_list",
+   "nodes_top",
+   "configuration_view"
+  ],
+  "setup": [
+   {
+    "label": "Run with npx",
+    "code": "{\n  \"mcpServers\": {\n    \"kubernetes\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"kubernetes-mcp-server@latest\"]\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Which pods are crash-looping in the staging namespace?",
+   "Show recent events for the api deployment."
+  ],
+  "officialUrl": "https://github.com/containers/kubernetes-mcp-server",
+  "sourceUrl": "https://github.com/containers/kubernetes-mcp-server",
+  "auth": {
+   "method": "Your kubeconfig credentials",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "grafana",
+  "name": "Grafana",
+  "vendor": "Grafana Labs",
+  "category": "dev-tools",
+  "official": true,
+  "summary": "Search dashboards, query datasources and manage incidents and alerts in Grafana.",
+  "description": "Grafana's official MCP server gives agents access to dashboards, datasources (Prometheus, Loki and more), alerting, incidents and OnCall. Works with self-hosted Grafana and Grafana Cloud.",
+  "tools": [
+   "get_dashboard_by_uid",
+   "get_dashboard_summary",
+   "list_teams",
+   "Prometheus and Loki queries",
+   "Alerting and incident tools"
+  ],
+  "setup": [
+   {
+    "label": "Run with uvx",
+    "code": "{\n  \"mcpServers\": {\n    \"grafana\": {\n      \"command\": \"uvx\",\n      \"args\": [\"mcp-grafana\"],\n      \"env\": {\n        \"GRAFANA_URL\": \"http://localhost:3000\",\n        \"GRAFANA_SERVICE_ACCOUNT_TOKEN\": \"<your service account token>\"\n      }\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "What's the p95 latency on the checkout service over the last hour?",
+   "Summarize the panels on the API Overview dashboard."
+  ],
+  "officialUrl": "https://github.com/grafana/mcp-grafana",
+  "sourceUrl": "https://github.com/grafana/mcp-grafana",
+  "auth": {
+   "method": "Grafana service account token",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "aws",
+  "name": "AWS MCP Servers",
+  "vendor": "AWS Labs",
+  "category": "dev-tools",
+  "official": true,
+  "summary": "A suite of AWS MCP servers: AWS API, docs/knowledge, IaC, IAM and many service-specific servers.",
+  "description": "AWS Labs publishes a large collection of open-source MCP servers that bring AWS best practices and services into agent workflows, plus a remote AWS Knowledge server.",
+  "tools": [
+   "AWS API server (call AWS CLI-style APIs)",
+   "AWS Knowledge (docs) server",
+   "IaC server",
+   "IAM server",
+   "Many service-specific servers"
+  ],
+  "setup": [
+   {
+    "label": "Example: AWS API server",
+    "code": "uvx awslabs.aws-api-mcp-server"
+   }
+  ],
+  "prompts": [
+   "List my S3 buckets in us-east-1.",
+   "What's the recommended way to set up a VPC endpoint for DynamoDB?"
+  ],
+  "officialUrl": "https://awslabs.github.io/mcp/",
+  "sourceUrl": "https://github.com/awslabs/mcp",
+  "auth": {
+   "method": "Your AWS credentials",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "azure",
+  "name": "Azure MCP Server",
+  "vendor": "Microsoft",
+  "category": "dev-tools",
+  "official": true,
+  "summary": "Microsoft's MCP server for Azure services such as Storage, Cosmos DB, Monitor and more.",
+  "description": "Microsoft's MCP repository hosts the Azure MCP Server and other Microsoft MCP servers, letting agents work with Azure resources using your Azure credentials.",
+  "tools": [
+   "Azure Storage",
+   "Cosmos DB",
+   "Azure Monitor / Log Analytics",
+   "Resource groups and subscriptions"
+  ],
+  "setup": [
+   {
+    "label": "Install",
+    "code": "# Install via the VS Code / Visual Studio buttons or follow the README:\n# https://github.com/microsoft/mcp"
+   }
+  ],
+  "prompts": [
+   "List the storage accounts in my subscription.",
+   "Query Log Analytics for errors in the last 24 hours."
+  ],
+  "officialUrl": "https://github.com/microsoft/mcp",
+  "sourceUrl": "https://github.com/microsoft/mcp",
+  "auth": {
+   "method": "Your Azure credentials",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "docker-mcp-gateway",
+  "name": "Docker MCP Gateway",
+  "vendor": "Docker",
+  "category": "dev-tools",
+  "official": true,
+  "summary": "Run and manage containerized MCP servers from the Docker MCP Catalog through one gateway.",
+  "description": "Docker's MCP Gateway (the docker mcp CLI plugin) runs MCP servers in isolated containers and exposes them to clients through a single gateway, using servers from the Docker MCP Catalog.",
+  "tools": [
+   "docker mcp CLI plugin",
+   "Server catalog and profiles",
+   "Single gateway endpoint for clients"
+  ],
+  "setup": [
+   {
+    "label": "CLI",
+    "code": "docker mcp --help"
+   }
+  ],
+  "prompts": [
+   "Enable the GitHub and Fetch servers from the Docker MCP Catalog."
+  ],
+  "officialUrl": "https://github.com/docker/mcp-gateway",
+  "sourceUrl": "https://github.com/docker/mcp-gateway",
+  "auth": {
+   "method": "None (per-server secrets managed by Docker)",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "twilio",
+  "name": "Twilio",
+  "vendor": "Twilio Labs",
+  "category": "communication",
+  "official": true,
+  "summary": "Expose Twilio's public APIs (SMS, voice, messaging and more) to agents.",
+  "description": "Twilio Labs' MCP server exposes Twilio's API surface to MCP clients, configured with your account SID and API key/secret. It's published as @twilio-alpha/mcp.",
+  "tools": [
+   "Twilio API endpoints (filterable by service, e.g. messaging)"
+  ],
+  "setup": [
+   {
+    "label": "Run with npx",
+    "code": "{\n  \"mcpServers\": {\n    \"twilio\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@twilio-alpha/mcp\", \"YOUR_ACCOUNT_SID/YOUR_API_KEY:YOUR_API_SECRET\"]\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Send an SMS to +15555550123 saying the build is done.",
+   "How many messages did we send yesterday?"
+  ],
+  "officialUrl": "https://github.com/twilio-labs/mcp",
+  "sourceUrl": "https://github.com/twilio-labs/mcp",
+  "auth": {
+   "method": "Account SID + API key/secret",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "resend",
+  "name": "Resend",
+  "vendor": "Resend",
+  "category": "communication",
+  "official": true,
+  "summary": "Send and manage email through Resend from your agent.",
+  "description": "Resend's MCP server lets agents send emails and work with the Resend API. Use the hosted server or run it locally with a Resend API key.",
+  "tools": [
+   "Send email",
+   "Manage contacts, audiences and broadcasts (per README)"
+  ],
+  "setup": [
+   {
+    "label": "Claude Code (remote)",
+    "code": "claude mcp add --transport http resend https://mcp.resend.com/mcp --header \"Authorization: Bearer re_xxxxxxxxx\""
+   },
+   {
+    "label": "Claude Code (local)",
+    "code": "claude mcp add resend -e RESEND_API_KEY=re_xxxxxxxxx -- npx -y resend-mcp"
+   }
+  ],
+  "prompts": [
+   "Email the team a summary of today's deploys.",
+   "Draft and send a welcome email to new@example.com."
+  ],
+  "officialUrl": "https://github.com/resend/mcp-send-email",
+  "sourceUrl": "https://github.com/resend/mcp-send-email",
+  "auth": {
+   "method": "Resend API key",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "elevenlabs",
+  "name": "ElevenLabs",
+  "vendor": "ElevenLabs",
+  "category": "communication",
+  "official": true,
+  "summary": "Text-to-speech, speech-to-text, voice and audio tools from ElevenLabs.",
+  "description": "ElevenLabs' official MCP server lets agents generate speech, transcribe audio, clone and design voices and process audio using the ElevenLabs API.",
+  "tools": [
+   "Text-to-speech",
+   "speech_to_text",
+   "speech_to_speech",
+   "isolate_audio",
+   "Voice design and cloning"
+  ],
+  "setup": [
+   {
+    "label": "Run with uvx",
+    "code": "{\n  \"mcpServers\": {\n    \"ElevenLabs\": {\n      \"command\": \"uvx\",\n      \"args\": [\"elevenlabs-mcp\"],\n      \"env\": { \"ELEVENLABS_API_KEY\": \"<insert-your-api-key-here>\" }\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Turn this blog post into an MP3 narration.",
+   "Transcribe this meeting recording."
+  ],
+  "officialUrl": "https://github.com/elevenlabs/elevenlabs-mcp",
+  "sourceUrl": "https://github.com/elevenlabs/elevenlabs-mcp",
+  "auth": {
+   "method": "ElevenLabs API key",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "zapier",
+  "name": "Zapier",
+  "vendor": "Zapier",
+  "category": "productivity",
+  "official": true,
+  "summary": "Connect agents to thousands of apps and actions through Zapier MCP.",
+  "description": "Zapier MCP gives your AI assistant access to actions across Zapier's app ecosystem through a personal hosted MCP endpoint that you configure in Zapier.",
+  "tools": [
+   "Any Zapier action you enable (e.g. send Gmail, create Sheets row, post to Slack)"
+  ],
+  "setup": [
+   {
+    "label": "Setup",
+    "code": "# Create your server URL at https://mcp.zapier.com and add it to your client"
+   }
+  ],
+  "prompts": [
+   "Add a row to my leads Google Sheet with this contact.",
+   "Create a Trello card for this task."
+  ],
+  "officialUrl": "https://zapier.com/mcp",
+  "sourceUrl": "https://github.com/zapier/zapier-mcp",
+  "auth": {
+   "method": "Personal Zapier MCP server URL",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "apify",
+  "name": "Apify",
+  "vendor": "Apify",
+  "category": "data",
+  "official": true,
+  "summary": "Use thousands of Apify Actors (scrapers and automations) from your agent.",
+  "description": "Apify's MCP server lets agents discover and run Apify Actors to scrape websites, extract data and automate the web. A hosted endpoint is available at mcp.apify.com.",
+  "tools": [
+   "search-actors",
+   "fetch-actor-details",
+   "call-actor",
+   "Apify docs search"
+  ],
+  "setup": [
+   {
+    "label": "Remote server",
+    "code": "{\n  \"mcpServers\": {\n    \"apify\": {\n      \"url\": \"https://mcp.apify.com\"\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Scrape the top Google Maps results for 'coworking Brooklyn'.",
+   "Find an Actor that extracts Instagram profile data."
+  ],
+  "officialUrl": "https://mcp.apify.com",
+  "sourceUrl": "https://github.com/apify/apify-mcp-server",
+  "auth": {
+   "method": "OAuth or Apify API token",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "box",
+  "name": "Box",
+  "vendor": "Box (community)",
+  "category": "productivity",
+  "official": false,
+  "summary": "Search, read and manage Box files and folders from your agent.",
+  "description": "The box-community MCP server connects agents to Box for file search, reading content, Box AI queries and folder management.",
+  "tools": [
+   "File search and read",
+   "Box AI ask/extract",
+   "Folder management"
+  ],
+  "setup": [
+   {
+    "label": "Source",
+    "code": "# Clone and run with uv; see README:\n# https://github.com/box-community/mcp-server-box"
+   }
+  ],
+  "prompts": [
+   "Find the latest signed contract with Acme in Box and summarize it."
+  ],
+  "officialUrl": "https://github.com/box-community/mcp-server-box",
+  "sourceUrl": "https://github.com/box-community/mcp-server-box",
+  "auth": {
+   "method": "Box OAuth",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "obsidian",
+  "name": "Obsidian (community)",
+  "vendor": "MarkusPfundstein (community)",
+  "category": "productivity",
+  "official": false,
+  "summary": "Read and edit your Obsidian vault via the Local REST API plugin.",
+  "description": "A community MCP server that interacts with Obsidian through the Local REST API community plugin, letting agents list, search, read and edit notes.",
+  "tools": [
+   "List files in vault",
+   "Search notes",
+   "Get / append / patch note content"
+  ],
+  "setup": [
+   {
+    "label": "Run with uvx",
+    "code": "{\n  \"mcpServers\": {\n    \"mcp-obsidian\": {\n      \"command\": \"uvx\",\n      \"args\": [\"mcp-obsidian\"],\n      \"env\": { \"OBSIDIAN_API_KEY\": \"<your_api_key_here>\" }\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Summarize my daily notes from last week.",
+   "Append today's action items to my Inbox note."
+  ],
+  "officialUrl": "https://github.com/MarkusPfundstein/mcp-obsidian",
+  "sourceUrl": "https://github.com/MarkusPfundstein/mcp-obsidian",
+  "auth": {
+   "method": "Obsidian Local REST API key",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "google-maps",
+  "name": "Google Maps (reference, archived)",
+  "vendor": "Model Context Protocol",
+  "category": "data",
+  "official": true,
+  "summary": "Geocoding, places, directions and distance via the Google Maps API. Archived.",
+  "description": "Archived reference server providing Google Maps location services. Requires a Google Maps API key.",
+  "tools": [
+   "maps_geocode",
+   "maps_reverse_geocode",
+   "maps_search_places",
+   "maps_place_details",
+   "maps_distance_matrix",
+   "maps_elevation",
+   "maps_directions"
+  ],
+  "setup": [
+   {
+    "label": "Run with npx",
+    "code": "{\n  \"mcpServers\": {\n    \"google-maps\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-google-maps\"],\n      \"env\": { \"GOOGLE_MAPS_API_KEY\": \"<YOUR_API_KEY>\" }\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "How long is the drive from Boston to NYC right now?",
+   "Find vegan restaurants near Times Square."
+  ],
+  "officialUrl": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/google-maps",
+  "sourceUrl": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/google-maps",
+  "auth": {
+   "method": "Google Maps API key",
+   "scopes": "Not documented"
+  },
+  "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "google-drive",
+  "name": "Google Drive (reference, archived)",
+  "vendor": "Model Context Protocol",
+  "category": "productivity",
+  "official": true,
+  "summary": "Search and read files in Google Drive. Archived reference server.",
+  "description": "Archived reference server that lets agents search Google Drive and read files, converting Google Docs, Sheets and Slides to readable formats. Requires a Google Cloud OAuth setup.",
+  "tools": [
+   "search",
+   "gdrive:/// file resources"
+  ],
+  "setup": [
+   {
+    "label": "Run with npx",
+    "code": "{\n  \"mcpServers\": {\n    \"gdrive\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-gdrive\"]\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Find the Q3 planning doc in my Drive and summarize it."
+  ],
+  "officialUrl": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/gdrive",
+  "sourceUrl": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/gdrive",
+  "auth": {
+   "method": "Google OAuth",
+   "scopes": "https://www.googleapis.com/auth/drive.readonly"
+  },
+  "lastVerified": "2026-10-15"
+ }
+]

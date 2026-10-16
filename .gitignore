@@ -1,0 +1,14 @@
+node_modules/
+.next/
+out/
+.vercel/
+.env*
+.admin-token
+.indexnow-key
+*.pem
+*.key
+launch/
+screenshots/
+next-env.d.ts
+*.log
+.DS_Store

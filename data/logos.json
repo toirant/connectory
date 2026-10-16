@@ -1,0 +1,369 @@
+{
+ "github": {
+  "hex": "181717",
+  "title": "GitHub",
+  "source": "simple-icons",
+  "file": "github.svg",
+  "si": "github"
+ },
+ "gitlab": {
+  "hex": "FC6D26",
+  "title": "GitLab",
+  "source": "simple-icons",
+  "file": "gitlab.svg",
+  "si": "gitlab"
+ },
+ "git": {
+  "hex": "F03C2E",
+  "title": "Git",
+  "source": "simple-icons",
+  "file": "git.svg",
+  "si": "git"
+ },
+ "figma": {
+  "hex": "F24E1E",
+  "title": "Figma",
+  "source": "simple-icons",
+  "file": "figma.svg",
+  "si": "figma"
+ },
+ "framelink-figma": {
+  "hex": "F24E1E",
+  "title": "Figma",
+  "source": "simple-icons",
+  "file": "framelink-figma.svg",
+  "si": "figma"
+ },
+ "stripe": {
+  "hex": "635BFF",
+  "title": "Stripe",
+  "source": "simple-icons",
+  "file": "stripe.svg",
+  "si": "stripe"
+ },
+ "paypal": {
+  "hex": "002991",
+  "title": "PayPal",
+  "source": "simple-icons",
+  "file": "paypal.svg",
+  "si": "paypal"
+ },
+ "square": {
+  "hex": "3E4348",
+  "title": "Square",
+  "source": "simple-icons",
+  "file": "square.svg",
+  "si": "square"
+ },
+ "linear": {
+  "hex": "5E6AD2",
+  "title": "Linear",
+  "source": "simple-icons",
+  "file": "linear.svg",
+  "si": "linear"
+ },
+ "notion": {
+  "hex": "000000",
+  "title": "Notion",
+  "source": "simple-icons",
+  "file": "notion.svg",
+  "si": "notion"
+ },
+ "atlassian": {
+  "hex": "0052CC",
+  "title": "Atlassian",
+  "source": "simple-icons",
+  "file": "atlassian.svg",
+  "si": "atlassian"
+ },
+ "vercel": {
+  "hex": "000000",
+  "title": "Vercel",
+  "source": "simple-icons",
+  "file": "vercel.svg",
+  "si": "vercel"
+ },
+ "sentry": {
+  "hex": "362D59",
+  "title": "Sentry",
+  "source": "simple-icons",
+  "file": "sentry.svg",
+  "si": "sentry"
+ },
+ "supabase": {
+  "hex": "3FCF8E",
+  "title": "Supabase",
+  "source": "simple-icons",
+  "file": "supabase.svg",
+  "si": "supabase"
+ },
+ "neon": {
+  "hex": "34D59A",
+  "title": "Neon",
+  "source": "simple-icons",
+  "file": "neon.svg",
+  "si": "neon"
+ },
+ "postgres": {
+  "hex": "4169E1",
+  "title": "PostgreSQL",
+  "source": "simple-icons",
+  "file": "postgres.svg",
+  "si": "postgresql"
+ },
+ "sqlite": {
+  "hex": "003B57",
+  "title": "SQLite",
+  "source": "simple-icons",
+  "file": "sqlite.svg",
+  "si": "sqlite"
+ },
+ "mongodb": {
+  "hex": "47A248",
+  "title": "MongoDB",
+  "source": "simple-icons",
+  "file": "mongodb.svg",
+  "si": "mongodb"
+ },
+ "redis": {
+  "hex": "FF4438",
+  "title": "Redis",
+  "source": "simple-icons",
+  "file": "redis.svg",
+  "si": "redis"
+ },
+ "clickhouse": {
+  "hex": "FFCC01",
+  "title": "ClickHouse",
+  "source": "simple-icons",
+  "file": "clickhouse.svg",
+  "si": "clickhouse"
+ },
+ "elasticsearch": {
+  "hex": "005571",
+  "title": "Elasticsearch",
+  "source": "simple-icons",
+  "file": "elasticsearch.svg",
+  "si": "elasticsearch"
+ },
+ "qdrant": {
+  "hex": "DC244C",
+  "title": "Qdrant",
+  "source": "simple-icons",
+  "file": "qdrant.svg",
+  "si": "qdrant"
+ },
+ "chrome-devtools": {
+  "hex": "4285F4",
+  "title": "Google Chrome",
+  "source": "simple-icons",
+  "file": "chrome-devtools.svg",
+  "si": "googlechrome"
+ },
+ "puppeteer": {
+  "hex": "40B5A4",
+  "title": "Puppeteer",
+  "source": "simple-icons",
+  "file": "puppeteer.svg",
+  "si": "puppeteer"
+ },
+ "brave-search": {
+  "hex": "FB542B",
+  "title": "Brave",
+  "source": "simple-icons",
+  "file": "brave-search.svg",
+  "si": "brave"
+ },
+ "perplexity": {
+  "hex": "1FB8CD",
+  "title": "Perplexity",
+  "source": "simple-icons",
+  "file": "perplexity.svg",
+  "si": "perplexity"
+ },
+ "context7": {
+  "hex": "00E9A3",
+  "title": "Upstash",
+  "source": "simple-icons",
+  "file": "context7.svg",
+  "si": "upstash"
+ },
+ "cloudflare": {
+  "hex": "F38020",
+  "title": "Cloudflare",
+  "source": "simple-icons",
+  "file": "cloudflare.svg",
+  "si": "cloudflare"
+ },
+ "terraform": {
+  "hex": "844FBA",
+  "title": "Terraform",
+  "source": "simple-icons",
+  "file": "terraform.svg",
+  "si": "terraform"
+ },
+ "kubernetes": {
+  "hex": "326CE5",
+  "title": "Kubernetes",
+  "source": "simple-icons",
+  "file": "kubernetes.svg",
+  "si": "kubernetes"
+ },
+ "grafana": {
+  "hex": "F46800",
+  "title": "Grafana",
+  "source": "simple-icons",
+  "file": "grafana.svg",
+  "si": "grafana"
+ },
+ "docker-mcp-gateway": {
+  "hex": "2496ED",
+  "title": "Docker",
+  "source": "simple-icons",
+  "file": "docker-mcp-gateway.svg",
+  "si": "docker"
+ },
+ "resend": {
+  "hex": "000000",
+  "title": "Resend",
+  "source": "simple-icons",
+  "file": "resend.svg",
+  "si": "resend"
+ },
+ "elevenlabs": {
+  "hex": "000000",
+  "title": "ElevenLabs",
+  "source": "simple-icons",
+  "file": "elevenlabs.svg",
+  "si": "elevenlabs"
+ },
+ "zapier": {
+  "hex": "FF4F00",
+  "title": "Zapier",
+  "source": "simple-icons",
+  "file": "zapier.svg",
+  "si": "zapier"
+ },
+ "box": {
+  "hex": "0061D5",
+  "title": "Box",
+  "source": "simple-icons",
+  "file": "box.svg",
+  "si": "box"
+ },
+ "obsidian": {
+  "hex": "7C3AED",
+  "title": "Obsidian",
+  "source": "simple-icons",
+  "file": "obsidian.svg",
+  "si": "obsidian"
+ },
+ "google-maps": {
+  "hex": "4285F4",
+  "title": "Google Maps",
+  "source": "simple-icons",
+  "file": "google-maps.svg",
+  "si": "googlemaps"
+ },
+ "google-drive": {
+  "hex": "4285F4",
+  "title": "Google Drive",
+  "source": "simple-icons",
+  "file": "google-drive.svg",
+  "si": "googledrive"
+ },
+ "filesystem": {
+  "hex": "111111",
+  "title": "Model Context Protocol",
+  "source": "simple-icons",
+  "file": "filesystem.svg",
+  "si": "modelcontextprotocol"
+ },
+ "fetch": {
+  "hex": "111111",
+  "title": "Model Context Protocol",
+  "source": "simple-icons",
+  "file": "fetch.svg",
+  "si": "modelcontextprotocol"
+ },
+ "memory": {
+  "hex": "111111",
+  "title": "Model Context Protocol",
+  "source": "simple-icons",
+  "file": "memory.svg",
+  "si": "modelcontextprotocol"
+ },
+ "sequential-thinking": {
+  "hex": "111111",
+  "title": "Model Context Protocol",
+  "source": "simple-icons",
+  "file": "sequential-thinking.svg",
+  "si": "modelcontextprotocol"
+ },
+ "time": {
+  "hex": "111111",
+  "title": "Model Context Protocol",
+  "source": "simple-icons",
+  "file": "time.svg",
+  "si": "modelcontextprotocol"
+ },
+ "everything": {
+  "hex": "111111",
+  "title": "Model Context Protocol",
+  "source": "simple-icons",
+  "file": "everything.svg",
+  "si": "modelcontextprotocol"
+ },
+ "slack": {
+  "source": "github-org-avatar",
+  "file": "slack.png"
+ },
+ "dbhub": {
+  "source": "github-org-avatar",
+  "file": "dbhub.png"
+ },
+ "pinecone": {
+  "source": "github-org-avatar",
+  "file": "pinecone.png"
+ },
+ "playwright": {
+  "source": "github-org-avatar",
+  "file": "playwright.png"
+ },
+ "browserbase": {
+  "source": "github-org-avatar",
+  "file": "browserbase.png"
+ },
+ "firecrawl": {
+  "source": "github-org-avatar",
+  "file": "firecrawl.png"
+ },
+ "exa": {
+  "source": "github-org-avatar",
+  "file": "exa.png"
+ },
+ "tavily": {
+  "source": "github-org-avatar",
+  "file": "tavily.png"
+ },
+ "heroku": {
+  "source": "github-org-avatar",
+  "file": "heroku.png"
+ },
+ "aws": {
+  "source": "github-org-avatar",
+  "file": "aws.png"
+ },
+ "azure": {
+  "source": "github-org-avatar",
+  "file": "azure.png"
+ },
+ "twilio": {
+  "source": "github-org-avatar",
+  "file": "twilio.png"
+ },
+ "apify": {
+  "source": "github-org-avatar",
+  "file": "apify.png"
+ }
+}
