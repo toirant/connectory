@@ -985,6 +985,23 @@
    "authBaselineHash": "0585975f51170029",
    "authChanged": false,
    "authChangedAt": null
+  },
+  "aident-loadout": {
+   "source": "https://raw.githubusercontent.com/Aident-AI/aident-skill/main/README.md",
+   "hash": "c69e5d767aea2ef0",
+   "lines": 2,
+   "release": null,
+   "lastCheck": "2026-10-19T13:08:00.623Z",
+   "baselineAt": "2026-10-19T13:08:00.623Z",
+   "needsReverification": false,
+   "changedAt": null,
+   "baselineHash": "c69e5d767aea2ef0",
+   "baselineRelease": null,
+   "authHash": "2349f603ac0a7299",
+   "authLines": 4,
+   "authBaselineHash": "2349f603ac0a7299",
+   "authChanged": false,
+   "authChangedAt": null
   }
  },
  "lastRun": "2026-10-19T13:05:37.696Z"

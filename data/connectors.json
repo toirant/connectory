@@ -1914,5 +1914,46 @@
    "scopes": "https://www.googleapis.com/auth/drive.readonly"
   },
   "lastVerified": "2026-10-15"
+ },
+ {
+  "slug": "aident-loadout",
+  "name": "Aident Loadout",
+  "vendor": "Aident AI",
+  "category": "productivity",
+  "official": true,
+  "summary": "Aident's remote MCP server that lets agents search, inspect and run Actions across your connected apps.",
+  "description": "Aident Loadout is a hosted MCP server (Streamable HTTP) that gives an existing agent Actions for connected apps and Aident-managed services. Over MCP it exposes Action search and metadata, Action execution, Skill guidance, Vault connection management and Audit history. App accounts are connected in Aident Vault, and Audit records each Action call and its outcome. Usage is credit-based; Aident's pricing page says you can start free.",
+  "tools": [
+   "Search Actions and read their live input schema",
+   "Run Actions in connected apps",
+   "Search and read Skills (reviewed task guidance)",
+   "Check and connect app accounts (Vault)",
+   "Review Action history (Audit)"
+  ],
+  "setup": [
+   {
+    "label": "Remote server",
+    "code": "{\n  \"mcpServers\": {\n    \"aident\": {\n      \"url\": \"https://loadout.aident.ai/mcp\"\n    }\n  }\n}"
+   },
+   {
+    "label": "Claude Code",
+    "code": "claude mcp add --transport http aident https://loadout.aident.ai/mcp"
+   },
+   {
+    "label": "Claude.ai / ChatGPT (custom connector)",
+    "code": "# Add a custom connector (Claude) or custom MCP server (ChatGPT)\n# Name: Aident Loadout\n# Server URL: https://loadout.aident.ai/mcp\n# then sign in to Aident and click Approve"
+   }
+  ],
+  "prompts": [
+   "Find the latest customer email about the renewal, summarize the open question, and draft a reply for me to review.",
+   "Is my Gmail account connected in Aident Loadout?"
+  ],
+  "officialUrl": "https://docs.aident.ai/loadout/overview",
+  "sourceUrl": "https://github.com/Aident-AI/aident-skill",
+  "auth": {
+   "method": "OAuth (remote server)",
+   "scopes": "capabilities:read, capabilities:search, capabilities:execute, integrations:read, integrations:connect, auth:login, auth:logout (advertised in the server's OAuth metadata)"
+  },
+  "lastVerified": "2026-10-19"
  }
 ]
