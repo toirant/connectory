@@ -1,7 +1,7 @@
 {
  "entries": {
   "git": {
-   "checked": "2026-10-16",
+   "checked": "2026-10-19",
    "via": "uvx mcp-server-git",
    "tools": [
     {
@@ -55,7 +55,7 @@
    ]
   },
   "filesystem": {
-   "checked": "2026-10-16",
+   "checked": "2026-10-19",
    "via": "npx @modelcontextprotocol/server-filesystem",
    "tools": [
     {
@@ -117,7 +117,7 @@
    ]
   },
   "fetch": {
-   "checked": "2026-10-16",
+   "checked": "2026-10-19",
    "via": "uvx mcp-server-fetch",
    "tools": [
     {
@@ -127,7 +127,7 @@
    ]
   },
   "memory": {
-   "checked": "2026-10-16",
+   "checked": "2026-10-19",
    "via": "npx @modelcontextprotocol/server-memory",
    "tools": [
     {
@@ -169,7 +169,7 @@
    ]
   },
   "sequential-thinking": {
-   "checked": "2026-10-16",
+   "checked": "2026-10-19",
    "via": "npx @modelcontextprotocol/server-sequential-thinking",
    "tools": [
     {
@@ -179,7 +179,7 @@
    ]
   },
   "time": {
-   "checked": "2026-10-16",
+   "checked": "2026-10-19",
    "via": "uvx mcp-server-time",
    "tools": [
     {
@@ -193,7 +193,7 @@
    ]
   },
   "everything": {
-   "checked": "2026-10-16",
+   "checked": "2026-10-19",
    "via": "npx @modelcontextprotocol/server-everything",
    "tools": [
     {
@@ -207,6 +207,10 @@
     {
      "name": "get-env",
      "description": "Returns all environment variables, helpful for debugging MCP server configuration"
+    },
+    {
+     "name": "get-header-params",
+     "description": "Returns its region argument and the Mcp-Param-Region HTTP header it arrived in. Demonstrates x-mcp-header (a 2026-07-28 Streamable HTTP client mirrors the argument into the header) and JSON Schema 2020-12 input and output schemas."
     },
     {
      "name": "get-resource-links",
@@ -230,23 +234,31 @@
     },
     {
      "name": "gzip-file-as-resource",
-     "description": "Compresses a single file using gzip compression. Depending upon the selected output type, returns either the compressed data as a gzipped resource or a resource link, allowing it to be downloaded in a subsequent request during the current session."
+     "description": "Compresses a single file using gzip compression. Depending upon the selected output type, returns either the compressed data as a gzipped resource or a resource link, allowing it to be downloaded in a subsequent request: during the current session for a 2025-era client, or for ten minutes at a minte"
     },
     {
-     "name": "toggle-simulated-logging",
-     "description": "Toggles simulated, random-leveled logging on or off."
+     "name": "trigger-list-changed",
+     "description": "Sends a notifications/<list>/list_changed for the tool, prompt or resource list. On protocol version 2026-07-28 it is delivered on each subscriptions/listen stream that asked for that list; a 2025-era client receives it unsolicited."
     },
     {
-     "name": "toggle-subscriber-updates",
-     "description": "Toggles simulated resource subscription updates on or off."
+     "name": "trigger-log-messages",
+     "description": "Sends one log message at each logging level during the call. On protocol version 2026-07-28 only the messages at or above the level the request names in _meta (io.modelcontextprotocol/logLevel) are sent, and none if it names no level; a 2025-era client gets those at or above the level it set with lo"
     },
     {
      "name": "trigger-long-running-operation",
      "description": "Demonstrates a long running operation with progress updates."
     },
     {
-     "name": "simulate-research-query",
-     "description": "Simulates a deep research operation that gathers, analyzes, and synthesizes information. Demonstrates MCP task-based operations with progress through multiple stages. If 'ambiguous' is true and client supports elicitation, sends an elicitation request for clarification."
+     "name": "trigger-resource-update",
+     "description": "Sends a notifications/resources/updated for a resource URI. On protocol version 2026-07-28 it is delivered on each subscriptions/listen stream whose resourceSubscriptions name the URI; a 2025-era client receives it once it has called resources/subscribe for the URI."
+    },
+    {
+     "name": "toggle-simulated-logging",
+     "description": "Toggles simulated, random-leveled logging on or off. Deprecated: 2025-era clients only, since protocol version 2026-07-28 removes logging/setLevel; use trigger-log-messages with a per-request log level instead."
+    },
+    {
+     "name": "toggle-subscriber-updates",
+     "description": "Toggles simulated resource subscription updates on or off. Deprecated: 2025-era clients only, since protocol version 2026-07-28 removes resources/subscribe; use trigger-resource-update with a subscriptions/listen stream instead."
     }
    ]
   },
@@ -534,5 +546,5 @@
    ]
   }
  },
- "lastRun": "2026-10-16T23:28:57.461Z"
+ "lastRun": "2026-10-19T13:14:42.375Z"
 }

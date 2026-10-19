@@ -56,7 +56,7 @@
   "setup": [
    {
     "label": "Run with npx",
-    "code": "{\n  \"mcpServers\": {\n    \"gitlab\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@zereight/mcp-gitlab@latest\"],\n      \"env\": {\n        \"GITLAB_PERSONAL_ACCESS_TOKEN\": \"<your token>\",\n        \"GITLAB_API_URL\": \"https://gitlab.com/api/v4\"\n      }\n    }\n  }\n}"
+    "code": "{\n  \"mcpServers\": {\n    \"gitlab\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@zereight/mcp-gitlab@2.3.3\"],\n      \"env\": {\n        \"GITLAB_PERSONAL_ACCESS_TOKEN\": \"<your token>\",\n        \"GITLAB_API_URL\": \"https://gitlab.com/api/v4\"\n      }\n    }\n  }\n}"
    }
   ],
   "prompts": [
@@ -70,7 +70,7 @@
    "method": "Personal Access Token (or OAuth)",
    "scopes": "OAuth: api or read_api (default api,read_api,read_user)"
   },
-  "lastVerified": "2026-10-16"
+  "lastVerified": "2026-10-19"
  },
  {
   "slug": "git",
@@ -79,7 +79,7 @@
   "category": "dev-tools",
   "official": true,
   "summary": "Reference server for reading, searching and manipulating local Git repositories.",
-  "description": "One of the reference servers maintained in the official modelcontextprotocol/servers repo. It gives an LLM tools to inspect status, diffs and logs and to stage, commit, reset and branch in a local Git repository.",
+  "description": "One of the reference servers maintained in the official modelcontextprotocol/servers repo. It gives an LLM tools to inspect status, diffs and logs and to stage, commit, reset and branch in a local Git repository. As of the 2026.10.19 release it is built on the MCP Python SDK 2.x (mcp>=2.3,<3).",
   "tools": [
    "git_status",
    "git_diff_unstaged",
@@ -108,7 +108,7 @@
    "method": "None (local repository access)",
    "scopes": "—"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-10-19"
  },
  {
   "slug": "filesystem",
@@ -117,7 +117,7 @@
   "category": "dev-tools",
   "official": true,
   "summary": "Reference server for secure file operations restricted to directories you allow.",
-  "description": "Official reference server that lets an agent read, write, edit, move and search files, but only inside the directories passed on the command line (or provided via MCP Roots).",
+  "description": "Official reference server that lets an agent read, write, edit, move and search files, but only inside the directories passed on the command line (or provided via MCP Roots). Requires Node.js 24 or later (as of server version 2.0.0).",
   "tools": [
    "read_text_file",
    "read_multiple_files",
@@ -148,7 +148,7 @@
    "method": "None (restricted to allowed directories)",
    "scopes": "—"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-10-19"
  },
  {
   "slug": "fetch",
@@ -157,7 +157,7 @@
   "category": "data",
   "official": true,
   "summary": "Reference server that fetches web pages and converts them to markdown for LLMs.",
-  "description": "Official reference server that retrieves a URL and converts HTML to markdown, with support for reading long pages in chunks via start_index and max_length.",
+  "description": "Official reference server that retrieves a URL and converts HTML to markdown, with support for reading long pages in chunks via start_index and max_length. As of the 2026.10.19 release it is built on the MCP Python SDK 2.x (mcp>=2.3,<3).",
   "tools": [
    "fetch (url, max_length, start_index, raw)"
   ],
@@ -177,7 +177,7 @@
    "method": "None",
    "scopes": "—"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-10-19"
  },
  {
   "slug": "memory",
@@ -186,7 +186,7 @@
   "category": "productivity",
   "official": true,
   "summary": "Knowledge-graph based persistent memory for your assistant.",
-  "description": "Official reference server that stores entities, relations and observations in a local knowledge graph so an assistant can remember facts across chats.",
+  "description": "Official reference server that stores entities, relations and observations in a local knowledge graph so an assistant can remember facts across chats. Requires Node.js 24 or later (as of server version 2.0.0).",
   "tools": [
    "create_entities",
    "create_relations",
@@ -214,7 +214,7 @@
    "method": "None (local)",
    "scopes": "—"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-10-19"
  },
  {
   "slug": "sequential-thinking",
@@ -223,7 +223,7 @@
   "category": "productivity",
   "official": true,
   "summary": "Structured, reflective step-by-step problem solving through thought sequences.",
-  "description": "Official reference server that provides a tool for breaking complex problems into revisable, branching sequences of thoughts.",
+  "description": "Official reference server that provides a tool for breaking complex problems into revisable, branching sequences of thoughts. Requires Node.js 24 or later (as of server version 2.0.0).",
   "tools": [
    "sequential_thinking"
   ],
@@ -243,7 +243,7 @@
    "method": "None",
    "scopes": "—"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-10-19"
  },
  {
   "slug": "time",
@@ -252,7 +252,7 @@
   "category": "productivity",
   "official": true,
   "summary": "Current time and timezone conversion for your agent.",
-  "description": "Official reference server that returns the current time in any IANA timezone and converts times between timezones.",
+  "description": "Official reference server that returns the current time in any IANA timezone and converts times between timezones. As of the 2026.10.19 release it is built on the MCP Python SDK 2.x (mcp>=2.3,<3).",
   "tools": [
    "get_current_time",
    "convert_time"
@@ -273,7 +273,7 @@
    "method": "None",
    "scopes": "—"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-10-19"
  },
  {
   "slug": "everything",
@@ -282,7 +282,7 @@
   "category": "dev-tools",
   "official": true,
   "summary": "Reference test server exercising every MCP feature: prompts, resources and tools.",
-  "description": "Official server meant for MCP client builders. It implements prompts, resources, tools and other protocol features so you can test a client end to end.",
+  "description": "Official server meant for MCP client builders. It implements prompts, resources, tools and other protocol features so you can test a client end to end. Requires Node.js 24 or later (as of server version 2.0.0).",
   "tools": [
    "Sample tools, resources and prompts covering the MCP spec"
   ],
@@ -301,7 +301,7 @@
    "method": "None",
    "scopes": "—"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-10-19"
  },
  {
   "slug": "figma",
@@ -1222,7 +1222,7 @@
    "method": "Firecrawl API key",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-10-19"
  },
  {
   "slug": "exa",
@@ -1350,7 +1350,7 @@
    "method": "API key recommended (Bearer header)",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-16"
+  "lastVerified": "2026-10-19"
  },
  {
   "slug": "cloudflare",
@@ -1593,7 +1593,7 @@
    "method": "Your Azure credentials (e.g. Azure CLI via az login)",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-16"
+  "lastVerified": "2026-10-19"
  },
  {
   "slug": "docker-mcp-gateway",
@@ -1770,7 +1770,9 @@
    "search-actors",
    "fetch-actor-details",
    "call-actor",
-   "Apify docs search"
+   "Apify docs search",
+   "create-actor",
+   "update-actor-version"
   ],
   "setup": [
    {
@@ -1788,7 +1790,7 @@
    "method": "OAuth or Apify API token",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-10-19"
  },
  {
   "slug": "box",
