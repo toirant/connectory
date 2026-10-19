@@ -39,11 +39,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <h1 className="guide-h1">{g.h1}</h1><p className="dek"><Rich x={g.dek} /></p>
       <p className="eyebrow tnum">Updated {fmtDate(g.updated)} · {g.sources.length} source{g.sources.length > 1 ? "s" : ""}</p></header>
     <div className="artgrid">
-      <div className="artbody">{g.sections.map((s, i) => <section key={s.h}><h2><span className="sec">§{i + 1}</span>{s.h}</h2>{s.b.map((b, j) => <B key={j} b={b} />)}</section>)}
+      <div className="artbody">{g.sections.map((s, i) => <section key={s.h} id={s.id}><h2><span className="sec">§{i + 1}</span>{s.h}</h2>{s.b.map((b, j) => <B key={j} b={b} />)}</section>)}
         {g.faq.length > 0 && <section><h2><span className="sec">§{g.sections.length + 1}</span>FAQ</h2><dl className="faq">{g.faq.map(f => <div key={f.q}><dt>{f.q}</dt><dd>{f.a}</dd></div>)}</dl></section>}
         <section><h2><span className="sec">§{g.sections.length + 2}</span>Sources</h2><ol className="sources">{g.sources.map(s => <li key={s.url}><a href={s.url} target="_blank" rel="noopener">{s.name} ↗</a></li>)}</ol><p className="note">Sources checked {fmtDate(g.updated)}. Spot something out of date? <Link href="/submit">Tell us</Link>.</p></section>
       </div>
-      <aside className="artside"><div className="factbox"><p className="eyebrow">On this page</p><ul>{g.sections.map(s => <li key={s.h}>{s.h}</li>)}</ul></div>
+      <aside className="artside"><div className="factbox"><p className="eyebrow">On this page</p><ul>{g.sections.map(s => <li key={s.h}>{s.id ? <a href={`#${s.id}`}>{s.h}</a> : s.h}</li>)}</ul></div>
         {rel.length > 0 && <div className="factbox"><p className="eyebrow">Related guides</p><ul>{rel.map(r => <li key={r!.slug}><Link href={`/guides/${r!.slug}`}>{r!.h1}</Link></li>)}</ul></div>}
         <div className="sponsor-mini"><span className="eyebrow">Build it</span><p>Combine any of these into one config file.</p><Link href="/config">Open Config Builder →</Link></div></aside>
     </div>

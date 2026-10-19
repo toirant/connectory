@@ -8,7 +8,7 @@ export type Block =
   | { t: "code"; label: string; x: string }
   | { t: "picks"; slugs: string[]; client?: Client; why?: Record<string, string> }
   | { t: "table"; head: string[]; rows: string[][] };
-export type Guide = { slug: string; title: string; h1: string; description: string; dek: string; kind: "Guide" | "How-to" | "List" | "Checklist"; updated: string; sections: { h: string; b: Block[] }[]; faq: { q: string; a: string }[]; sources: { name: string; url: string }[]; related: string[] };
+export type Guide = { slug: string; title: string; h1: string; description: string; dek: string; kind: "Guide" | "How-to" | "List" | "Checklist"; updated: string; sections: { h: string; id?: string; b: Block[] }[]; faq: { q: string; a: string }[]; sources: { name: string; url: string }[]; related: string[] };
 const D = "2026-10-15";
 const S = {
   cursor: { name: "Cursor docs — Model Context Protocol", url: "https://cursor.com/docs/context/mcp" },
@@ -17,6 +17,11 @@ const S = {
   vscode: { name: "VS Code docs — Add and manage MCP servers", url: "https://code.visualstudio.com/docs/copilot/customization/mcp-servers" },
   transports: { name: "MCP specification — Transports (2025-06-18)", url: "https://modelcontextprotocol.io/specification/2025-06-18/basic/transports" },
   sec: { name: "MCP specification — Security Best Practices", url: "https://modelcontextprotocol.io/specification/2025-06-18/basic/security_best_practices" },
+  auth: { name: "MCP specification — Authorization (2026-07-28)", url: "https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization" },
+  authsec: { name: "MCP specification — Authorization Security Considerations (2026-07-28)", url: "https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization/security-considerations" },
+  rfc6749: { name: "RFC 6749 — OAuth 2.0, Section 6: Refreshing an Access Token", url: "https://www.rfc-editor.org/rfc/rfc6749#section-6" },
+  rfc9700: { name: "RFC 9700 — OAuth 2.0 Security Best Current Practice, Section 4.14: Refresh Token Protection", url: "https://www.rfc-editor.org/rfc/rfc9700#section-4.14" },
+  cursorcli: { name: "Cursor docs — MCP in the CLI", url: "https://cursor.com/docs/cli/mcp" },
 };
 export const guides: Guide[] = [
 {
@@ -313,20 +318,20 @@ export const guides: Guide[] = [
   sources: [S.vscode], related: ["github-mcp-server-cursor", "remote-vs-local-mcp-servers"],
 },
 {
-  slug: "mcp-server-security-checklist", kind: "Checklist", updated: D,
+  slug: "mcp-server-security-checklist", kind: "Checklist", updated: "2026-10-19",
   title: "MCP server security & permissions checklist",
   h1: "MCP security & permissions checklist",
   description: "A practical checklist before you connect an MCP server: verify the source, minimize scopes and tokens, prefer read-only, review local commands, keep approvals on. Sourced from the MCP spec and client docs.",
   dek: "An MCP server acts with your credentials. This checklist turns the MCP specification's security guidance and the major clients' docs into steps you can follow before you click Allow.",
   sections: [
-    { h: "Before you install", b: [
+    { h: "Before you install", id: "before-you-install", b: [
       { t: "ol", x: [
         "Verify the source. Prefer the vendor's official server or a known repository; every Connectory entry links to its official page and source.",
         "Read the exact command for local servers. The MCP spec warns local servers can run arbitrary code with your privileges — watch for `sudo`, `rm -rf`, network calls or access to home directories and SSH keys.",
         "Check what it can reach. A local server can touch your files and network; a remote server can do whatever the vendor's API allows for your account.",
       ] },
     ] },
-    { h: "Credentials and scopes", b: [
+    { h: "Credentials and scopes", id: "credentials-and-scopes", b: [
       { t: "ol", x: [
         "Use the narrowest token you can: a fine-grained GitHub token for specific repos, a read-only database user, a restricted API key.",
         "Request minimal OAuth scopes. The spec's scope-minimization guidance: start with low-risk read scopes and elevate only when needed. Claude Code lets you pin scopes with `oauth.scopes`; Cursor lets you set `scopes` in a static OAuth `auth` block.",
@@ -334,7 +339,22 @@ export const guides: Guide[] = [
         "Check each Connectory spec sheet's Scopes / permissions cell — where the vendor documents scopes we list them; where they don't, we say \"Not documented\".",
       ] },
     ] },
-    { h: "While it runs", b: [
+    { h: "OAuth token refresh", id: "token-refresh", b: [
+      { t: "p", x: "For a remote server, your MCP client is the OAuth client: it runs the sign-in, stores the access and refresh tokens, and uses the refresh token (if one was issued) to get new access tokens. The MCP authorization spec requires clients to keep refresh tokens confidential in transit and storage, and tells them not to assume a refresh token will be issued at all. It also says authorization servers SHOULD issue short-lived access tokens and MUST rotate refresh tokens for public clients. Local stdio servers sit outside this flow — the spec says they should take credentials from the environment, so the token advice under [Credentials and scopes](/guides/mcp-server-security-checklist#credentials-and-scopes) applies to them instead." },
+      { t: "p", x: "A refresh can't widen access. Under OAuth 2.0 (RFC 6749, section 6) a refresh request can't ask for scope the user didn't originally grant, and a replacement refresh token must carry the same scope as the one it replaces. The OAuth security best practice (RFC 9700, section 4.14) adds that refresh tokens must stay bound to the scope and resource servers the user consented to, and that a public client's refresh tokens must be sender-constrained or rotated. The catch is the other direction: a refresh token represents the full scope you granted and can keep minting access tokens until the authorization server expires or revokes it." },
+      { t: "table", head: ["Client", "Who refreshes", "Clear a server's sign-in"], rows: [
+        ["Claude Code", "Claude Code. Its docs say tokens are stored securely and refreshed automatically; on a `401` it refreshes the stored token, reconnects and retries once.", ""Clear authentication" in the server's `/mcp` menu, or `claude mcp logout <name>`. `claude mcp remove` also deletes the OAuth tokens and client registration it stored for that server."],
+        ["Cursor", "Cursor supports OAuth for remote servers; its MCP docs don't describe where tokens are stored or how refresh works.", "No per-server MCP sign-out is documented. The CLI's `agent mcp disable <identifier>` stops a server loading; `agent logout` signs you out of Cursor itself, not out of an MCP server."],
+      ] },
+      { t: "ol", x: [
+        "Pin scopes before the first sign-in. Every refresh can reuse whatever you grant, so set `oauth.scopes` in Claude Code or `scopes` in Cursor's `auth` block — see [Credentials and scopes](/guides/mcp-server-security-checklist#credentials-and-scopes).",
+        "When you drop a server, clear it in the client and revoke it at the vendor. Remove the app from the vendor's connected-apps (authorized applications) page: revoking the grant on the authorization server's side is what stops its refresh token from minting new access tokens.",
+        "Prefer vendors that publish access-token lifetimes and refresh-token rotation or expiry. If a vendor doesn't document them, assume the grant lasts until you revoke it.",
+        "Re-check granted scopes after a server update. A server can ask for more through the spec's step-up flow (an `insufficient_scope` challenge), and the client re-authorizes with the union of old and new scopes — read the consent screen rather than clicking through. Our [status page](/status) flags entries whose auth-related docs changed.",
+        "Act on re-authentication prompts deliberately. Claude Code shows a notice pointing at `/mcp` when a server rejects the stored refresh token; sign in again only if you still use that server.",
+      ] },
+    ] },
+    { h: "While it runs", id: "while-it-runs", b: [
       { t: "ol", x: [
         "Keep tool approval on for anything that writes. Cursor asks before MCP tool calls by default; Codex supports `default_tools_approval_mode = \"writes\"`.",
         "Limit tools. Codex has `enabled_tools` / `disabled_tools`; VS Code and Cursor let you toggle tools or servers off.",
@@ -343,15 +363,16 @@ export const guides: Guide[] = [
         "Re-verify after upgrades. Server READMEs change; our [status page](/status) flags entries whose upstream setup docs changed.",
       ] },
     ] },
-    { h: "If you build or host a server", b: [
+    { h: "If you build or host a server", id: "if-you-build-or-host", b: [
       { t: "ul", x: ["Don't pass client tokens through to downstream APIs — the spec forbids accepting tokens not issued for your server.", "Use secure random session IDs and never use sessions for authentication.", "For local HTTP servers, bind to 127.0.0.1, validate the Origin header and require auth — or use stdio."] },
     ] },
   ],
   faq: [
     { q: "Are MCP servers safe?", a: "They are as safe as their code and the credentials you give them. Local servers run with your user's privileges, so verify the source, use least-privilege tokens, keep approvals on and sandbox where you can." },
+    { q: "Do MCP servers refresh OAuth tokens on their own?", a: "For remote servers, the MCP client (Claude Code, Cursor and others) holds the tokens and refreshes them. A refresh can't add scope beyond the original grant, but the refresh token keeps working until the vendor expires or revokes it, so revoke the app at the vendor when you stop using a server." },
     { q: "What permissions does an MCP server need?", a: "It depends on the server. Connectory lists the documented auth method and scopes for each server; many vendors don't document scopes, which we mark as Not documented." },
   ],
-  sources: [S.sec, S.transports, S.cursor, S.cc, S.codex, S.vscode], related: ["remote-vs-local-mcp-servers", "mcp-servers-for-databases"],
+  sources: [S.sec, S.auth, S.authsec, S.rfc6749, S.rfc9700, S.transports, S.cursor, S.cursorcli, S.cc, S.codex, S.vscode], related: ["remote-vs-local-mcp-servers", "mcp-servers-for-databases"],
 },
 ];
 export const guideOf = (s: string) => guides.find(g => g.slug === s);
