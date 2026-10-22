@@ -35,7 +35,7 @@
    "method": "OAuth (remote) or Personal Access Token",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-10-22"
  },
  {
   "slug": "gitlab",
@@ -44,7 +44,7 @@
   "category": "dev-tools",
   "official": false,
   "summary": "Community GitLab MCP server covering merge requests, pipelines, projects and the GitLab API.",
-  "description": "A widely used community-maintained MCP server for GitLab. It exposes tools for merge requests, diffs, pipelines and jobs, groups, environments and generic GitLab API requests. The original reference GitLab server from the MCP project is archived.",
+  "description": "A widely used community-maintained MCP server for GitLab. It exposes tools for merge requests, diffs, pipelines and jobs, groups, environments and generic GitLab API requests. The original reference GitLab server from the MCP project is archived. Since v2.3.6 every GITLAB_API_URL entry must start with http:// or https://, and a comma in an embedded password must be written as %2C.",
   "tools": [
    "get_merge_request",
    "list_merge_request_changed_files",
@@ -55,8 +55,8 @@
   ],
   "setup": [
    {
-    "label": "Run with npx",
-    "code": "{\n  \"mcpServers\": {\n    \"gitlab\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@zereight/mcp-gitlab@2.3.3\"],\n      \"env\": {\n        \"GITLAB_PERSONAL_ACCESS_TOKEN\": \"<your token>\",\n        \"GITLAB_API_URL\": \"https://gitlab.com/api/v4\"\n      }\n    }\n  }\n}"
+    "label": "Run with npx (README's pinned stable release)",
+    "code": "{\n  \"mcpServers\": {\n    \"gitlab\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@zereight/mcp-gitlab@2.3.5\"],\n      \"env\": {\n        \"GITLAB_PERSONAL_ACCESS_TOKEN\": \"<your token>\",\n        \"GITLAB_API_URL\": \"https://gitlab.com/api/v4\"\n      }\n    }\n  }\n}"
    }
   ],
   "prompts": [
@@ -70,7 +70,7 @@
    "method": "Personal Access Token (or OAuth)",
    "scopes": "OAuth: api or read_api (default api,read_api,read_user)"
   },
-  "lastVerified": "2026-10-19"
+  "lastVerified": "2026-10-22"
  },
  {
   "slug": "git",
@@ -1065,7 +1065,7 @@
   "category": "dev-tools",
   "official": true,
   "summary": "Let coding agents control and inspect a live Chrome browser with DevTools.",
-  "description": "Chrome DevTools MCP gives agents access to Chrome DevTools for automation, debugging, network inspection and performance analysis.",
+  "description": "Chrome DevTools MCP gives agents access to Chrome DevTools for automation, debugging, network inspection and performance analysis. The same npm package also ships a chrome-devtools CLI and agent skills, installable as a plugin.",
   "tools": [
    "Navigation and input automation",
    "Performance traces",
@@ -1076,6 +1076,10 @@
    {
     "label": "Run with npx",
     "code": "{\n  \"mcpServers\": {\n    \"chrome-devtools\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"chrome-devtools-mcp@latest\"]\n    }\n  }\n}"
+   },
+   {
+    "label": "Claude Code (plugin with MCP server and skills)",
+    "code": "/plugin marketplace add ChromeDevTools/chrome-devtools-mcp\n/plugin install chrome-devtools-mcp@chrome-devtools-plugins"
    }
   ],
   "prompts": [
@@ -1088,7 +1092,7 @@
    "method": "None (local browser)",
    "scopes": "—"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-10-22"
  },
  {
   "slug": "puppeteer",
@@ -1222,7 +1226,7 @@
    "method": "Firecrawl API key",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-19"
+  "lastVerified": "2026-10-22"
  },
  {
   "slug": "exa",
@@ -1350,7 +1354,7 @@
    "method": "API key recommended (Bearer header)",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-19"
+  "lastVerified": "2026-10-22"
  },
  {
   "slug": "cloudflare",
@@ -1359,7 +1363,7 @@
   "category": "dev-tools",
   "official": true,
   "summary": "Cloudflare's remote MCP servers for Workers, observability, DNS analytics, Radar, docs and more.",
-  "description": "Cloudflare runs a set of remote MCP servers, each focused on an area of the platform (docs, Workers bindings, observability, Radar, DNS analytics, logs, GraphQL and more).",
+  "description": "Cloudflare runs a set of remote MCP servers, each focused on an area of the platform (docs, Workers bindings, observability, Radar, DNS analytics, logs, GraphQL and more). Each server is served over stateless Streamable HTTP at /mcp; the old /sse URL is retired and returns 410 Gone, so point clients at /mcp.",
   "tools": [
    "Docs search",
    "Workers bindings and builds",
@@ -1381,9 +1385,9 @@
   "sourceUrl": "https://github.com/cloudflare/mcp-server-cloudflare",
   "auth": {
    "method": "OAuth (remote servers)",
-   "scopes": "Not documented"
+   "scopes": "Not documented. OAuth tokens are bound to the server's /mcp URL; grants made against /sse fail on refresh and need a fresh sign-in."
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-10-22"
  },
  {
   "slug": "heroku",
@@ -1487,7 +1491,7 @@
    "method": "Your kubeconfig credentials",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-10-22"
  },
  {
   "slug": "grafana",
@@ -1518,9 +1522,9 @@
   "sourceUrl": "https://github.com/grafana/mcp-grafana",
   "auth": {
    "method": "Grafana service account token",
-   "scopes": "Not documented"
+   "scopes": "Per-tool Grafana RBAC permissions are listed in the README (e.g. ask_assistant needs grafana-assistant-app.chats:access and plugins.app:access)"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-10-22"
  },
  {
   "slug": "aws",
@@ -1593,7 +1597,7 @@
    "method": "Your Azure credentials (e.g. Azure CLI via az login)",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-19"
+  "lastVerified": "2026-10-22"
  },
  {
   "slug": "docker-mcp-gateway",
@@ -1790,7 +1794,7 @@
    "method": "OAuth or Apify API token",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-19"
+  "lastVerified": "2026-10-22"
  },
  {
   "slug": "box",

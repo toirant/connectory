@@ -22,6 +22,9 @@ const S = {
   rfc6749: { name: "RFC 6749 — OAuth 2.0, Section 6: Refreshing an Access Token", url: "https://www.rfc-editor.org/rfc/rfc6749#section-6" },
   rfc9700: { name: "RFC 9700 — OAuth 2.0 Security Best Current Practice, Section 4.14: Refresh Token Protection", url: "https://www.rfc-editor.org/rfc/rfc9700#section-4.14" },
   cursorcli: { name: "Cursor docs — MCP in the CLI", url: "https://cursor.com/docs/cli/mcp" },
+  http26: { name: "MCP specification — Streamable HTTP transport (2026-07-28)", url: "https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/streamable-http" },
+  sec26: { name: "MCP specification — Security Best Practices (2026-07-28)", url: "https://modelcontextprotocol.io/specification/2026-07-28/basic/security_best_practices" },
+  vscodemanage: { name: "VS Code docs — Manage MCP servers", url: "https://code.visualstudio.com/docs/agents/run/manage-mcp-servers" },
 };
 export const guides: Guide[] = [
 {
@@ -318,7 +321,7 @@ export const guides: Guide[] = [
   sources: [S.vscode], related: ["github-mcp-server-cursor", "remote-vs-local-mcp-servers"],
 },
 {
-  slug: "mcp-server-security-checklist", kind: "Checklist", updated: "2026-10-19",
+  slug: "mcp-server-security-checklist", kind: "Checklist", updated: "2026-10-22",
   title: "MCP server security & permissions checklist",
   h1: "MCP security & permissions checklist",
   description: "A practical checklist before you connect an MCP server: verify the source, minimize scopes and tokens, prefer read-only, review local commands, keep approvals on. Sourced from the MCP spec and client docs.",
@@ -335,7 +338,7 @@ export const guides: Guide[] = [
       { t: "ol", x: [
         "Use the narrowest token you can: a fine-grained GitHub token for specific repos, a read-only database user, a restricted API key.",
         "Request minimal OAuth scopes. The spec's scope-minimization guidance: start with low-risk read scopes and elevate only when needed. Claude Code lets you pin scopes with `oauth.scopes`; Cursor lets you set `scopes` in a static OAuth `auth` block.",
-        "Keep secrets out of committed files. Use `${env:NAME}` in Cursor, `${VAR}` in Claude Code's `.mcp.json`, `bearer_token_env_var` in Codex, or input variables in VS Code.",
+        "Keep secrets out of committed files. Use `${env:NAME}` in Cursor, `${VAR}` in Claude Code's `.mcp.json`, `bearer_token_env_var` in Codex, or input variables in VS Code (VS Code-format `mcp.json` only; VS Code's portable `mcpServers` configs don't support input variables or env files).",
         "Check each Connectory spec sheet's Scopes / permissions cell — where the vendor documents scopes we list them; where they don't, we say \"Not documented\".",
       ] },
     ] },
@@ -344,7 +347,7 @@ export const guides: Guide[] = [
       { t: "p", x: "A refresh can't widen access. Under OAuth 2.0 (RFC 6749, section 6) a refresh request can't ask for scope the user didn't originally grant, and a replacement refresh token must carry the same scope as the one it replaces. The OAuth security best practice (RFC 9700, section 4.14) adds that refresh tokens must stay bound to the scope and resource servers the user consented to, and that a public client's refresh tokens must be sender-constrained or rotated. The catch is the other direction: a refresh token represents the full scope you granted and can keep minting access tokens until the authorization server expires or revokes it." },
       { t: "table", head: ["Client", "Who refreshes", "Clear a server's sign-in"], rows: [
         ["Claude Code", "Claude Code. Its docs say tokens are stored securely and refreshed automatically; on a `401` it refreshes the stored token, reconnects and retries once.", "“Clear authentication” in the server's `/mcp` menu, or `claude mcp logout <name>`. `claude mcp remove` also deletes the OAuth tokens and client registration it stored for that server."],
-        ["Cursor", "Cursor supports OAuth for remote servers; its MCP docs don't describe where tokens are stored or how refresh works.", "No per-server MCP sign-out is documented. The CLI's `agent mcp disable <identifier>` stops a server loading; `agent logout` signs you out of Cursor itself, not out of an MCP server."],
+        ["Cursor", "Cursor supports OAuth for remote servers; its MCP docs don't describe where tokens are stored or how refresh works. Cloud Agents keep their own MCP sign-ins on Cursor's servers, separate from the sign-ins on your machine.", "Signing out locally doesn't sign out Cloud Agents: open Customize and log out on the server's Cloud row. The CLI's `agent mcp disable <identifier>` stops a server loading or prompting for approval."],
       ] },
       { t: "ol", x: [
         "Pin scopes before the first sign-in. Every refresh can reuse whatever you grant, so set `oauth.scopes` in Claude Code or `scopes` in Cursor's `auth` block — see [Credentials and scopes](/guides/mcp-server-security-checklist#credentials-and-scopes).",
@@ -358,13 +361,13 @@ export const guides: Guide[] = [
       { t: "ol", x: [
         "Keep tool approval on for anything that writes. Cursor asks before MCP tool calls by default; Codex supports `default_tools_approval_mode = \"writes\"`.",
         "Limit tools. Codex has `enabled_tools` / `disabled_tools`; VS Code and Cursor let you toggle tools or servers off.",
-        "Sandbox local servers where possible — VS Code's `sandboxEnabled` on macOS/Linux, or run the server in a container.",
+        "Sandbox local servers where possible — VS Code's per-server `sandboxEnabled` for stdio servers on macOS/Linux (not Windows), or run the server in a container.",
         "Treat fetched content as untrusted. Claude Code's docs warn that servers fetching external content can expose you to prompt injection.",
         "Re-verify after upgrades. Server READMEs change; our [status page](/status) flags entries whose upstream setup docs changed.",
       ] },
     ] },
     { h: "If you build or host a server", id: "if-you-build-or-host", b: [
-      { t: "ul", x: ["Don't pass client tokens through to downstream APIs — the spec forbids accepting tokens not issued for your server.", "Use secure random session IDs and never use sessions for authentication.", "For local HTTP servers, bind to 127.0.0.1, validate the Origin header and require auth — or use stdio."] },
+      { t: "ul", x: ["Don't pass client tokens through to downstream APIs — the spec forbids accepting tokens not issued for your server.", "MCP 2026-07-28 is stateless with no protocol sessions. If your server mints state handles (cart or workflow IDs passed back as tool arguments), make them secure random values, bind them server-side to the authenticated user, and never treat possession of a handle as authentication. Servers still on 2025-11-25 or earlier session IDs should follow that version's session-hijacking guidance.", "For local Streamable HTTP servers, bind to 127.0.0.1 rather than 0.0.0.0, validate the Origin header on every request (403 if invalid) and require auth — or use stdio."] },
     ] },
   ],
   faq: [
@@ -372,7 +375,7 @@ export const guides: Guide[] = [
     { q: "Do MCP servers refresh OAuth tokens on their own?", a: "For remote servers, the MCP client (Claude Code, Cursor and others) holds the tokens and refreshes them. A refresh can't add scope beyond the original grant, but the refresh token keeps working until the vendor expires or revokes it, so revoke the app at the vendor when you stop using a server." },
     { q: "What permissions does an MCP server need?", a: "It depends on the server. Connectory lists the documented auth method and scopes for each server; many vendors don't document scopes, which we mark as Not documented." },
   ],
-  sources: [S.sec, S.auth, S.authsec, S.rfc6749, S.rfc9700, S.transports, S.cursor, S.cursorcli, S.cc, S.codex, S.vscode], related: ["remote-vs-local-mcp-servers", "mcp-servers-for-databases"],
+  sources: [S.sec26, S.auth, S.authsec, S.rfc6749, S.rfc9700, S.http26, S.cursor, S.cursorcli, S.cc, S.codex, S.vscode, S.vscodemanage], related: ["remote-vs-local-mcp-servers", "mcp-servers-for-databases"],
 },
 ];
 export const guideOf = (s: string) => guides.find(g => g.slug === s);
