@@ -1002,6 +1002,23 @@
    "authBaselineHash": "2349f603ac0a7299",
    "authChanged": false,
    "authChangedAt": null
+  },
+  "neverapply": {
+   "source": "https://raw.githubusercontent.com/kasovy/neverapply-mcp/main/README.md",
+   "hash": "e9bae7d8ef4e35c5",
+   "lines": 16,
+   "release": "v1.0.0",
+   "lastCheck": "2026-10-22T19:58:04.262Z",
+   "baselineAt": "2026-10-22T19:58:04.262Z",
+   "needsReverification": false,
+   "changedAt": null,
+   "baselineHash": "e9bae7d8ef4e35c5",
+   "baselineRelease": "v1.0.0",
+   "authHash": "3bb76cf26dec341a",
+   "authLines": 14,
+   "authBaselineHash": "3bb76cf26dec341a",
+   "authChanged": false,
+   "authChangedAt": null
   }
  },
  "lastRun": "2026-10-19T13:29:57.703Z"

@@ -1957,5 +1957,55 @@
    "scopes": "capabilities:read, capabilities:search, capabilities:execute, integrations:read, integrations:connect, auth:login, auth:logout (advertised in the server's OAuth metadata)"
   },
   "lastVerified": "2026-10-19"
+ },
+ {
+  "slug": "neverapply",
+  "name": "NeverApply",
+  "vendor": "NeverApply",
+  "category": "productivity",
+  "official": true,
+  "summary": "NeverApply's remote MCP server for searching jobs, reviewing matches, tracking applications and applying to jobs you approve.",
+  "description": "NeverApply is a hosted MCP server (Streamable HTTP) that connects an assistant to your NeverApply account. Read access covers job search, matches, your profile and application history. Write access lets it update your profile, upload a resume, save answers, tailor resumes and prepare interview drafts. Apply access lets it submit applications, which NeverApply says needs credits and your explicit approval of each job. Sign-in is OAuth 2.1 with PKCE and you choose which permissions to grant; access can be revoked in Settings, Connected AI clients. Resume tailoring and interview preparation require a paid plan.",
+  "tools": [
+   "Search jobs and read job details (search_jobs, get_job)",
+   "Explain your matches (get_matches)",
+   "Read and update your profile, upload a resume, save answers",
+   "List and read your applications (list_applications, get_application)",
+   "Tailor resumes and prepare for interviews (paid plan)",
+   "Apply to jobs you approve (apply_to_job, answer_screening_question, approve_application)"
+  ],
+  "setup": [
+   {
+    "label": "Remote server",
+    "code": "{\n  \"mcpServers\": {\n    \"neverapply\": {\n      \"url\": \"https://neverapply.co/mcp\"\n    }\n  }\n}"
+   },
+   {
+    "label": "Claude Code",
+    "code": "claude mcp add --transport http neverapply https://neverapply.co/mcp\n# then run /mcp in Claude Code and sign in"
+   },
+   {
+    "label": "Claude Code (.mcp.json)",
+    "code": "{\n  \"mcpServers\": {\n    \"neverapply\": {\n      \"type\": \"http\",\n      \"url\": \"https://neverapply.co/mcp\"\n    }\n  }\n}"
+   },
+   {
+    "label": "Codex",
+    "code": "codex mcp add neverapply --url https://neverapply.co/mcp\ncodex mcp login neverapply"
+   },
+   {
+    "label": "Claude.ai / ChatGPT (custom connector)",
+    "code": "# Add a custom connector (Claude) or custom MCP server (ChatGPT, Developer mode)\n# Name: NeverApply\n# Server URL: https://neverapply.co/mcp\n# then sign in to NeverApply and choose permissions"
+   }
+  ],
+  "prompts": [
+   "Find remote product manager jobs in Germany that fit me.",
+   "What applications are waiting for me?"
+  ],
+  "officialUrl": "https://neverapply.co/features/mcp",
+  "sourceUrl": "https://github.com/kasovy/neverapply-mcp",
+  "auth": {
+   "method": "OAuth 2.1 + PKCE (remote server)",
+   "scopes": "mcp:read, mcp:write, mcp:apply (advertised in the server's OAuth metadata). Write and apply scopes allow profile changes and job applications; NeverApply says applications are only sent for jobs you explicitly approve."
+  },
+  "lastVerified": "2026-10-22"
  }
 ]

@@ -369,5 +369,9 @@
  "aident-loadout": {
   "source": "github-org-avatar",
   "file": "aident-loadout.png"
+ },
+ "neverapply": {
+  "source": "github-org-avatar",
+  "file": "neverapply.png"
  }
 }
