@@ -369,7 +369,7 @@
    ]
   },
   "chrome-devtools": {
-   "checked": "2026-10-16",
+   "checked": "2026-10-22",
    "via": "npx chrome-devtools-mcp@latest",
    "tools": [
     {
@@ -498,7 +498,7 @@
     },
     {
      "name": "wait_for",
-     "description": "Wait for the specified text to appear on the selected page."
+     "description": "Wait for the specified text to appear on the selected page. By default, hidden text is also matched. Set visible to true to wait until the matched text is visible."
     }
    ]
   },
@@ -546,5 +546,5 @@
    ]
   }
  },
- "lastRun": "2026-10-19T13:14:42.375Z"
+ "lastRun": "2026-10-23T00:18:37.738Z"
 }

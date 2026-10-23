@@ -15,7 +15,8 @@ const S = {
   cc: { name: "Claude Code docs — Connect Claude Code to tools via MCP", url: "https://docs.claude.com/en/docs/claude-code/mcp" },
   codex: { name: "OpenAI docs — Model Context Protocol (Codex)", url: "https://developers.openai.com/codex/mcp" },
   vscode: { name: "VS Code docs — Add and manage MCP servers", url: "https://code.visualstudio.com/docs/copilot/customization/mcp-servers" },
-  transports: { name: "MCP specification — Transports (2025-06-18)", url: "https://modelcontextprotocol.io/specification/2025-06-18/basic/transports" },
+  transports: { name: "MCP specification — Transports (2026-07-28)", url: "https://modelcontextprotocol.io/specification/2026-07-28/basic/transports" },
+  stdio26: { name: "MCP specification — stdio transport (2026-07-28)", url: "https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/stdio" },
   sec: { name: "MCP specification — Security Best Practices", url: "https://modelcontextprotocol.io/specification/2025-06-18/basic/security_best_practices" },
   auth: { name: "MCP specification — Authorization (2026-07-28)", url: "https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization" },
   authsec: { name: "MCP specification — Authorization Security Considerations (2026-07-28)", url: "https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization/security-considerations" },
@@ -202,7 +203,7 @@ export const guides: Guide[] = [
   sources: [S.cc, { name: "Supabase MCP docs", url: "https://supabase.com/docs/guides/getting-started/mcp" }, { name: "neondatabase/mcp-server-neon", url: "https://github.com/neondatabase/mcp-server-neon" }, { name: "bytebase/dbhub", url: "https://github.com/bytebase/dbhub" }, { name: "mongodb-js/mongodb-mcp-server", url: "https://github.com/mongodb-js/mongodb-mcp-server" }], related: ["mcp-server-security-checklist", "remote-vs-local-mcp-servers"],
 },
 {
-  slug: "remote-vs-local-mcp-servers", kind: "Guide", updated: D,
+  slug: "remote-vs-local-mcp-servers", kind: "Guide", updated: "2026-10-22",
   title: "Remote vs local MCP servers: stdio vs Streamable HTTP explained",
   h1: "Remote vs local MCP servers",
   description: "What the difference between stdio (local) and Streamable HTTP (remote) MCP servers means for setup, auth and security — and how each client configures them.",
@@ -212,10 +213,12 @@ export const guides: Guide[] = [
       { t: "table", head: ["", "Local — stdio", "Remote — Streamable HTTP"], rows: [
         ["How it runs", "The client launches the server as a subprocess and talks over stdin/stdout", "An independent server process at a URL (e.g. https://example.com/mcp), handling many clients"],
         ["Install", "A command: npx, uvx, docker, a binary", "A URL"],
-        ["Auth", "Usually env vars / API keys you pass in", "OAuth sign-in or a bearer token header"],
+        ["Auth", "Credentials from the environment (env vars / API keys you pass in); the spec says stdio servers should not use its OAuth flow", "OAuth sign-in per the spec's authorization rules, or a bearer token header"],
         ["Reach", "Can access your files, local apps and network", "Only what the vendor's API allows for your account"],
       ] },
-      { t: "p", x: "The older HTTP+SSE transport was replaced by Streamable HTTP in protocol version 2025-03-26; Anthropic's Claude Code docs call SSE deprecated. Some services still expose `/sse` endpoints." },
+      { t: "p", x: "The older HTTP+SSE transport was replaced by Streamable HTTP in protocol version 2025-03-26 and is formally classified as Deprecated in the current spec (2026-07-28); Anthropic's Claude Code docs also call SSE deprecated. Some services still expose `/sse` endpoints." },
+      { t: "p", x: "Streamable HTTP changed in spec revision 2026-07-28: every client message is its own HTTP POST to a single MCP endpoint, and the server answers with a JSON object or an SSE stream scoped to that request. Protocol-level sessions (the `Mcp-Session-Id` header), the standalone GET stream and resumable streams were removed. Servers and clients on 2025-03-26 through 2025-11-25 still use the older shape, and the spec describes how each side detects and falls back." },
+      { t: "p", x: "For local Streamable HTTP servers the spec requires validating the `Origin` header (403 if invalid) and recommends binding to 127.0.0.1 rather than 0.0.0.0 and authenticating every connection, to block DNS-rebinding attacks." },
     ] },
     { h: "Same idea, different config per client", b: [
       { t: "code", label: "Cursor / Claude Desktop-style mcp.json", x: '{\n  "mcpServers": {\n    "local": { "command": "npx", "args": ["-y", "some-mcp-server"] },\n    "remote": { "url": "https://example.com/mcp" }\n  }\n}' },
@@ -230,10 +233,10 @@ export const guides: Guide[] = [
     ] },
   ],
   faq: [
-    { q: "What is the difference between stdio and Streamable HTTP in MCP?", a: "With stdio the client launches the server as a local subprocess and exchanges messages over stdin/stdout. With Streamable HTTP the server is an independent process at a URL that handles HTTP POST and GET requests, optionally streaming with Server-Sent Events." },
-    { q: "Is SSE deprecated in MCP?", a: "The HTTP+SSE transport from protocol version 2024-11-05 was replaced by Streamable HTTP, and Claude Code's docs describe SSE as deprecated. Streamable HTTP can still use SSE internally for streaming." },
+    { q: "What is the difference between stdio and Streamable HTTP in MCP?", a: "With stdio the client launches the server as a local subprocess and exchanges messages over stdin/stdout. With Streamable HTTP the server is an independent process at a URL that receives each message as its own HTTP POST to a single endpoint and replies with JSON or a request-scoped Server-Sent Events stream. As of spec revision 2026-07-28 there are no protocol sessions and no standalone GET stream." },
+    { q: "Is SSE deprecated in MCP?", a: "Yes. The HTTP+SSE transport from protocol version 2024-11-05 was replaced by Streamable HTTP in 2025-03-26 and is classified as Deprecated in the 2026-07-28 spec, eligible for removal in a future revision. Claude Code's docs describe SSE as deprecated. Streamable HTTP can still use SSE internally for streaming." },
   ],
-  sources: [S.transports, S.cursor, S.cc, S.codex, S.vscode], related: ["mcp-server-security-checklist", "best-mcp-servers-for-cursor"],
+  sources: [S.transports, S.http26, S.stdio26, S.auth, S.cursor, S.cc, S.codex, S.vscode], related: ["mcp-server-security-checklist", "best-mcp-servers-for-cursor"],
 },
 {
   slug: "mcp-servers-for-figma-design", kind: "Guide", updated: D,
