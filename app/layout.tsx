@@ -3,9 +3,10 @@ import Link from "next/link";
 import type { Metadata, Viewport } from "next";
 import { SITE_NAME, SITE_URL, connectors, categories } from "../lib/data";
 import { display, serif, sans, mono } from "./fonts";
+import BrandMark from "../components/BrandMark";
 import { Analytics } from "@vercel/analytics/next";
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
+  metadataBase: new URL("https://connectory-rose.vercel.app"),
   title: { default: `${SITE_NAME} — Directory of MCP servers & AI agent connectors`, template: `%s | ${SITE_NAME}` },
   description: "Searchable directory of Model Context Protocol (MCP) servers and AI agent connectors with setup instructions, key tools and example prompts. Weekly new-connectors newsletter.",
   openGraph: { siteName: SITE_NAME, type: "website" },
@@ -18,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (<html lang="en" className={`${display.variable} ${serif.variable} ${sans.variable} ${mono.variable}`}><body>
     <a href="#main" className="skip">Skip to content</a>
     <header className="top"><div className="wrap top-row">
-      <Link href="/" className="brand" aria-label="Connectory home"><span className="brand-mark" aria-hidden="true"><i /><i /><i /><i /></span><span className="brand-word">Connectory</span></Link>
+      <Link href="/" className="brand" aria-label="Connectory home"><BrandMark size={26} /><span className="brand-word">Connectory</span></Link>
       <span className="eyebrow top-meta tnum">Index of MCP servers — No. {String(connectors.length).padStart(3, "0")}</span>
       <nav className="nav" aria-label="Primary">
         <Link href="/#directory">Index</Link><Link href="/guides">Guides</Link><Link href="/config">Config Builder</Link><Link href="/submit">Submit</Link><Link href="/sponsor">Sponsor</Link>

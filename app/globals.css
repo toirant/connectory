@@ -25,7 +25,7 @@ em{font-style:italic}h1 em,h2 em{color:var(--sig)}
 .top-row{display:flex;align-items:center;gap:24px;height:60px}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
 .brand-mark{display:grid;grid-template-columns:repeat(2,9px);gap:2px}.brand-mark i{width:9px;height:9px;background:var(--ink)}.brand-mark i:nth-child(2){background:var(--sig)}
-.brand:hover .brand-mark i{animation:blink .6s var(--ease)}.brand:hover .brand-mark i:nth-child(3){animation-delay:.08s}
+.brand-svg{display:block;flex:none}.brand-svg .bm-l,.brand-svg .bm-r{transition:transform .25s var(--ease)}.brand:hover .bm-l{transform:translateX(-1.5px)}.brand:hover .bm-r{transform:translateX(1.5px)}
 @keyframes blink{50%{background:var(--sig)}}
 .brand-word{font:400 28px/1 var(--display);letter-spacing:-.01em}
 .top-meta{color:var(--mute);border-left:1px solid var(--hair);padding-left:24px}
