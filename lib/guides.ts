@@ -324,7 +324,7 @@ export const guides: Guide[] = [
   sources: [S.vscode], related: ["github-mcp-server-cursor", "remote-vs-local-mcp-servers"],
 },
 {
-  slug: "mcp-server-security-checklist", kind: "Checklist", updated: "2026-10-22",
+  slug: "mcp-server-security-checklist", kind: "Checklist", updated: "2026-10-25",
   title: "MCP server security & permissions checklist",
   h1: "MCP security & permissions checklist",
   description: "A practical checklist before you connect an MCP server: verify the source, minimize scopes and tokens, prefer read-only, review local commands, keep approvals on. Sourced from the MCP spec and client docs.",
@@ -354,7 +354,8 @@ export const guides: Guide[] = [
       ] },
       { t: "ol", x: [
         "Pin scopes before the first sign-in. Every refresh can reuse whatever you grant, so set `oauth.scopes` in Claude Code or `scopes` in Cursor's `auth` block — see [Credentials and scopes](/guides/mcp-server-security-checklist#credentials-and-scopes).",
-        "When you drop a server, clear it in the client and revoke it at the vendor. Remove the app from the vendor's connected-apps (authorized applications) page: revoking the grant on the authorization server's side is what stops its refresh token from minting new access tokens.",
+        "**Removed locally** — when you drop a server, clear it in your MCP client: use the “Clear a server's sign-in” column above (Claude Code's `claude mcp logout` / `claude mcp remove`, Cursor's local and Cloud log-outs). This deletes the client's copy of the tokens.",
+        "**Authorization revoked** — then open the vendor's connected-apps (authorized applications) page and revoke the grant. Revoking on the authorization server's side is what stops the refresh token from minting new access tokens; clearing the client alone is not enough, because the grant stays live at the vendor until it expires or is revoked (RFC 6749 and RFC 9700, above). Each Connectory connector page for an OAuth server has a “When you disconnect” section that links the vendor's revoke page when the vendor documents one.",
         "Prefer vendors that publish access-token lifetimes and refresh-token rotation or expiry. If a vendor doesn't document them, assume the grant lasts until you revoke it.",
         "Re-check granted scopes after a server update. A server can ask for more through the spec's step-up flow (an `insufficient_scope` challenge), and the client re-authorizes with the union of old and new scopes — read the consent screen rather than clicking through. Our [status page](/status) flags entries whose auth-related docs changed.",
         "Act on re-authentication prompts deliberately. Claude Code shows a notice pointing at `/mcp` when a server rejects the stored refresh token; sign in again only if you still use that server.",
@@ -375,7 +376,7 @@ export const guides: Guide[] = [
   ],
   faq: [
     { q: "Are MCP servers safe?", a: "They are as safe as their code and the credentials you give them. Local servers run with your user's privileges, so verify the source, use least-privilege tokens, keep approvals on and sandbox where you can." },
-    { q: "Do MCP servers refresh OAuth tokens on their own?", a: "For remote servers, the MCP client (Claude Code, Cursor and others) holds the tokens and refreshes them. A refresh can't add scope beyond the original grant, but the refresh token keeps working until the vendor expires or revokes it, so revoke the app at the vendor when you stop using a server." },
+    { q: "Do MCP servers refresh OAuth tokens on their own?", a: "For remote servers, the MCP client (Claude Code, Cursor and others) holds the tokens and refreshes them. A refresh can't add scope beyond the original grant, but the refresh token keeps working until the vendor expires or revokes it, so treat disconnecting as two steps: Removed locally (clear or remove the server in your client) and Authorization revoked (revoke the app on the vendor's connected-apps page). Only the second stops the refresh token." },
     { q: "What permissions does an MCP server need?", a: "It depends on the server. Connectory lists the documented auth method and scopes for each server; many vendors don't document scopes, which we mark as Not documented." },
   ],
   sources: [S.sec26, S.auth, S.authsec, S.rfc6749, S.rfc9700, S.http26, S.cursor, S.cursorcli, S.cc, S.codex, S.vscode, S.vscodemanage], related: ["remote-vs-local-mcp-servers", "mcp-servers-for-databases"],

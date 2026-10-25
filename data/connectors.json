@@ -33,7 +33,9 @@
   "sourceUrl": "https://github.com/github/github-mcp-server",
   "auth": {
    "method": "OAuth (remote) or Personal Access Token",
-   "scopes": "Not documented"
+   "scopes": "Not documented",
+   "revokeUrl": "https://github.com/settings/applications",
+   "revokeLabel": "GitHub → Settings → Applications → Authorized OAuth Apps"
   },
   "lastVerified": "2026-10-22"
  },
@@ -332,7 +334,9 @@
   "sourceUrl": "https://developers.figma.com/docs/figma-mcp-server/remote-server-installation/",
   "auth": {
    "method": "Figma account sign-in (remote server)",
-   "scopes": "Not documented"
+   "scopes": "Not documented",
+   "revokeUrl": "https://help.figma.com/hc/en-us/articles/15021280611607-How-do-I-keep-my-account-secure",
+   "revokeLabel": "Figma → Settings → Security → Connected apps"
   },
   "lastVerified": "2026-10-15"
  },
@@ -392,7 +396,9 @@
   "sourceUrl": "https://github.com/stripe/agent-toolkit",
   "auth": {
    "method": "OAuth (remote server)",
-   "scopes": "Not documented"
+   "scopes": "Not documented",
+   "revokeUrl": "https://dashboard.stripe.com/settings/user",
+   "revokeLabel": "Stripe Dashboard → User settings → OAuth sessions"
   },
   "lastVerified": "2026-10-15"
  },
@@ -493,7 +499,9 @@
   "sourceUrl": "https://linear.app/docs/mcp",
   "auth": {
    "method": "OAuth (remote server)",
-   "scopes": "Not documented"
+   "scopes": "Not documented",
+   "revokeUrl": "https://linear.app/docs/security-and-access",
+   "revokeLabel": "Linear → Settings → Account → Security & access → Authorized applications"
   },
   "lastVerified": "2026-10-15"
  },
@@ -561,7 +569,9 @@
   "sourceUrl": "https://github.com/atlassian/atlassian-mcp-server",
   "auth": {
    "method": "OAuth 2.1 (remote server)",
-   "scopes": "Inherits your existing Atlassian permissions"
+   "scopes": "Inherits your existing Atlassian permissions",
+   "revokeUrl": "https://id.atlassian.com/manage-profile/apps",
+   "revokeLabel": "Atlassian account → Connected apps"
   },
   "lastVerified": "2026-10-15"
  },
@@ -664,7 +674,9 @@
   "sourceUrl": "https://github.com/getsentry/sentry-mcp",
   "auth": {
    "method": "OAuth (remote server)",
-   "scopes": "Not documented"
+   "scopes": "Not documented",
+   "revokeUrl": "https://docs.sentry.io/product/partnership-platform/oauth-integration/",
+   "revokeLabel": "Sentry → Settings → Account → Authorized Applications"
   },
   "lastVerified": "2026-10-15"
  },
@@ -1385,7 +1397,9 @@
   "sourceUrl": "https://github.com/cloudflare/mcp-server-cloudflare",
   "auth": {
    "method": "OAuth (remote servers)",
-   "scopes": "Not documented. OAuth tokens are bound to the server's /mcp URL; grants made against /sse fail on refresh and need a fresh sign-in."
+   "scopes": "Not documented. OAuth tokens are bound to the server's /mcp URL; grants made against /sse fail on refresh and need a fresh sign-in.",
+   "revokeUrl": "https://developers.cloudflare.com/fundamentals/oauth/authorizing-an-application/",
+   "revokeLabel": "Cloudflare dashboard → Profile → authorized applications"
   },
   "lastVerified": "2026-10-22"
  },
@@ -1917,7 +1931,9 @@
   "sourceUrl": "https://github.com/modelcontextprotocol/servers-archived/tree/main/src/gdrive",
   "auth": {
    "method": "Google OAuth",
-   "scopes": "https://www.googleapis.com/auth/drive.readonly"
+   "scopes": "https://www.googleapis.com/auth/drive.readonly",
+   "revokeUrl": "https://support.google.com/accounts/answer/13533235",
+   "revokeLabel": "Google Account → linked apps"
   },
   "lastVerified": "2026-10-15"
  },

@@ -15,6 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params; const c = connectors.find(x => x.slug === slug); if (!c) notFound();
   const idx = connectors.findIndex(x => x.slug === c.slug) + 1; const spec = specOf(c); const dr = driftOf(c.slug); const cat = categories[c.category]; const live = liveToolsOf(c.slug);
+  const oauth = /oauth|sign-in/i.test(c.auth.method) || !!c.auth.revokeUrl;
   const related = connectors.filter(x => x.category === c.category && x.slug !== c.slug).slice(0, 4);
   const jsonld = { "@context": "https://schema.org", "@type": "SoftwareApplication", name: `${c.name} MCP Server`, applicationCategory: "DeveloperApplication", description: c.description, url: `${SITE_URL}/connectors/${c.slug}`, sameAs: [c.officialUrl, c.sourceUrl], publisher: { "@type": "Organization", name: c.vendor }, offers: { "@type": "Offer", price: "0", priceCurrency: "USD" } };
   const crumbs = { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: SITE_URL }, { "@type": "ListItem", position: 2, name: cat.name, item: `${SITE_URL}/category/${c.category}` }, { "@type": "ListItem", position: 3, name: c.name }] };
@@ -46,6 +47,14 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         <h2><span className="sec">§2</span>Setup</h2>{c.setup.map(s => <figure key={s.label} className="code"><figcaption><span>{s.label}</span><CopyButton text={s.code} /></figcaption><pre><code>{s.code}</code></pre></figure>)}
         <p className="note">Snippets adapted from the official documentation. Check the <a href={c.officialUrl}>official page</a> for current options and auth requirements.</p>
         {live && <><h2><span className="sec">§2a</span>Tools (live-checked {fmtDate(live.checked)})</h2><p className="note">Returned by the server's own <code>tools/list</code> via {live.via}{live.note ? ` (${live.note})` : ""}. No credentials used; no tools were called.</p><ul className="prompts">{live.tools.map(t => <li key={t.name}><span><code>{t.name}</code>{t.description ? ` — ${t.description}` : ""}</span></li>)}</ul></>}
+        {oauth && <><h2 id="disconnect"><span className="sec">§2b</span>When you disconnect</h2>
+          <ol className="disconnect">
+            <li><b>Removed locally</b><span>Clear the sign-in or remove the server in your MCP client (for example <code>claude mcp logout</code> or <code>claude mcp remove</code> in Claude Code, or log out of the server in Cursor). This only deletes the client's copy of the tokens.</span></li>
+            <li><b>Authorization revoked</b><span>{c.auth.revokeUrl
+              ? <>Revoke the grant on {c.vendor}'s app-permissions page: <a href={c.auth.revokeUrl} target="_blank" rel="noopener">{c.auth.revokeLabel || "connected apps"} ↗</a>.</>
+              : <>Find {c.vendor}'s connected-apps / authorized applications page and revoke the grant there. We haven't found an official page for it yet.</>}{" "}This is what stops the refresh token; clearing the client alone is not enough.</span></li>
+          </ol>
+          <p className="note">Why both steps: <Link href="/guides/mcp-server-security-checklist#token-refresh">OAuth token refresh</Link> in the security checklist.</p></>}
         <h2><span className="sec">§3</span>Prompts to try</h2><ol className="prompts">{c.prompts.map(p => <li key={p}><span>“{p}”</span><CopyButton text={p} /></li>)}</ol>
       </div>
       <aside className="artside">
