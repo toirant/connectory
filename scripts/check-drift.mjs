@@ -55,7 +55,10 @@ for (const c of connectors) {
   for (const u of s.readmes) { try { text = await get(u); used = u; break; } catch (e) { if (e instanceof RateLimited) { limited = true; break; } } }
   let release = null;
   const prev = db.entries[c.slug];
-  if (s.repo && !limited) { try { const j = await get(`https://api.github.com/repos/${s.repo}/releases/latest`, true); release = j.tag_name || null; } catch (e) { if (e instanceof RateLimited) limited = true; } }
+  if (s.repo && !limited) { try {
+    // Monorepos (e.g. upstash/context7) publish several packages; releaseTagPrefix pins tracking to the MCP server's own tags.
+    if (c.releaseTagPrefix) { const list = await get(`https://api.github.com/repos/${s.repo}/releases?per_page=100`, true); release = list.filter(r => !r.draft && !r.prerelease).map(r => r.tag_name).find(t => t && t.startsWith(c.releaseTagPrefix)) || null; }
+    else { const j = await get(`https://api.github.com/repos/${s.repo}/releases/latest`, true); release = j.tag_name || null; } } catch (e) { if (e instanceof RateLimited) limited = true; } }
   // Rate-limited: skip the entry entirely (keep its stored state) and report it, rather than treating it as unchanged.
   if (limited) { rateSkipped.push(c.slug); if (prev) db.entries[c.slug] = { ...prev, lastError: `${now}: GitHub rate limit, not checked` }; continue; }
   if (!text) { failed.push(c.slug); db.entries[c.slug] = { ...(prev || {}), lastCheck: now, lastError: "fetch failed" }; continue; }

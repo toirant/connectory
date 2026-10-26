@@ -4,7 +4,7 @@ import drift from "../data/drift.json";
 import toolsDb from "../data/tools.json";
 export type Setup = { label: string; code: string };
 export type Entry = { command?: string; args?: string[]; env?: Record<string, string>; url?: string; type?: string };
-export type Connector = { slug: string; name: string; vendor: string; category: string; official: boolean; summary: string; description: string; tools: string[]; setup: Setup[]; prompts: string[]; officialUrl: string; sourceUrl: string; lastVerified: string; auth: { method: string; scopes: string; revokeUrl?: string; revokeLabel?: string } };
+export type Connector = { slug: string; name: string; vendor: string; category: string; official: boolean; summary: string; description: string; tools: string[]; setup: Setup[]; prompts: string[]; officialUrl: string; sourceUrl: string; releaseTagPrefix?: string; lastVerified: string; auth: { method: string; scopes: string; revokeUrl?: string; revokeLabel?: string } };
 export const connectors = (raw as Connector[]).slice().sort((a, b) => a.name.localeCompare(b.name));
 export const categories: Record<string, { name: string; blurb: string; code: string }> = {
   "dev-tools": { name: "Dev Tools", code: "DEV", blurb: "MCP servers for code, cloud, CI, observability and browsers." },

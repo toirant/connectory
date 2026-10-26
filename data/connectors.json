@@ -46,7 +46,7 @@
   "category": "dev-tools",
   "official": false,
   "summary": "Community GitLab MCP server covering merge requests, pipelines, projects and the GitLab API.",
-  "description": "A widely used community-maintained MCP server for GitLab. It exposes tools for merge requests, diffs, pipelines and jobs, groups, environments and generic GitLab API requests. The original reference GitLab server from the MCP project is archived. Since v2.3.6 every GITLAB_API_URL entry must start with http:// or https://, and a comma in an embedded password must be written as %2C.",
+  "description": "A widely used community-maintained MCP server for GitLab. It exposes tools for merge requests, diffs, pipelines and jobs, groups, environments and generic GitLab API requests. The original reference GitLab server from the MCP project is archived. Since v2.3.6 every GITLAB_API_URL entry must start with http:// or https://, and a comma in an embedded password must be written as %2C. Releases v2.3.7 to v2.3.10 fixed several security advisories (project-allowlist and download-scope checks, session owner binding with REMOTE_AUTHORIZATION), so stay on a current release. Legacy flags such as GITLAB_READ_ONLY_MODE are deprecated and will be removed in v3.0.0.",
   "tools": [
    "get_merge_request",
    "list_merge_request_changed_files",
@@ -58,7 +58,7 @@
   "setup": [
    {
     "label": "Run with npx (README's pinned stable release)",
-    "code": "{\n  \"mcpServers\": {\n    \"gitlab\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@zereight/mcp-gitlab@2.3.5\"],\n      \"env\": {\n        \"GITLAB_PERSONAL_ACCESS_TOKEN\": \"<your token>\",\n        \"GITLAB_API_URL\": \"https://gitlab.com/api/v4\"\n      }\n    }\n  }\n}"
+    "code": "{\n  \"mcpServers\": {\n    \"gitlab\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@zereight/mcp-gitlab@2.3.10\"],\n      \"env\": {\n        \"GITLAB_PERSONAL_ACCESS_TOKEN\": \"<your token>\",\n        \"GITLAB_API_URL\": \"https://gitlab.com/api/v4\"\n      }\n    }\n  }\n}"
    }
   ],
   "prompts": [
@@ -70,9 +70,9 @@
   "sourceUrl": "https://github.com/zereight/gitlab-mcp",
   "auth": {
    "method": "Personal Access Token (or OAuth)",
-   "scopes": "OAuth: api or read_api (default api,read_api,read_user)"
+   "scopes": "OAuth: api or read_api. Local OAuth (GITLAB_OAUTH_SCOPES) defaults to api, or read_api in readonly permission mode; server-side OAuth defaults to api,read_api,read_user"
   },
-  "lastVerified": "2026-10-22"
+  "lastVerified": "2026-10-26"
  },
  {
   "slug": "git",
@@ -1362,11 +1362,12 @@
   ],
   "officialUrl": "https://github.com/upstash/context7",
   "sourceUrl": "https://github.com/upstash/context7",
+  "releaseTagPrefix": "@upstash/context7-mcp@",
   "auth": {
    "method": "API key recommended (Bearer header)",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-22"
+  "lastVerified": "2026-10-26"
  },
  {
   "slug": "cloudflare",
@@ -1479,7 +1480,7 @@
   "category": "dev-tools",
   "official": false,
   "summary": "Kubernetes and OpenShift MCP server for pods, namespaces, events, nodes and resources.",
-  "description": "A native Go MCP server for Kubernetes and OpenShift that talks to the API server directly (no kubectl required).",
+  "description": "A native Go MCP server for Kubernetes and OpenShift that talks to the API server directly (no kubectl required). Since v0.0.68 the configuration_view tool is not enabled when the server runs in HTTP mode, and HTTP mode supports OAuth/OIDC authentication.",
   "tools": [
    "pods_list",
    "pods_get",
@@ -1505,7 +1506,7 @@
    "method": "Your kubeconfig credentials",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-22"
+  "lastVerified": "2026-10-26"
  },
  {
   "slug": "grafana",
