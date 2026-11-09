@@ -1339,6 +1339,44 @@
   "lastVerified": "2026-10-15"
  },
  {
+  "slug": "qovia",
+  "name": "Qovia",
+  "vendor": "Qovia",
+  "category": "data",
+  "official": true,
+  "summary": "Chinese social, e-commerce and web data API for agents via a hosted Streamable HTTP MCP server.",
+  "description": "Qovia exposes 150+ live data endpoints (Douyin, Xiaohongshu/RedNote, Weibo, Kuaishou, Bilibili, WeChat, TikTok, YouTube, Instagram, X, Reddit, Taobao, JD and more) through a remote MCP server. By default the agent gets four catalog tools (search, describe, call, account); optional ?tools=all or platform filters expose each endpoint as its own tool. Auth is the same prepaid API key as the REST API. Only successful non-empty calls are billed. Create a separate scoped key for AI tools so agents cannot burn your main balance.",
+  "tools": [
+   "search_endpoints",
+   "get_endpoint",
+   "call_endpoint",
+   "get_account",
+   "Optional: per-endpoint tools via ?tools=all or ?tools=douyin,kuaishou"
+  ],
+  "setup": [
+   {
+    "label": "Cursor (remote, API key)",
+    "code": "{\n  \"mcpServers\": {\n    \"qovia\": {\n      \"url\": \"https://api.qovia.ai/mcp\",\n      \"headers\": {\n        \"Authorization\": \"Bearer sk-qovia-…\"\n      }\n    }\n  }\n}"
+   },
+   {
+    "label": "Claude Code (remote, API key)",
+    "code": "claude mcp add --transport http qovia https://api.qovia.ai/mcp \\\n  --header \"Authorization: Bearer $QOVIA_KEY\""
+   }
+  ],
+  "prompts": [
+   "How many likes and comments does Douyin video 7681194457378688292 have?",
+   "Search Xiaohongshu notes about 新能源汽车 and summarize the top creators.",
+   "What is my Qovia balance and rate limit?"
+  ],
+  "officialUrl": "https://qovia.ai/docs/mcp/",
+  "sourceUrl": "https://qovia.ai/docs/mcp/",
+  "auth": {
+   "method": "Qovia API key (Authorization: Bearer sk-qovia-… or x-api-key); catalog tools work without a key",
+   "scopes": "Key scopes: * | search | raw:* | raw:<platform> (e.g. raw:douyin)"
+  },
+  "lastVerified": "2026-11-06"
+ },
+ {
   "slug": "context7",
   "name": "Context7",
   "vendor": "Upstash",
