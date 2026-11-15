@@ -2066,5 +2066,48 @@
    "scopes": "mcp:read, mcp:write, mcp:apply (advertised in the server's OAuth metadata). Write and apply scopes allow profile changes and job applications; NeverApply says applications are only sent for jobs you explicitly approve."
   },
   "lastVerified": "2026-10-22"
+ },
+ {
+  "slug": "no-stairs-please",
+  "name": "No Stairs Please",
+  "vendor": "No Stairs Please",
+  "category": "data",
+  "official": true,
+  "summary": "Hosted Streamable HTTP MCP server for a live music venue booking directory and tour routing across the US, DC and British Columbia.",
+  "description": "No Stairs Please hosts a remote Streamable HTTP MCP server at https://nostairsplease.com/mcp. It lets agents search a live music venue booking directory and plan multi-stop tour routes. As of 2026-11-11 the directory covers 38,223 open small and mid-size venues across 10,286 towns in all 50 US states, DC and British Columbia, with booking contacts, room capacity, usual music nights and show history. Auth is OAuth 2.1 with PKCE. You can start with 4 free venue reveals without an account, or sign in during the connection flow to link a free account (10 reveals, one time) or an All Access pass ($25 for one month or $200 for one year, paid once, no automatic renewal). Tool results follow the linked account's access level, remaining reveals and saved Favorites. Disconnect connected apps under Account → Connected apps.",
+  "tools": [
+   "search_venues (read-only)",
+   "get_venue (read-only)",
+   "reveal_venue (spends a 7-day reveal; not read-only)",
+   "find_by_performer (read-only)",
+   "get_profile (read-only)",
+   "list_saved_venues (read-only)",
+   "save_venue (writes Favorites)",
+   "remove_saved_venue (destructive; removes a Favorite)"
+  ],
+  "setup": [
+   {
+    "label": "Remote server (OAuth)",
+    "code": "{\n  \"mcpServers\": {\n    \"nostairsplease\": {\n      \"url\": \"https://nostairsplease.com/mcp\"\n    }\n  }\n}"
+   },
+   {
+    "label": "Claude Code",
+    "code": "claude mcp add --transport http nostairsplease https://nostairsplease.com/mcp"
+   }
+  ],
+  "prompts": [
+   "Route a 5-stop tour from Portland, OR to Spokane, WA via Bend, Boise and Missoula, listing venues up to 200 capacity along the highway.",
+   "Find folk and Americana listening rooms in Montana, Idaho and Wyoming with a capacity under 150.",
+   "Where has Horse Feathers played, and which 100-to-300 capacity venues booked them?"
+  ],
+  "officialUrl": "https://nostairsplease.com/mcp",
+  "sourceUrl": "https://nostairsplease.com/mcp",
+  "auth": {
+   "method": "OAuth 2.1 + PKCE (remote server)",
+   "scopes": "openid, profile, email, offline_access, venues:read, venues:write (advertised in the server's OAuth metadata)",
+   "revokeUrl": "https://nostairsplease.com/account",
+   "revokeLabel": "Account → Connected apps"
+  },
+  "lastVerified": "2026-11-15"
  }
 ]
