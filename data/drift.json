@@ -1053,6 +1053,23 @@
    "authBaselineHash": "dc39c3b83505689d",
    "authChanged": false,
    "authChangedAt": null
+  },
+  "sitelemetry": {
+   "source": "https://sitelemetry.com/mcp-guide",
+   "hash": "c6e65871ddc14fc6",
+   "lines": 7,
+   "release": null,
+   "lastCheck": "2026-11-16T12:19:25.111Z",
+   "baselineAt": "2026-11-16T12:19:25.111Z",
+   "needsReverification": false,
+   "changedAt": null,
+   "baselineHash": "c6e65871ddc14fc6",
+   "baselineRelease": null,
+   "authHash": "861ae5fc47c8bc42",
+   "authLines": 33,
+   "authBaselineHash": "861ae5fc47c8bc42",
+   "authChanged": false,
+   "authChangedAt": null
   }
  },
  "lastRun": "2026-11-09T14:00:30.452Z"

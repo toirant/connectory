@@ -2109,5 +2109,50 @@
    "revokeLabel": "Account → Connected apps"
   },
   "lastVerified": "2026-11-15"
+ },
+ {
+  "slug": "sitelemetry",
+  "name": "Sitelemetry",
+  "vendor": "Sitelemetry",
+  "category": "dev-tools",
+  "official": true,
+  "summary": "Hosted Streamable HTTP MCP server that audits a website for security, technical SEO, AI visibility, accessibility, performance and integrations.",
+  "description": "Sitelemetry hosts a remote Streamable HTTP MCP server at https://sitelemetry.com/mcp. It gives coding agents seven audit tools that return evidence-backed findings and fixes for a target URL you own or are authorized to assess. Auth is OAuth 2.1 with PKCE (scope audit); the general endpoint also accepts a Sitelemetry MCP API key as a Bearer token. The Free plan covers limited security checks only (10 of 27; 7 run without site verification and 3 after). SEO, AI visibility, accessibility, performance, integrations and a six-area full audit start at $49/month on Starter. Protected security modules and a full audit need a verified site in your Sitelemetry workspace. Checks are not meant to change the target but can include active probes on a verified paid plan (port probes on Starter+, SQLi canary on Professional+, ZAP and WPScan on Enterprise) and can appear in the site's logs or alerts. Official docs name the tools with underscores (audit_security and so on); the server's public card currently lists dotted names (audit.security and so on) until confirmed against a live tools/list. Disconnect apps under My account → Connected MCP applications.",
+  "tools": [
+   "audit_security",
+   "audit_seo",
+   "audit_ai_visibility",
+   "audit_integrations",
+   "audit_accessibility",
+   "audit_performance",
+   "audit_full"
+  ],
+  "setup": [
+   {
+    "label": "Cursor (remote, OAuth)",
+    "code": "{\n  \"mcpServers\": {\n    \"sitelemetry\": {\n      \"url\": \"https://sitelemetry.com/mcp\"\n    }\n  }\n}"
+   },
+   {
+    "label": "Claude Code",
+    "code": "claude mcp add --transport http sitelemetry https://sitelemetry.com/mcp"
+   },
+   {
+    "label": "Codex",
+    "code": "codex mcp add sitelemetry --url https://sitelemetry.com/mcp\ncodex mcp login sitelemetry"
+   }
+  ],
+  "prompts": [
+   "Run a Sitelemetry security audit of example.com and list the findings by severity, each with its fix.",
+   "Audit the technical SEO of example.com and group the fixes into crawlability, metadata, structured data and internal links.",
+   "Measure the Core Web Vitals of example.com and list the three improvements with the biggest impact."
+  ],
+  "officialUrl": "https://sitelemetry.com/mcp-guide",
+  "sourceUrl": "https://sitelemetry.com/mcp-guide",
+  "auth": {
+   "method": "OAuth 2.1 + PKCE (remote server); MCP API key also accepted as a Bearer token",
+   "scopes": "audit (advertised in WWW-Authenticate and protected-resource metadata); authorization server also lists openid, email",
+   "revokeLabel": "My account → Connected MCP applications"
+  },
+  "lastVerified": "2026-11-16"
  }
 ]
