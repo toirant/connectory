@@ -6,13 +6,11 @@
   "category": "dev-tools",
   "official": true,
   "summary": "GitHub's official MCP server: work with repos, issues, pull requests, Actions and code security from your agent.",
-  "description": "The GitHub MCP Server connects AI tools directly to GitHub's platform, letting agents read repositories and code files, manage issues and pull requests, analyze code, and automate workflows. It is available as a remote server hosted by GitHub or as a local server run via Docker.",
+  "description": "The GitHub MCP Server connects AI tools directly to GitHub's platform, letting agents read repositories and code files, manage issues and pull requests, analyze code, and automate workflows. It is available as a remote server hosted by GitHub at https://api.githubcopilot.com/mcp/ or as a local server run via Docker. Remote auth is OAuth or a PAT; the local server can also run a browser-based OAuth login (token kept in memory only) or take GITHUB_PERSONAL_ACCESS_TOKEN, which takes precedence over OAuth.",
   "tools": [
-   "get_file_contents",
-   "get_repository_tree",
-   "list_gists / create_gist",
-   "github_support_docs_search",
-   "Toolsets: pull_requests, code_security, secret_protection, security_advisories, copilot_spaces"
+   "Default toolsets: context, repos, issues, pull_requests, users",
+   "Other toolsets: actions, code_quality, code_security, copilot, copilot_automations, copilot_issue_intents, dependabot, discussions, gists, git, governance, labels, notifications, orgs, projects, secret_protection, security_advisories, stargazers",
+   "Remote-only toolsets: copilot, copilot_spaces, github_support_docs_search"
   ],
   "setup": [
    {
@@ -32,12 +30,12 @@
   "officialUrl": "https://github.com/github/github-mcp-server",
   "sourceUrl": "https://github.com/github/github-mcp-server",
   "auth": {
-   "method": "OAuth (remote) or Personal Access Token",
-   "scopes": "Not documented",
+   "method": "OAuth (remote server, or local Docker browser login that keeps the token in memory) or Personal Access Token",
+   "scopes": "Varies by toolset (documented as OAuth Challenge Scopes in the README); examples include repo, gist, read:org, workflow, security_events, project, notifications, delete_repo",
    "revokeUrl": "https://github.com/settings/applications",
    "revokeLabel": "GitHub → Settings → Applications → Authorized OAuth Apps"
   },
-  "lastVerified": "2026-10-22"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "gitlab",
@@ -46,7 +44,7 @@
   "category": "dev-tools",
   "official": false,
   "summary": "Community GitLab MCP server covering merge requests, pipelines, projects and the GitLab API.",
-  "description": "A widely used community-maintained MCP server for GitLab. It exposes tools for merge requests, diffs, pipelines and jobs, groups, environments and generic GitLab API requests. The original reference GitLab server from the MCP project is archived. Since v2.3.6 every GITLAB_API_URL entry must start with http:// or https://, and a comma in an embedded password must be written as %2C. Releases v2.3.7 to v2.3.10 fixed several security advisories (project-allowlist and download-scope checks, session owner binding with REMOTE_AUTHORIZATION), so stay on a current release. Legacy flags such as GITLAB_READ_ONLY_MODE are deprecated and will be removed in v3.0.0.",
+  "description": "A widely used community-maintained MCP server for GitLab. It exposes tools for merge requests, diffs, pipelines and jobs, groups, environments and generic GitLab API requests. The original reference GitLab server from the MCP project is archived. Since v2.3.6 every GITLAB_API_URL entry must start with http:// or https://, and a comma in an embedded password must be written as %2C. The README recommends pinning npx to @zereight/mcp-gitlab@2.3.27, or using @latest / a global zereight-mcp-gitlab install. Legacy flags such as GITLAB_READ_ONLY_MODE are deprecated and will be removed in v3.0.0; use --permission-mode instead.",
   "tools": [
    "get_merge_request",
    "list_merge_request_changed_files",
@@ -58,7 +56,7 @@
   "setup": [
    {
     "label": "Run with npx (README's pinned stable release)",
-    "code": "{\n  \"mcpServers\": {\n    \"gitlab\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@zereight/mcp-gitlab@2.3.10\"],\n      \"env\": {\n        \"GITLAB_PERSONAL_ACCESS_TOKEN\": \"<your token>\",\n        \"GITLAB_API_URL\": \"https://gitlab.com/api/v4\"\n      }\n    }\n  }\n}"
+    "code": "{\n  \"mcpServers\": {\n    \"gitlab\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@zereight/mcp-gitlab@2.3.27\"],\n      \"env\": {\n        \"GITLAB_PERSONAL_ACCESS_TOKEN\": \"<your token>\",\n        \"GITLAB_API_URL\": \"https://gitlab.com/api/v4\"\n      }\n    }\n  }\n}"
    }
   ],
   "prompts": [
@@ -72,7 +70,7 @@
    "method": "Personal Access Token (or OAuth)",
    "scopes": "OAuth: api or read_api. Local OAuth (GITLAB_OAUTH_SCOPES) defaults to api, or read_api in readonly permission mode; server-side OAuth defaults to api,read_api,read_user"
   },
-  "lastVerified": "2026-10-26"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "git",
@@ -81,7 +79,7 @@
   "category": "dev-tools",
   "official": true,
   "summary": "Reference server for reading, searching and manipulating local Git repositories.",
-  "description": "One of the reference servers maintained in the official modelcontextprotocol/servers repo. It gives an LLM tools to inspect status, diffs and logs and to stage, commit, reset and branch in a local Git repository. As of the 2026.10.19 release it is built on the MCP Python SDK 2.x (mcp>=2.3,<3).",
+  "description": "One of the reference servers maintained in the official modelcontextprotocol/servers repo. It gives an LLM tools to inspect status, diffs, logs, remotes and branches, and to stage, commit, reset, checkout, merge and show objects in a local Git repository. As of the v2.4.0 monorepo release it is built on the MCP Python SDK 2.x (mcp>=2.3,<3).",
   "tools": [
    "git_status",
    "git_diff_unstaged",
@@ -91,7 +89,12 @@
    "git_add",
    "git_reset",
    "git_log",
-   "git_create_branch"
+   "git_create_branch",
+   "git_checkout",
+   "git_merge",
+   "git_show",
+   "git_branch",
+   "git_remote"
   ],
   "setup": [
    {
@@ -110,7 +113,7 @@
    "method": "None (local repository access)",
    "scopes": "—"
   },
-  "lastVerified": "2026-10-19"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "filesystem",
@@ -119,15 +122,19 @@
   "category": "dev-tools",
   "official": true,
   "summary": "Reference server for secure file operations restricted to directories you allow.",
-  "description": "Official reference server that lets an agent read, write, edit, move and search files, but only inside the directories passed on the command line (or provided via MCP Roots). Requires Node.js 24 or later (as of server version 2.0.0).",
+  "description": "Official reference server that lets an agent read, write, append, copy, edit, move and search files, but only inside the directories passed on the command line. --read-only disables write tools, and --read-only-dir can mark specific directories read-only. MCP Roots are deprecated and apply only to 2025-era clients. Requires Node.js 24 or later (as of server version 2.0.0).",
   "tools": [
    "read_text_file",
+   "read_media_file",
    "read_multiple_files",
    "write_file",
+   "append_file",
    "edit_file",
    "create_directory",
    "list_directory",
+   "list_directory_with_sizes",
    "move_file",
+   "copy_file",
    "search_files",
    "directory_tree",
    "get_file_info",
@@ -150,7 +157,7 @@
    "method": "None (restricted to allowed directories)",
    "scopes": "—"
   },
-  "lastVerified": "2026-10-19"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "fetch",
@@ -159,7 +166,7 @@
   "category": "data",
   "official": true,
   "summary": "Reference server that fetches web pages and converts them to markdown for LLMs.",
-  "description": "Official reference server that retrieves a URL and converts HTML to markdown, with support for reading long pages in chunks via start_index and max_length. As of the 2026.10.19 release it is built on the MCP Python SDK 2.x (mcp>=2.3,<3).",
+  "description": "Official reference server that retrieves a URL and converts HTML to markdown, with support for reading long pages in chunks via start_index and max_length. As of the v2.4.0 monorepo release it is built on the MCP Python SDK 2.x (mcp>=2.3,<3).",
   "tools": [
    "fetch (url, max_length, start_index, raw)"
   ],
@@ -179,7 +186,7 @@
    "method": "None",
    "scopes": "—"
   },
-  "lastVerified": "2026-10-19"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "memory",
@@ -216,7 +223,7 @@
    "method": "None (local)",
    "scopes": "—"
   },
-  "lastVerified": "2026-10-19"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "sequential-thinking",
@@ -245,7 +252,7 @@
    "method": "None",
    "scopes": "—"
   },
-  "lastVerified": "2026-10-19"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "time",
@@ -254,7 +261,7 @@
   "category": "productivity",
   "official": true,
   "summary": "Current time and timezone conversion for your agent.",
-  "description": "Official reference server that returns the current time in any IANA timezone and converts times between timezones. As of the 2026.10.19 release it is built on the MCP Python SDK 2.x (mcp>=2.3,<3).",
+  "description": "Official reference server that returns the current time in any IANA timezone and converts times between timezones. As of the v2.4.0 monorepo release it is built on the MCP Python SDK 2.x (mcp>=2.3,<3).",
   "tools": [
    "get_current_time",
    "convert_time"
@@ -275,7 +282,7 @@
    "method": "None",
    "scopes": "—"
   },
-  "lastVerified": "2026-10-19"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "everything",
@@ -303,7 +310,7 @@
    "method": "None",
    "scopes": "—"
   },
-  "lastVerified": "2026-10-19"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "figma",
@@ -376,16 +383,29 @@
   "vendor": "Stripe",
   "category": "payments",
   "official": true,
-  "summary": "Stripe's hosted MCP server for working with the Stripe API and searching Stripe docs.",
-  "description": "Stripe hosts a remote MCP server at mcp.stripe.com that lets MCP clients interact with the Stripe API and knowledge base, authenticated via OAuth.",
+  "summary": "Stripe's hosted MCP server for the Stripe API, documentation search, Atlas, analytics and Treasury.",
+  "description": "Stripe hosts a remote MCP server at https://mcp.stripe.com that lets MCP clients call Stripe API methods, search the Stripe knowledge base, and use account, Atlas, analytics and Treasury tools. The recommended setup is the Stripe CLI agent plugin (`stripe agent setup`). You can also add the server URL manually. Auth is OAuth for interactive clients, or an agent API key sent as a Bearer token for autonomous clients. Starting in December 2026, Stripe MCP will stop accepting full-access secret keys and restricted keys without the Agent tag; migrate to an agent API key or OAuth by 30 November 2026. Revoke OAuth sessions under User settings → OAuth sessions.",
   "tools": [
-   "Create and manage Stripe objects (customers, products, prices, payment links, invoices, refunds and more)",
-   "Search Stripe documentation"
+   "stripe_api_search / stripe_api_details / stripe_api_read / stripe_api_write",
+   "get_stripe_account_info",
+   "search_stripe_documentation / stripe_implementation_planner",
+   "atlas_company_formation",
+   "stripe_analytics (preview)",
+   "Treasury tools (preview): get_balance_summary, convert_currency, send_money, setup_recipient, transfer_money",
+   "send_stripe_feedback"
   ],
   "setup": [
    {
+    "label": "Recommended (Stripe CLI agent plugin)",
+    "code": "stripe agent setup"
+   },
+   {
     "label": "Remote server (OAuth)",
     "code": "{\n  \"mcpServers\": {\n    \"stripe\": {\n      \"url\": \"https://mcp.stripe.com\"\n    }\n  }\n}"
+   },
+   {
+    "label": "Claude Code",
+    "code": "claude mcp add --transport http stripe https://mcp.stripe.com/"
    }
   ],
   "prompts": [
@@ -393,14 +413,14 @@
    "List last week's failed payments and their reasons."
   ],
   "officialUrl": "https://docs.stripe.com/mcp",
-  "sourceUrl": "https://github.com/stripe/agent-toolkit",
+  "sourceUrl": "https://docs.stripe.com/mcp",
   "auth": {
-   "method": "OAuth (remote server)",
-   "scopes": "Not documented",
+   "method": "OAuth (remote server) or agent API key (Authorization: Bearer)",
+   "scopes": "Granted per live account or sandbox during the OAuth consent flow; not a fixed published scope list",
    "revokeUrl": "https://dashboard.stripe.com/settings/user",
    "revokeLabel": "Stripe Dashboard → User settings → OAuth sessions"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "paypal",
@@ -503,7 +523,7 @@
    "revokeUrl": "https://linear.app/docs/security-and-access",
    "revokeLabel": "Linear → Settings → Account → Security & access → Authorized applications"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "notion",
@@ -618,13 +638,18 @@
   "category": "dev-tools",
   "official": true,
   "summary": "Vercel's official remote MCP server to manage projects and deployments and search Vercel docs.",
-  "description": "Vercel MCP is Vercel's official hosted MCP server with OAuth. Agents can search Vercel docs, inspect projects and deployments, and read deployment logs.",
+  "description": "Vercel MCP is Vercel's official hosted MCP server with OAuth, at https://mcp.vercel.com. Agents can search Vercel docs, inspect projects and deployments, read deployment logs, and query Web Analytics. Official docs recommend installing it with `npx add-mcp https://mcp.vercel.com`.",
   "tools": [
    "Search Vercel documentation",
    "List projects and deployments",
-   "Get deployment build logs"
+   "Get deployment build logs",
+   "Query Web Analytics (visitors, page views and custom events)"
   ],
   "setup": [
+   {
+    "label": "Recommended (add-mcp)",
+    "code": "npx -y add-mcp https://mcp.vercel.com -g"
+   },
    {
     "label": "Remote server",
     "code": "{\n  \"mcpServers\": {\n    \"vercel\": {\n      \"url\": \"https://mcp.vercel.com\"\n    }\n  }\n}"
@@ -644,7 +669,7 @@
    "method": "OAuth (remote server)",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "sentry",
@@ -678,7 +703,7 @@
    "revokeUrl": "https://docs.sentry.io/product/partnership-platform/oauth-integration/",
    "revokeLabel": "Sentry → Settings → Account → Authorized Applications"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "supabase",
@@ -687,7 +712,7 @@
   "category": "data",
   "official": true,
   "summary": "Connect agents to Supabase projects: databases, migrations, edge functions and docs.",
-  "description": "Supabase's MCP server lets agents manage tables, run SQL, fetch config and query docs. The hosted server supports scoping to a single project and a read-only mode.",
+  "description": "Supabase's MCP server lets agents manage tables, run SQL, fetch config, manage projects, branches and edge functions, and query docs. The hosted server is https://mcp.supabase.com/mcp (OAuth). You can scope a connection with project_ref, enable a read-only mode, and restrict feature groups. Local CLI and self-hosted deployments expose a more limited tool set and do not support OAuth 2.1. For CI, official docs allow a personal access token instead of browser OAuth.",
   "tools": [
    "Database tools (list tables, execute SQL, apply migrations)",
    "Docs search",
@@ -696,7 +721,11 @@
   ],
   "setup": [
    {
-    "label": "Remote server (scoped, read-only)",
+    "label": "Remote server (OAuth)",
+    "code": "{\n  \"mcpServers\": {\n    \"supabase\": {\n      \"url\": \"https://mcp.supabase.com/mcp\"\n    }\n  }\n}"
+   },
+   {
+    "label": "Remote server (project-scoped, read-only)",
     "code": "{\n  \"mcpServers\": {\n    \"supabase\": {\n      \"url\": \"https://mcp.supabase.com/mcp?project_ref=<project-ref>&read_only=true\"\n    }\n  }\n}"
    }
   ],
@@ -707,10 +736,11 @@
   "officialUrl": "https://supabase.com/docs/guides/getting-started/mcp",
   "sourceUrl": "https://github.com/supabase-community/supabase-mcp",
   "auth": {
-   "method": "OAuth (remote server)",
+   "method": "OAuth (remote server); personal access token for CI or clients that cannot use browser OAuth",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-11-16",
+  "releaseTagPrefix": "mcp-server-supabase-"
  },
  {
   "slug": "neon",
@@ -746,7 +776,7 @@
    "method": "OAuth (remote) or Neon API key",
    "scopes": "read, write"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "postgres",
@@ -839,7 +869,7 @@
    "method": "Database DSN",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "mongodb",
@@ -871,7 +901,7 @@
    "method": "Connection string or Atlas service account",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "redis",
@@ -997,7 +1027,7 @@
    "method": "Qdrant URL (+ API key if required)",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "pinecone",
@@ -1006,11 +1036,13 @@
   "category": "data",
   "official": true,
   "summary": "Pinecone's developer MCP server: search docs and manage indexes and records.",
-  "description": "Pinecone's MCP server helps coding agents search Pinecone documentation and manage indexes, upsert and search records. Requires Node.js 20+ and a Pinecone API key.",
+  "description": "Pinecone's MCP server helps coding agents search Pinecone documentation and manage indexes, upsert and search records and documents, including cascading search and reranking. Requires Node.js 22+ and a Pinecone API key (docs search works without a key).",
   "tools": [
    "search-docs",
-   "list-indexes / describe-index / create-index-for-model",
-   "upsert-records / search-records"
+   "list-indexes / describe-index / describe-index-stats",
+   "create-document-index / upsert-documents / search-document-index",
+   "create-index-for-model / upsert-records / search-records",
+   "cascading-search / rerank-documents"
   ],
   "setup": [
    {
@@ -1028,7 +1060,7 @@
    "method": "Pinecone API key",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "playwright",
@@ -1068,7 +1100,7 @@
    "method": "None (local browser)",
    "scopes": "—"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "chrome-devtools",
@@ -1104,7 +1136,7 @@
    "method": "None (local browser)",
    "scopes": "—"
   },
-  "lastVerified": "2026-10-22"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "puppeteer",
@@ -1214,17 +1246,26 @@
   "category": "data",
   "official": true,
   "summary": "Scrape, crawl, map and search the web with clean LLM-ready output.",
-  "description": "Firecrawl's official MCP server gives agents web scraping, crawling, site mapping and search through the Firecrawl API.",
+  "description": "Firecrawl's official MCP server gives agents web scraping, crawling, site mapping, search, document parsing, browser interaction, page monitors and agent research jobs. The hosted endpoint is https://mcp.firecrawl.dev/v2/mcp; a keyless free tier covers scrape, search and parse only (rate-limited). OAuth (https://mcp.firecrawl.dev/v2/mcp-oauth) or a Firecrawl API key unlocks the full tool set and higher limits. You can also run it locally with npx.",
   "tools": [
-   "firecrawl_scrape",
-   "firecrawl_map",
-   "firecrawl_crawl",
-   "firecrawl_search",
+   "firecrawl_scrape / firecrawl_parse",
+   "firecrawl_map / firecrawl_crawl / firecrawl_check_crawl_status",
+   "firecrawl_search / firecrawl_developer_search / firecrawl_gov_search / firecrawl_research_*",
+   "firecrawl_interact / firecrawl_agent",
+   "firecrawl_monitor_*",
    "firecrawl_credit_usage"
   ],
   "setup": [
    {
-    "label": "Run with npx",
+    "label": "Remote server (hosted, keyless free tier)",
+    "code": "{\n  \"mcpServers\": {\n    \"firecrawl\": {\n      \"url\": \"https://mcp.firecrawl.dev/v2/mcp\"\n    }\n  }\n}"
+   },
+   {
+    "label": "Remote server (OAuth)",
+    "code": "{\n  \"mcpServers\": {\n    \"firecrawl\": {\n      \"url\": \"https://mcp.firecrawl.dev/v2/mcp-oauth\"\n    }\n  }\n}"
+   },
+   {
+    "label": "Local via npx (API key)",
     "code": "env FIRECRAWL_API_KEY=fc-YOUR_API_KEY npx -y firecrawl-mcp"
    }
   ],
@@ -1235,10 +1276,10 @@
   "officialUrl": "https://github.com/firecrawl/firecrawl-mcp-server",
   "sourceUrl": "https://github.com/firecrawl/firecrawl-mcp-server",
   "auth": {
-   "method": "Firecrawl API key",
+   "method": "None on the hosted keyless free tier (scrape, search and parse only, rate-limited); OAuth or Firecrawl API key (Authorization: Bearer / FIRECRAWL_API_KEY) for the full tool set",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-22"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "exa",
@@ -1269,7 +1310,7 @@
    "method": "Exa API key or OAuth (remote)",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "tavily",
@@ -1304,7 +1345,7 @@
    "method": "Tavily API key",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "perplexity",
@@ -1374,7 +1415,7 @@
    "method": "Qovia API key (Authorization: Bearer sk-qovia-… or x-api-key); catalog tools work without a key",
    "scopes": "Key scopes: * | search | raw:* | raw:<platform> (e.g. raw:douyin)"
   },
-  "lastVerified": "2026-11-06"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "context7",
@@ -1383,12 +1424,16 @@
   "category": "dev-tools",
   "official": true,
   "summary": "Up-to-date, version-specific library docs and code examples for coding agents.",
-  "description": "Context7 pulls current documentation for libraries directly into the prompt, reducing hallucinated or outdated APIs.",
+  "description": "Context7 pulls current documentation for libraries directly into the prompt, reducing hallucinated or outdated APIs. Official docs recommend `npx ctx7 setup` (Node.js 22.13+), which can authenticate with OAuth, generate an API key and install a skill or MCP mode. You can also connect to https://mcp.context7.com/mcp and pass the API key as a Bearer token.",
   "tools": [
    "resolve-library-id",
    "query-docs"
   ],
   "setup": [
+   {
+    "label": "Recommended (ctx7 CLI)",
+    "code": "npx ctx7 setup"
+   },
    {
     "label": "Remote server",
     "code": "{\n  \"mcpServers\": {\n    \"context7\": {\n      \"url\": \"https://mcp.context7.com/mcp\"\n    }\n  }\n}"
@@ -1402,10 +1447,10 @@
   "sourceUrl": "https://github.com/upstash/context7",
   "releaseTagPrefix": "@upstash/context7-mcp@",
   "auth": {
-   "method": "API key recommended (Bearer header)",
+   "method": "OAuth via ctx7 setup, or API key as a Bearer header (recommended for higher rate limits)",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-26"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "cloudflare",
@@ -1449,7 +1494,7 @@
   "category": "dev-tools",
   "official": true,
   "summary": "Manage Heroku apps, dynos, add-ons and deployments with your agent.",
-  "description": "Heroku's official MCP server lets agents list and create apps, scale and restart dynos, manage add-ons, toggle maintenance mode and deploy.",
+  "description": "Heroku's official MCP server lets agents list and create apps, scale and restart dynos, manage add-ons, toggle maintenance mode, deploy, and work with pipelines, teams and Heroku Postgres. Official docs recommend `heroku mcp:start`, which uses your current Heroku CLI session; you can also run `npx -y @heroku/mcp-server` with HEROKU_API_KEY.",
   "tools": [
    "list_apps",
    "get_app_info",
@@ -1464,6 +1509,10 @@
   ],
   "setup": [
    {
+    "label": "Recommended (Heroku CLI session)",
+    "code": "{\n  \"mcpServers\": {\n    \"heroku\": {\n      \"command\": \"heroku\",\n      \"args\": [\"mcp:start\"]\n    }\n  }\n}"
+   },
+   {
     "label": "Run with npx",
     "code": "{\n  \"mcpServers\": {\n    \"heroku\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@heroku/mcp-server\"],\n      \"env\": { \"HEROKU_API_KEY\": \"<your-api-key>\" }\n    }\n  }\n}"
    }
@@ -1475,10 +1524,10 @@
   "officialUrl": "https://devcenter.heroku.com/articles/heroku-mcp-server",
   "sourceUrl": "https://github.com/heroku/heroku-mcp-server",
   "auth": {
-   "method": "Heroku API key",
+   "method": "Heroku CLI session (heroku mcp:start) or Heroku API key (HEROKU_API_KEY)",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "terraform",
@@ -1487,13 +1536,17 @@
   "category": "dev-tools",
   "official": true,
   "summary": "Terraform Registry lookups for providers and modules, plus HCP Terraform workflows.",
-  "description": "HashiCorp's Terraform MCP server gives agents accurate provider and module documentation from the Terraform Registry so they generate correct infrastructure code.",
+  "description": "HashiCorp's Terraform MCP server gives agents accurate provider and module documentation from the Terraform Registry so they generate correct infrastructure code. You can run it locally with Docker, or connect to the hosted remote server at https://mcp.terraform.io/mcp with a TFE_TOKEN.",
   "tools": [
    "Search providers and provider docs",
    "Search modules and module details",
    "HCP Terraform / Terraform Enterprise workspace tools"
   ],
   "setup": [
+   {
+    "label": "Remote server (HCP Terraform / Enterprise)",
+    "code": "{\n  \"mcpServers\": {\n    \"terraform\": {\n      \"url\": \"https://mcp.terraform.io/mcp\",\n      \"headers\": {\n        \"Authorization\": \"Bearer <<TFE_TOKEN>>\"\n      }\n    }\n  }\n}"
+   },
    {
     "label": "Claude Code (Docker)",
     "code": "claude mcp add terraform -s user -t stdio -- docker run -i --rm hashicorp/terraform-mcp-server"
@@ -1506,10 +1559,10 @@
   "officialUrl": "https://github.com/hashicorp/terraform-mcp-server",
   "sourceUrl": "https://github.com/hashicorp/terraform-mcp-server",
   "auth": {
-   "method": "None for public Registry; TFE_TOKEN for HCP Terraform / Enterprise",
+   "method": "None for public Registry on the local server; TFE_TOKEN (env or Authorization: Bearer) for HCP Terraform / Enterprise and the hosted remote server",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-15"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "kubernetes",
@@ -1544,7 +1597,7 @@
    "method": "Your kubeconfig credentials",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-26"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "grafana",
@@ -1577,7 +1630,7 @@
    "method": "Grafana service account token",
    "scopes": "Per-tool Grafana RBAC permissions are listed in the README (e.g. ask_assistant needs grafana-assistant-app.chats:access and plugins.app:access)"
   },
-  "lastVerified": "2026-10-22"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "aws",
@@ -1614,7 +1667,7 @@
    "method": "Your AWS credentials",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-16"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "azure",
@@ -1623,7 +1676,7 @@
   "category": "dev-tools",
   "official": true,
   "summary": "Microsoft's MCP server for Azure services such as Storage, Cosmos DB, Monitor and more.",
-  "description": "Microsoft's MCP repository hosts the Azure MCP Server and other Microsoft MCP servers, letting agents work with Azure resources using your Azure credentials.",
+  "description": "Microsoft's Azure MCP Server lets agents work with Azure resources using your Azure credentials (for example Azure CLI via az login). The usual local install is `npx -y @azure/mcp@latest server start`, or the Azure plugin for Claude Code. Official docs live at Microsoft Learn; source is in the microsoft/mcp monorepo under servers/Azure.Mcp.Server.",
   "tools": [
    "Azure Storage",
    "Cosmos DB",
@@ -1644,13 +1697,14 @@
    "List the storage accounts in my subscription.",
    "Query Log Analytics for errors in the last 24 hours."
   ],
-  "officialUrl": "https://github.com/microsoft/mcp",
-  "sourceUrl": "https://github.com/microsoft/mcp",
+  "officialUrl": "https://learn.microsoft.com/azure/developer/azure-mcp-server/",
+  "sourceUrl": "https://github.com/microsoft/mcp/tree/main/servers/Azure.Mcp.Server",
   "auth": {
    "method": "Your Azure credentials (e.g. Azure CLI via az login)",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-22"
+  "lastVerified": "2026-11-16",
+  "releaseTagPrefix": "Azure.Mcp.Server-"
  },
  {
   "slug": "docker-mcp-gateway",
@@ -1751,7 +1805,7 @@
    "method": "OAuth (remote) or Resend API key (Bearer header / RESEND_API_KEY)",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-16"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "elevenlabs",
@@ -1847,7 +1901,7 @@
    "method": "OAuth or Apify API token",
    "scopes": "Not documented"
   },
-  "lastVerified": "2026-10-22"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "box",
@@ -2065,7 +2119,7 @@
    "method": "OAuth 2.1 + PKCE (remote server)",
    "scopes": "mcp:read, mcp:write, mcp:apply (advertised in the server's OAuth metadata). Write and apply scopes allow profile changes and job applications; NeverApply says applications are only sent for jobs you explicitly approve."
   },
-  "lastVerified": "2026-10-22"
+  "lastVerified": "2026-11-16"
  },
  {
   "slug": "no-stairs-please",
