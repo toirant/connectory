@@ -4,7 +4,7 @@ import drift from "../data/drift.json";
 import toolsDb from "../data/tools.json";
 export type Setup = { label: string; code: string };
 export type Entry = { command?: string; args?: string[]; env?: Record<string, string>; url?: string; type?: string };
-export type Connector = { slug: string; name: string; vendor: string; category: string; official: boolean; summary: string; description: string; tools: string[]; setup: Setup[]; prompts: string[]; officialUrl: string; sourceUrl: string; releaseTagPrefix?: string; lastVerified: string; auth: { method: string; scopes: string; revokeUrl?: string; revokeLabel?: string } };
+export type Connector = { slug: string; name: string; vendor: string; category: string; official: boolean; summary: string; description: string; tools: string[]; setup: Setup[]; prompts: string[]; officialUrl: string; sourceUrl: string; releaseTagPrefix?: string; lastVerified: string; featured?: boolean; featuredUntil?: string; auth: { method: string; scopes: string; revokeUrl?: string; revokeLabel?: string } };
 export const connectors = (raw as Connector[]).slice().sort((a, b) => a.name.localeCompare(b.name));
 export const categories: Record<string, { name: string; blurb: string; code: string }> = {
   "dev-tools": { name: "Dev Tools", code: "DEV", blurb: "MCP servers for code, cloud, CI, observability and browsers." },
@@ -15,10 +15,19 @@ export const categories: Record<string, { name: string; blurb: string; code: str
   communication: { name: "Communication", code: "COM", blurb: "Messaging, email, SMS and voice." },
 };
 export const SITE_NAME = "Connectory";
+/** Paid-placement checkout. Set NEXT_PUBLIC_PAYMENT_LINK_URL (Stripe / Lemon Squeezy link) to switch the Featured CTA from email to checkout. */
+export const PAYMENT_LINK_URL = process.env.NEXT_PUBLIC_PAYMENT_LINK_URL || "";
+export const FEATURED_CONTACT = "terseerkpojime@outlook.com";
+export const FEATURED_DISCLOSURE = "Featured listings are paid placements; verification is unaffected.";
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000");
 export const CONTACT = "memphiznero@outlook.com";
 const logos = logoMap as Record<string, { file: string; hex?: string; source: string }>;
 export function logoOf(slug: string) { const l = logos[slug]; return l ? `/logos/${l.file}` : null; }
+/** Featured only while `featured` is true and today (UTC, YYYY-MM-DD) <= featuredUntil. Presentation only: never read by verification/drift/status code. */
+export function isFeatured(c: Connector, today = new Date().toISOString().slice(0, 10)) { return c.featured === true && !!c.featuredUntil && /^\d{4}-\d{2}-\d{2}$/.test(c.featuredUntil) && today <= c.featuredUntil; }
+export const featuredConnectors = () => connectors.filter(c => isFeatured(c));
+/** Featured first; otherwise keeps the existing alphabetical order (stable sort). */
+export const featuredFirst = (list: Connector[]) => { const t = new Date().toISOString().slice(0, 10); return list.slice().sort((a, b) => Number(isFeatured(b, t)) - Number(isFeatured(a, t))); };
 /** First setup snippet that is a JSON client config; this is the only source the Config Builder uses. */
 export function entryOf(c: Connector): Entry | null {
   for (const s of c.setup) { try { const j = JSON.parse(s.code); const o = j.mcpServers || j.servers; if (o) return Object.values(o)[0] as Entry; } catch {} }
@@ -34,7 +43,7 @@ export function specOf(c: Connector) {
   return { transport, credentials, tools: c.tools.length, status: c.official ? "Official" : "Community", builder: !!e };
 }
 export function slim(c: Connector) {
-  return { slug: c.slug, name: c.name, vendor: c.vendor, category: c.category, official: c.official, summary: c.summary, tools: c.tools, logo: logoOf(c.slug), verified: c.lastVerified, stale: !!driftOf(c.slug).needsReverification };
+  return { slug: c.slug, name: c.name, vendor: c.vendor, category: c.category, official: c.official, summary: c.summary, tools: c.tools, logo: logoOf(c.slug), verified: c.lastVerified, featured: isFeatured(c), stale: !!driftOf(c.slug).needsReverification };
 }
 
 type Drift = { source?: string; needsReverification?: boolean; changedAt?: string | null; lastCheck?: string; release?: string | null; lastError?: string; authChanged?: boolean; authChangedAt?: string | null };

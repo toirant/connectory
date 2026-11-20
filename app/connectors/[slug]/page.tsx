@@ -4,8 +4,10 @@ import type { Metadata } from "next";
 import Newsletter from "../../../components/Newsletter";
 import CopyButton from "../../../components/CopyButton";
 import Logo from "../../../components/Logo";
-import { connectors, categories, SITE_URL, logoOf, specOf, driftOf, liveToolsOf, fmtDate } from "../../../lib/data";
+import FeaturedBadge from "../../../components/FeaturedBadge";
+import { connectors, categories, SITE_URL, logoOf, specOf, driftOf, liveToolsOf, fmtDate, isFeatured, FEATURED_DISCLOSURE } from "../../../lib/data";
 export const dynamicParams = false;
+export const revalidate = 3600; // re-evaluate featuredUntil hourly
 export function generateStaticParams() { return connectors.map(c => ({ slug: c.slug })); }
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params; const c = connectors.find(x => x.slug === slug); if (!c) return {};
@@ -25,8 +27,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <div className="art-top"><p className="crumbs eyebrow"><Link href="/">Index</Link> / <Link href={`/category/${c.category}`}>{cat.name}</Link> / <span className="tnum">No. {String(idx).padStart(3, "0")}</span></p>
         <span className="folio tnum" aria-hidden="true">{String(idx).padStart(3, "0")}</span></div>
       <div className="art-id"><Logo src={logoOf(c.slug)} name={c.name} size={56} className="art-logo" />
-        <div><p className="eyebrow">{cat.code} · {cat.name} · {spec.status} server</p><h1>{c.name}</h1></div></div>
+        <div><p className="eyebrow">{cat.code} · {cat.name} · {spec.status} server{isFeatured(c) && <> · <FeaturedBadge /></>}</p><h1>{c.name}</h1></div></div>
       <p className="dek">{c.summary}</p>
+      {isFeatured(c) && <p className="fnote">{FEATURED_DISCLOSURE}</p>}
       {dr.needsReverification && <p className="drift-note"><b className="stale">Needs re-verification</b> Upstream setup docs changed on {fmtDate(dr.changedAt!)}. Details on this page may be out of date — <Link href="/status">see status</Link>.</p>}
       {dr.authChanged && <p className="drift-note"><b className="stale">Auth changed</b> Auth-related upstream docs (OAuth, keys, tokens, scopes) changed on {fmtDate(dr.authChangedAt!)}. Check the auth details below against the <a href={c.officialUrl}>official page</a> — <Link href="/status">see status</Link>.</p>}
       <div className="art-actions">

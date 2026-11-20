@@ -2,10 +2,13 @@ import Link from "next/link";
 import Directory from "../components/Directory";
 import Newsletter from "../components/Newsletter";
 import Hero from "../components/Hero";
+import FeaturedBadge from "../components/FeaturedBadge";
 import ConfigBuilder from "../components/ConfigBuilder";
-import { connectors, categories, SITE_NAME, SITE_URL, slim, entryOf, logoOf } from "../lib/data";
+import { connectors, categories, SITE_NAME, SITE_URL, slim, entryOf, logoOf, featuredConnectors, FEATURED_DISCLOSURE } from "../lib/data";
 import { guides } from "../lib/guides";
+export const revalidate = 3600; // re-evaluate featuredUntil hourly
 export default function Home() {
+  const featured = featuredConnectors();
   const items = connectors.map(slim);
   const bitems = connectors.map(c => ({ slug: c.slug, name: c.name, logo: logoOf(c.slug), category: c.category, entry: entryOf(c), officialUrl: c.officialUrl }));
   const official = connectors.filter(c => c.official).length; const buildable = bitems.filter(b => b.entry).length;
@@ -23,6 +26,8 @@ export default function Home() {
       <Hero />
     </div></section>
     <div className="wrap">
+      {featured.length > 0 && <section className="featstrip" aria-labelledby="ft"><div className="featstrip-head"><h2 id="ft">Featured</h2><p className="eyebrow">{FEATURED_DISCLOSURE}</p></div>
+        <ul className="featstrip-list">{featured.map(c => { const l = logoOf(c.slug); return <li key={c.slug}><Link href={`/connectors/${c.slug}`} className="featcard"><span className="featcard-top">{l && <img src={l} alt="" width={22} height={22} loading="lazy" />}<FeaturedBadge /></span><strong>{c.name}</strong><span className="featcard-sum">{c.summary}</span><span className="arrow" aria-hidden="true">→</span></Link></li>; })}</ul></section>}
       <Directory items={items} categories={categories} />
       <section className="feature" aria-labelledby="cb">
         <header className="feat-head"><p className="eyebrow">Tool · Config Builder</p><h2 id="cb">Pick servers. Pick a client.<br /><em>Paste one config.</em></h2>

@@ -263,3 +263,23 @@ code{font-family:var(--mono);font-size:.88em;background:var(--paper-2);padding:1
 .disconnect li::before{content:"0" counter(dc);font:500 12px var(--mono);color:var(--sig)}
 .disconnect b{font:500 12px var(--mono);text-transform:uppercase;letter-spacing:.06em}
 @media (max-width:640px){.disconnect li{grid-template-columns:28px 1fr}.disconnect li span{grid-column:2}}
+/* featured listings */
+.fbadge{display:inline-flex;align-items:center;gap:6px;vertical-align:middle;margin-left:10px;padding:4px 7px 4px 6px;font:500 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--sig-ink);background:var(--sig-wash);border:1px solid var(--sig);white-space:nowrap}
+.fbadge::before{content:"";width:6px;height:6px;background:var(--sig);transform:rotate(45deg)}
+.eyebrow .fbadge{margin-left:2px}
+.row-item.is-featured{background:linear-gradient(90deg,var(--sig-wash),transparent 38%)}
+.row-item.is-featured::before{transform:scaleY(1)}
+.fnote{margin:0;font:400 12px/1.4 var(--mono);letter-spacing:.04em;color:var(--mute)}
+.sheet>.fnote{padding:10px 20px;border-bottom:1px solid var(--hair)}.arthead>.fnote{margin:-6px 0 16px}
+.featstrip{margin:56px 0 0}
+.featstrip-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;border-bottom:1px solid var(--ink);padding-bottom:10px}
+.featstrip-head h2{font:400 40px/1 var(--display);margin:0;letter-spacing:-.02em}
+.featstrip-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));border-left:1px solid var(--hair)}
+.featcard{position:relative;display:grid;gap:8px;align-content:start;height:100%;padding:18px 20px 22px;border-right:1px solid var(--hair);border-bottom:1px solid var(--hair);text-decoration:none;color:inherit;background:linear-gradient(180deg,var(--sig-wash),transparent 60%);transition:background .2s}
+.featcard:hover{background:var(--card)}.featcard:hover strong{color:var(--sig)}
+.featcard-top{display:flex;align-items:center;justify-content:space-between;gap:10px}.featcard-top .fbadge{margin-left:0}
+.featcard strong{font:400 28px/1.05 var(--display)}.featcard-sum{font-size:14px;color:var(--ink-2)}.featcard .arrow{position:absolute;right:18px;bottom:16px}
+.featoffer{display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:end;margin:56px 0 40px;padding:32px;border:1px solid var(--ink);background:var(--card);box-shadow:6px 6px 0 var(--sig)}
+.featoffer h2{font:400 clamp(30px,3.4vw,44px)/1.02 var(--display);margin:8px 0 12px;letter-spacing:-.02em}.featoffer h2 em{color:var(--sig-ink)}
+.featoffer p{margin:0 0 10px;color:var(--ink-2)}.featoffer-cta{display:grid;gap:10px}.featoffer-cta .btn{justify-content:space-between}
+@media(max-width:820px){.featoffer{grid-template-columns:1fr;padding:22px}.featstrip-head{flex-direction:column;gap:6px}}

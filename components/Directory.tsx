@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
+import FeaturedBadge from "./FeaturedBadge";
 import { useEffect, useMemo, useRef, useState } from "react";
-type Item = { slug: string; name: string; vendor: string; category: string; official: boolean; summary: string; tools: string[]; logo: string | null; verified: string; stale: boolean };
+type Item = { slug: string; name: string; vendor: string; category: string; official: boolean; summary: string; tools: string[]; logo: string | null; verified: string; stale: boolean; featured?: boolean };
 export default function Directory({ items, categories }: { items: Item[]; categories: Record<string, { name: string; code: string }> }) {
   const [q, setQ] = useState(""); const [cat, setCat] = useState("all"); const ref = useRef<HTMLInputElement>(null);
   useEffect(() => { const f = (e: KeyboardEvent) => { const t = e.target as HTMLElement;
@@ -20,10 +21,10 @@ export default function Directory({ items, categories }: { items: Item[]; catego
       <label className="searchwrap"><span className="eyebrow">Search</span>
         <input ref={ref} className="search" placeholder="postgres, browser, invoice, figma…" value={q} onChange={e => setQ(e.target.value)} aria-label="Search connectors" />
         <kbd aria-hidden="true">/</kbd><span className="eyebrow tnum res">{String(list.length).padStart(2, "0")}/{items.length}</span></label>
-      <ol className="rows" key={cat + "|" + q.length}>{list.map((i, n) => <li key={i.slug} style={{ ["--i" as string]: Math.min(n, 14) }}><Link href={`/connectors/${i.slug}`} className="row-item">
+      <ol className="rows" key={cat + "|" + q.length}>{list.map((i, n) => <li key={i.slug} style={{ ["--i" as string]: Math.min(n, 14) }}><Link href={`/connectors/${i.slug}`} className={i.featured ? "row-item is-featured" : "row-item"}>
         <span className="num tnum">{String(n + 1).padStart(3, "0")}</span>
         <span className="rlogo">{i.logo && <img src={i.logo} alt="" width={22} height={22} loading="lazy" decoding="async" />}</span>
-        <span className="rname">{i.name}</span>
+        <span className="rname">{i.name}{i.featured && <FeaturedBadge />}</span>
         <span className="rsum">{i.summary}<span className="rver tnum">{i.stale ? <b className="stale">Needs re-verification</b> : <>Verified {i.verified}</>}</span></span>
         <span className="rmeta"><span className="code">{categories[i.category]?.code}</span>{i.official ? <span className="pill">Official</span> : <span className="pill ghost">Community</span>}</span>
         <span className="arrow" aria-hidden="true">→</span>
