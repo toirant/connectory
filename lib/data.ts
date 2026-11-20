@@ -15,12 +15,14 @@ export const categories: Record<string, { name: string; blurb: string; code: str
   communication: { name: "Communication", code: "COM", blurb: "Messaging, email, SMS and voice." },
 };
 export const SITE_NAME = "Connectory";
-/** Paid-placement checkout. Set NEXT_PUBLIC_PAYMENT_LINK_URL (Stripe / Lemon Squeezy link) to switch the Featured CTA from email to checkout. */
-export const PAYMENT_LINK_URL = process.env.NEXT_PUBLIC_PAYMENT_LINK_URL || "";
-export const FEATURED_CONTACT = "terseerkpojime@outlook.com";
+/** Live Paystack payment pages for Featured listings (billed in NGN; USD is approximate). */
+export const FEATURED_PLANS = [
+  { key: "monthly", label: "Monthly", ngn: "₦67,000", usd: "$49", per: "per month", url: "https://paystack.com/pay/connectory-featured-monthly" },
+  { key: "quarterly", label: "Quarterly", ngn: "₦135,000", usd: "$99", per: "per quarter", url: "https://paystack.com/pay/connectory-featured-quarterly" },
+] as const;
 export const FEATURED_DISCLOSURE = "Featured listings are paid placements; verification is unaffected.";
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000");
-export const CONTACT = "memphiznero@outlook.com";
+export const CONTACT = "terseerkpojime@outlook.com";
 const logos = logoMap as Record<string, { file: string; hex?: string; source: string }>;
 export function logoOf(slug: string) { const l = logos[slug]; return l ? `/logos/${l.file}` : null; }
 /** Featured only while `featured` is true and today (UTC, YYYY-MM-DD) <= featuredUntil. Presentation only: never read by verification/drift/status code. */
