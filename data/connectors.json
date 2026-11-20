@@ -2208,5 +2208,76 @@
    "revokeLabel": "My account → Connected MCP applications"
   },
   "lastVerified": "2026-11-16"
+ },
+ {
+  "slug": "easi-run",
+  "name": "easi.run",
+  "vendor": "easi.run (Juliano Gouveia)",
+  "category": "dev-tools",
+  "official": true,
+  "summary": "Self-hosted real Chrome sessions for AI agents, with live viewing and human takeover for logins, 2FA and approvals. Built-in MCP and REST.",
+  "description": "easi.run is open-source (AGPL-3.0-only) software you run on your own Linux x86-64 server (systemd, rootful Docker Engine 28+). Its admin app has a built-in MCP server that gives agents isolated Google Chrome sessions, fresh or resuming persistent sessions whose logins are encrypted with a key only your password unlocks. You watch any session live and take over; the agent waits until you hand control back. MCP connects to your own deployment, either over HTTPS at https://<your-admin>:9443/mcp (Streamable HTTP, Authorization: Bearer easi_… token created under Agent tokens) or over stdio via docker exec. A token reaches only the sessions it started plus the persistent sessions you allow it; never the viewer stream, downloads, takeovers, settings or tokens. Tokens never get Developer tools (run_javascript). Agent file downloads and uploads default to ask. Browsers run in sandboxed containers with HTTPS-only public-web egress. The admin uses a self-signed certificate (set NODE_EXTRA_CA_CERTS for Node-based clients). Caveats: (1) the project is young (repo created Oct 22, 2026) and largely AI-assisted, with no tagged releases. (2) A resumed saved session acts on sites as you, logged in, so use it only on your own deployment. (3) The stdio route (docker exec) has no token or login; anyone who can run docker exec on the server can use it (ADMIN_LOCAL_MCP=0 turns it off). (4) The installer is a curl-and-bash script that makes root-level firewall and sysctl changes through a short-lived privileged container; read it before running. The project also advertises bot-detection evasion, so check target sites' terms. Connectory has not run it; setup is read from the repo and docs.",
+  "tools": [
+   "start_session",
+   "list_sessions",
+   "session_status",
+   "call_status",
+   "stop_session",
+   "list_saved_sessions (resume a persistent session you allowed)",
+   "navigate",
+   "inspect_page (read-only)",
+   "get_desktop_state",
+   "get_window_state",
+   "list_windows",
+   "click",
+   "type_text",
+   "press_key",
+   "hotkey",
+   "scroll",
+   "run_steps",
+   "run_script",
+   "close_window",
+   "list_files",
+   "save_download",
+   "send_file",
+   "choose_files",
+   "request_person",
+   "wait_for_control"
+  ],
+  "setup": [
+   {
+    "label": "Claude Code (HTTPS, token)",
+    "code": "claude mcp add --transport http easi https://localhost:9443/mcp \\\n  --header \"Authorization: Bearer easi_…\""
+   },
+   {
+    "label": "Claude Code (on the server, stdio, no token)",
+    "code": "claude mcp add --scope user easi -- docker exec -i easi-run-admin-1 admin mcp"
+   },
+   {
+    "label": "Claude Code (over SSH, stdio, no token)",
+    "code": "claude mcp add --scope user easi -- ssh -T you@your-server docker exec -i easi-run-admin-1 admin mcp"
+   },
+   {
+    "label": "Codex (stdio, no token)",
+    "code": "codex mcp add easi -- docker exec -i easi-run-admin-1 admin mcp"
+   },
+   {
+    "label": "Cursor / generic stdio (derived from the documented command; easi.run does not document Cursor)",
+    "code": "{\n  \"mcpServers\": {\n    \"easi\": {\n      \"command\": \"docker\",\n      \"args\": [\"exec\", \"-i\", \"easi-run-admin-1\", \"admin\", \"mcp\"]\n    }\n  }\n}"
+   }
+  ],
+  "prompts": [
+   "Start an easi.run session at example.com, read the page, and ask me to take over if it needs a login.",
+   "Resume my saved \"work\" session and check the dashboard for new alerts.",
+   "Open the billing page, and call request_person with reason confirm before submitting anything."
+  ],
+  "officialUrl": "https://docs.easi.run/#/agents",
+  "sourceUrl": "https://github.com/julianosig/easi.run",
+  "auth": {
+   "method": "Per-agent bearer token (easi_…) over HTTPS; or local stdio via docker exec (no token)",
+   "scopes": "A token reaches only sessions it started plus persistent sessions you allow; no viewer stream, downloads, takeovers, settings or tokens. No Developer tools for tokens.",
+   "revokeLabel": "Admin page → Agent tokens (revoking stops its sessions)"
+  },
+  "lastVerified": "2026-11-20"
  }
 ]
